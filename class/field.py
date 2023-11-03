@@ -1,5 +1,5 @@
 #@Leon Ams, Sercan Berkpinar, Lukas Buser
-class field:
+class Field:
     matrix: int
 
     def __init__(self):
