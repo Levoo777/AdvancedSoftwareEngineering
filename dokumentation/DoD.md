@@ -1,4 +1,4 @@
-#Definition of Done
+# Definition of Done
 
 1. Tests wurden integriert welche die Funktionalität automatisch prüfen können.
 2. Die Funktion wurde ordnungsgemäß dokumentiert.
