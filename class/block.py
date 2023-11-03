@@ -1,7 +1,7 @@
 #@Leon Ams, Sercan Berkpinar, Lukas Buser
 block_dict = {1: [[True]], 2: [[True,True]], 3: [[True,True],[False,True]], 4: [[True,True,True]]}
 
-class Block:
+class Block():
     color: str
     block_matrix: int
 
