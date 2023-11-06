@@ -13,3 +13,8 @@
 - Entschieden Python OO zu implementieren
 - Erste Klassen erstellen
 - Webserver mit Flask einrichten
+
+<h2>Meeting 3 - 06.11.2023</h2>
+<h4>Thema: Vorstellung des bereits implementierten Codes</h4>
+
+- Levin und Lukas stellen ihren Code vor
