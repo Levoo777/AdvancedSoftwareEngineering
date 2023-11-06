@@ -17,4 +17,5 @@
 <h2>Meeting 3 - 06.11.2023</h2>
 <h4>Thema: Vorstellung des bereits implementierten Codes</h4>
 
+- Gemeinsamer Rückblick auf DoD
 - Levin und Lukas stellen ihren Code vor
