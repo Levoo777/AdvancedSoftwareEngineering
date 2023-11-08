@@ -19,3 +19,9 @@
 
 - Gemeinsamer Rückblick auf DoD
 - Levin und Lukas stellen ihren Code vor
+
+<h2>Meeting 4 - 08.11.2023</h2>
+<h4>Thema: Architekturdiagramm</h4>
+
+- Besprechung wie die Architektur aussehen soll
+- Ersten gemeinsamen Aufbau definieren
