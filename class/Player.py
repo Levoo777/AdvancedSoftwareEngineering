@@ -1,6 +1,4 @@
-import Board
-
-class Player(Board):
+class Player():
 
     color: str
     blocks: dict

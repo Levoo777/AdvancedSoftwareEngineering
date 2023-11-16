@@ -22,7 +22,7 @@ class Board():
             #     for j in range(len(block[i])):
             #                 self.matrix[row + i][column + j] = block[i][j]
             
-            return False
+            return True
                     
 
 
