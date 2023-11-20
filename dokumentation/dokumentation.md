@@ -25,3 +25,10 @@
 
 - Besprechung wie die Architektur aussehen soll
 - Ersten gemeinsamen Aufbau definieren
+
+<h2>Meeting 5 - 20.11.2023</h2>
+<h4>Thema: Vorstellung implementierter Code</h4>
+
+- Teammitglieder werden auf den aktuellen Stand gebracht
+- Gedanken machen über das Front-End
+- Erkundigen, ob jemand im Team hilfe braucht
