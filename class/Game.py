@@ -11,6 +11,7 @@ class Game():
     def start_new_game(self):
         exit = False
         self.board = Board()
+        round_one = True
         for player in self.players:
             player.board = self.board
         
@@ -27,7 +28,16 @@ class Game():
                         block_idx = int(input("Choose Block\n"))
                         row =  int(input("Choose row\n"))
                         col = int(input("Choose Col\n"))
-                        player.player_insert(block_idx, row, col)
+                        if round_one:
+                            player.player_insert(block_idx, row, col)
+                        else:
+                            valid = self.board.is_move_valid(row, col, player.get_block(block_idx))
+                            if valid:
+                                player.player_insert(block_idx, row, col)
+                            else: 
+                                print("Move not valid!")
+                                turn_active = True
+
                     elif action == "rotate":
                         block_idx = int(input("Choose Block\n"))
                         player.blocks[block_idx].rotate()
@@ -39,6 +49,7 @@ class Game():
                 if action == "exit":
                     exit = True
                     break
+            round_one = False
             
 PlayerA = Player("red", None)
 PlayerB = Player("blue", None)

@@ -7,21 +7,56 @@ class Board():
     def __init__(self):
         self.matrix = [[None for _ in range(20)] for _ in range(20)]
         
-    # @ Levin Bolbas
-    def is_move_valid(self, row: int, column: int, block):
+    # @ Lukas Buser, Leon Ams, Levin Bolbas
+    def is_move_valid(self, row: int, column: int, block: Block):
 
+            corner = False
+            for i in range(len(block.block_matrix)):
+                for j in range(len(block.block_matrix[i])):
 
-            for i in range(len(block)):
-                for j in range(len(block[i])):
-                    
+                    if not block.block_matrix[i][j]:
+                        break
+
+                
                     if self.matrix[row + i][column + j] != None:
+                            if block.block_matrix[i][j]:
+                                return False
+
+                    if row+i != 0:
+                        if self.matrix[row-1+i][column+j] == block.color:
                             return False
+                        if column+i != 0:
+                            if self.matrix[row-1+i][column-1+j] == block.color:
+                                corner = True
+                        if column+i != 20:
+                            if self.matrix[row-1+i][column+1+j] == block.color:
+                                corner = True
+                             
+                             
+                    if row+i != 20:
+                        if self.matrix[row+1+i][column+j] == block.color:
+                            return False
+                        if column+i != 0:
+                            if self.matrix[row+1+i][column-1+j] == block.color:
+                                corner = True
+                        if column+i != 20:
+                            if self.matrix[row+1+i][column+1+j] == block.color:
+                                corner = True
+                        
+                    if column+j != 0:
+                        if self.matrix[row+i][column-1+j] == block.color:
+                            return False
+                        
+                    if column+j != 20:
+                        if self.matrix[row+i][column+1+j] == block.color:
+                            return False       
+            
+            return corner
 
             # for i in range(len(block)):
             #     for j in range(len(block[i])):
             #                 self.matrix[row + i][column + j] = block[i][j]
             
-            return True
     
     #@Leon Ams
     def board_insert(self, block: Block, row: int, col: int):
