@@ -23,6 +23,10 @@ class Player():
         for idx, block in self.blocks.items():
             print(f"\n\n Block index {idx}:\n")
             block.show_block()
+            
+    #@Lukas Buser
+    def get_block(self, index):
+        return self.blocks[index]
 
 #board = Board()
 #player = Player("red", board)
