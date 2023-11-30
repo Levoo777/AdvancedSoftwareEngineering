@@ -5,6 +5,7 @@ class Player():
 
     color: str
     blocks: dict[int, Block]
+    board: Board
 
     # @ Lukas Buser, Levin Bolbas
     def __init__(self, color, board: Board, blocks = None):
