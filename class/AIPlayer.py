@@ -41,11 +41,11 @@ class AIPlayer(Player):
         random_block_idx = len(self.blocks) - self.rnd_gen.randint(0,3)
         random_big_block = self.blocks[random_block_idx]
 
-        pos_row = 9
-        pos_col = 8
+        pos_row = 10
+        pos_col = 10
+        #i = 10
 
         for i in range(0,6,2):
-
             move = self.try_block(pos_row  + i, pos_col + i, random_big_block)
             if move > best_move:
                 best_move = move
@@ -65,23 +65,76 @@ class AIPlayer(Player):
         self.player_insert(random_block_idx, best_move.row, best_move.col)
         self.corners += best_move.new_corners
         self.pop_corners()
+        print(self.corners)
     
     def set_block(self):
-        pass
+        best_move = Move(0, 0, 0, [])
+        block_idx, rand_block = self.get_random_block()
+
+        for row, col in self.corners:
+            pass
 
     def get_random_block(self, size = None):
         remaining_idx = self.get_remaining_block_idx()
         if not size:
             rand_idx = random.shuffle(remaining_idx)[0]
-            return self.blocks[rand_idx]
+            return rand_idx, self.blocks[rand_idx]
         elif size == "small":
             small_idx = remaining_idx[:len(remaining_idx)//2 +1]
             rand_idx = random.shuffle(small_idx)[0]
-            return self.blocks[rand_idx]
+            return rand_idx, self.blocks[rand_idx]
         elif size == "big":
             big_idx = remaining_idx[len(remaining_idx)//2:]
             rand_idx = random.shuffle(big_idx)[0]
-            return self.blocks[rand_idx]
+            return rand_idx, self.blocks[rand_idx]
+        else:
+            raise ValueError(f"'{size}' is not a valid size")
+
+    def find_block_position(self, row_to_fullfile, col_to_fullfile, block: Block):
+        for _ in range(3):
+            count_rows = len(block.block_matrix)
+            count_cols = len(block.block_matrix[0])
+            element = block.block_matrix[0][0]
+            valid = self.board.is_move_valid(row_to_fullfile, col_to_fullfile, block)
+            if element:
+                if valid:
+                    return row_to_fullfile, col_to_fullfile
+            else:
+                for j in range(1, 4):
+                    if block.block_matrix[0][j]:
+                        if self.board.is_move_valid(row_to_fullfile - j, col_to_fullfile, block):
+                                return row_to_fullfile - j, col_to_fullfile
+            
+                    if block.block_matrix[j][0]:
+                        if self.board.is_move_valid(row_to_fullfile, col_to_fullfile - j, block):
+                                return row_to_fullfile, col_to_fullfile - j
+
+            element = block.block_matrix[0][-1]
+            if element:
+                if valid:
+                    return row_to_fullfile, col_to_fullfile
+            else:
+                for j in range(1, 4):
+                    if block.block_matrix[0][j]:
+                        if self.board.is_move_valid(row_to_fullfile + j, col_to_fullfile, block):
+                                return row_to_fullfile + j, col_to_fullfile
+            
+                    if block.block_matrix[j][0]:
+                        if self.board.is_move_valid(row_to_fullfile, col_to_fullfile - j, block):
+                                return row_to_fullfile, col_to_fullfile - j
+            
+            
+
+                
+
+
+
+            block.rotate()
+            
+
+
+
+        pass
 
 
     def get_remaining_block_idx(self):
@@ -102,6 +155,8 @@ class AIPlayer(Player):
                         if (row_i, col_i) not in self.corners:
                             new_corners.append((row_i, col_i))
             return Move(len(new_corners)-1, row, col, new_corners, block)
+
+
         
     # pops old corners (which are now invalid)
     def pop_corners(self):
@@ -112,8 +167,13 @@ class AIPlayer(Player):
     # check if the position is a corner (possibility to insert new block)
     def is_corner(self, board: Board, row, col) -> bool:
         corner = False
+
+        if row > 20 or row < 0 or col > 20 or col < 0:
+            return False
+
         if board.matrix[row][col]:
             return False
+
         for i in [-1, 1]:
             if board.matrix[row + i][col] == self.color:
                 return False
