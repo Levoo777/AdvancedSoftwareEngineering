@@ -2,9 +2,17 @@ from Player import Player
 from Board import Board
 from Block import Block
 from secrets import SystemRandom
+import random
 from copy import deepcopy
 
 class Move():
+
+    coef: int                                                       # strength of the move (atm number of new corners)
+    row: int
+    col: int
+    new_corners: list[tuple[int, int]]
+    block: Block
+
     def __init__(self, coef, row, col, new_corners, block = None):
         self.coef = coef
         self.row = row
@@ -19,12 +27,16 @@ class Move():
 
 class AIPlayer(Player):
     
-    corners: list
+    corners: list[tuple[int, int]]
     rnd_gen: SystemRandom
 
-    def set_first_block(self):
-        self.rnd_gen = SystemRandom()
+    def __init__(self, color, board: Board, blocks=None):
+        super().__init__(color, board, blocks)
         self.corners = []
+        self.rnd_gen = SystemRandom()
+
+    # inserts random big block in the middle of the field
+    def set_first_block(self):
         best_move = Move(0, 0, 0, [])
         random_block_idx = len(self.blocks) - self.rnd_gen.randint(0,3)
         random_big_block = self.blocks[random_block_idx]
@@ -34,49 +46,62 @@ class AIPlayer(Player):
 
         for i in range(0,6,2):
 
-            if not self.board.is_move_valid(pos_row  + i, pos_col + i, random_big_block):
-                c, new_corners = self.try_block(pos_row  + i, pos_col + i, random_big_block)
-                move = Move(c, pos_row + i, pos_col + i, new_corners)
-                if move > best_move:
-                    best_move = move
+            move = self.try_block(pos_row  + i, pos_col + i, random_big_block)
+            if move > best_move:
+                best_move = move
 
-            if not self.board.is_move_valid(pos_row - i, pos_col - i, random_big_block):
-                c, new_corners = self.try_block(pos_row - i, pos_col - i, random_big_block)
-                move = Move(c, pos_row - i, pos_col - i, new_corners)
-                if move > best_move:
-                    best_move = move
+            move = self.try_block(pos_row - i, pos_col - i, random_big_block)
+            if move > best_move:
+                best_move = move
 
-            if not self.board.is_move_valid(pos_row + i, pos_col - i, random_big_block):
-                c, new_corners = self.try_block(pos_row + i, pos_col - i, random_big_block)
-                move = Move(c, pos_row + i, pos_col - i, new_corners)
-                if move > best_move:
-                    best_move = move
+            move = self.try_block(pos_row + i, pos_col - i, random_big_block)
+            if move > best_move:
+                best_move = move
 
-            if not self.board.is_move_valid(pos_row - i, pos_col + i, random_big_block):
-                c, new_corners = self.try_block(pos_row - i, pos_col + i, random_big_block)
-                move = Move(c, pos_row - i, pos_col + i, new_corners)
-                if move > best_move:
-                    best_move = move
+            move = self.try_block(pos_row - i, pos_col + i, random_big_block)
+            if move > best_move:
+                best_move = move
 
         self.player_insert(random_block_idx, best_move.row, best_move.col)
         self.corners += best_move.new_corners
-        print(self.corners)
         self.pop_corners()
-        print(self.corners)
+    
+    def set_block(self):
+        pass
 
-            
+    def get_random_block(self, size = None):
+        remaining_idx = self.get_remaining_block_idx()
+        if not size:
+            rand_idx = random.shuffle(remaining_idx)[0]
+            return self.blocks[rand_idx]
+        elif size == "small":
+            small_idx = remaining_idx[:len(remaining_idx)//2 +1]
+            rand_idx = random.shuffle(small_idx)[0]
+            return self.blocks[rand_idx]
+        elif size == "big":
+            big_idx = remaining_idx[len(remaining_idx)//2:]
+            rand_idx = random.shuffle(big_idx)[0]
+            return self.blocks[rand_idx]
+
+
+    def get_remaining_block_idx(self):
+        return [idx for idx in self.blocks]
+
+
+        
 
     # inserts a block in a copied board and checks how many new corners it generates
-    def try_block(self, row: int, col: int, block: Block):
-        demo_board = deepcopy(self.board)
-        demo_board.board_insert(block, row, col)
-        new_corners = []
-        for row_i in range(row -1, len(block.block_matrix) + row + 1):
-            for col_i in range(col -1, len(block.block_matrix[0]) + col + 1):
-                if self.is_corner(demo_board, row_i, col_i):
-                    if (row_i, col_i) not in self.corners:
-                        new_corners.append((row_i, col_i))
-        return len(new_corners)-1, new_corners
+    def try_block(self, row: int, col: int, block: Block) -> Move:
+        if not self.board.is_move_valid(row, col, block):
+            demo_board = deepcopy(self.board)
+            demo_board.board_insert(block, row, col)
+            new_corners = []
+            for row_i in range(row -1, len(block.block_matrix) + row + 1):
+                for col_i in range(col -1, len(block.block_matrix[0]) + col + 1):
+                    if self.is_corner(demo_board, row_i, col_i):
+                        if (row_i, col_i) not in self.corners:
+                            new_corners.append((row_i, col_i))
+            return Move(len(new_corners)-1, row, col, new_corners, block)
         
     # pops old corners (which are now invalid)
     def pop_corners(self):
@@ -84,7 +109,7 @@ class AIPlayer(Player):
             if not self.is_corner(self.board, row, col):
                 self.corners.pop((row, col))
 
-    # check if the position is a corner(possibility to insert new block)
+    # check if the position is a corner (possibility to insert new block)
     def is_corner(self, board: Board, row, col) -> bool:
         corner = False
         if board.matrix[row][col]:
