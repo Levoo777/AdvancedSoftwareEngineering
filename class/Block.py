@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-BLOCKS_MATRIX = {1: [[True]], 2: [[True,True]], 3: [[True,True],[None,True]], 4: [[True,True,True]]}
+BLOCKS_MATRIX = {1: [[True]], 2: [[True,True]], 3: [[True,True],[None,True]], 4: [[True,True,True]], 5: [[True,True,True, True]], 6: [[None, None, True],[True,True,True]], 7: [[True, True, None], [None, True, True]]}
 
 class Block():
     color: str
