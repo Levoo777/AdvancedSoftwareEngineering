@@ -307,43 +307,56 @@ class AIPlayer(Player):
                 corner = True
         return corner
         
+    def set_block(self):
+        best_move = Move(0, 0, 0, [])
+        new_board.show_board()
+        best_row, best_col = self.get_best_corner()
 
+        best_idx= 0
+        counter = 0
+
+        while counter < 8:
+
+            idx, block = self.get_random_block("big")
+            new_best_move = self.find_block_position(best_row, best_col, block)
+            if best_move == Move(0, 0, 0, []):
+                best_move = new_best_move
+                best_idx = idx
+            else:
+                if new_best_move > best_move:
+                    best_move = new_best_move
+                    best_idx = idx
+            counter += 1
+
+
+        while best_move == Move(0, 0, 0, []) and counter < 16:
+            best_row, best_col = self.get_random_corner()
+            idx, block = self.get_random_block()
+            new_best_move = self.find_block_position(best_row, best_col, block)
+            if best_move == Move(0, 0, 0, []):
+                best_move = new_best_move
+                best_idx = idx 
+            else:
+                if new_best_move > best_move:
+                    best_move = new_best_move 
+                    best_idx = idx
+            counter += 1
+
+        self.player_insert(best_idx, best_move.row, best_move.col)
+        self.corners += best_move.new_corners
+        self.pop_corners()
+        print(self.corners)
+
+        
+
+    def get_random_corner(self):
+        copied_corners = deepcopy(self.corners)
+        return random.shuffle(copied_corners)[0]
 
 new_board = Board()
 ai = AIPlayer("red", new_board)
 new_board.show_board()
 ai.set_first_block()
-
-def set_block(self):
-    best_move = Move(0, 0, 0, [])
-    new_board.show_board()
-    (best_row, best_col) = get_best_corner(self.corners)
-    block_idx, rand_block = self.get_random_block()
-
-    counter = 0
-
-    while counter < 8:
-
-        idx, block = get_random_block(self, "big")
-        new_best_move = find_block_position(self, best_row, best_col, idx: Block)
-        if best_move == Move(0, 0, 0, []):
-            best_move = new_best_move 
-        else:
-            if new_best_move > best_move:
-                best_move = new_best_move 
-        counter += 1
-
-
-    while best_move ==  Move(0, 0, 0, []) and counter < 16:
-        best_row, best_col = get_random_corner(self.corners)
-        idx, block = get_random_block(self)
-        new_best_move = find_block_position(self, best_row, best_col, idx: Block)
-        if best_move == Move(0, 0, 0, []):
-            best_move = new_best_move 
-        else:
-            if new_best_move > best_move:
-                best_move = new_best_move 
-        counter += 1
 
 
 
