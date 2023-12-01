@@ -37,42 +37,50 @@ class AIPlayer(Player):
 
     # inserts random big block in the middle of the field
     def set_first_block(self):
-        best_move = Move(0, 0, 0, [])
-        random_block_idx = len(self.blocks) - self.rnd_gen.randint(0,3)
+        #best_move = Move(0, 0, 0, [])
+        random_block_idx = len(self.blocks) - self.rnd_gen.randint(0,7)
         random_big_block = self.blocks[random_block_idx]
 
-        pos_row = 10
-        pos_col = 10
+        #pos_row = 10
+        #pos_col = 10
         #i = 10
+        valid_move = False
 
-        for i in range(0,6,2):
-            move = self.try_block(pos_row  + i, pos_col + i, random_big_block)
-            if move > best_move:
-                best_move = move
+        while valid_move == False:
+            if not self.board.matrix[0][0]:
+                pos_row = 0
+                pos_col = 0
+                move = self.try_block(pos_row, pos_col, random_big_block)
+                if self.board.matrix[0][0]:
+                    valid_move = True
 
-            move = self.try_block(pos_row - i, pos_col - i, random_big_block)
-            if move > best_move:
-                best_move = move
+            elif not self.board.matrix[19][0]:
+                pos_row = 19
+                pos_col = 0
+                move = self.try_block(pos_row -2, pos_col, random_big_block)
+                if self.board.matrix[19][0]:
+                    valid_move = True
+            
+            elif not self.board.matrix[0][19]:
+                pos_row = 0
+                pos_col = 19
+                move = self.try_block(pos_row, pos_col, random_big_block -2)
+                if self.board.matrix[0][19]:
+                    valid_move = True
 
-            move = self.try_block(pos_row + i, pos_col - i, random_big_block)
-            if move > best_move:
-                best_move = move
+            else:
+                pos_row = 19
+                pos_col = 19
+                move = self.try_block(pos_row,  -2, random_big_block -2)
+                if self.board.matrix[19][19]:
+                    valid_move = True
 
-            move = self.try_block(pos_row - i, pos_col + i, random_big_block)
-            if move > best_move:
-                best_move = move
-
-        self.player_insert(random_block_idx, best_move.row, best_move.col)
-        self.corners += best_move.new_corners
-        self.pop_corners()
+        self.player_insert(random_block_idx, move.row, move.col)
+        self.corners += move.new_corners
+        #self.pop_corners()
         print(self.corners)
     
-    def set_block(self):
-        best_move = Move(0, 0, 0, [])
-        block_idx, rand_block = self.get_random_block()
-
-        for row, col in self.corners:
-            pass
+   
 
     
 
@@ -93,7 +101,7 @@ class AIPlayer(Player):
             raise ValueError(f"'{size}' is not a valid size")
 
     def find_block_position(self, row_to_fullfile, col_to_fullfile, block: Block):
-        old_strength = -500000
+        best_move = Move(0, 0, 0, [])
         count_rows = len(block.block_matrix)
         count_cols = len(block.block_matrix[0])
         for _ in range (2):
@@ -103,30 +111,29 @@ class AIPlayer(Player):
                 
                 if element:
                     if self.board.is_move_valid(row_to_fullfile, col_to_fullfile, block):
-                        strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
-                        if strength_of_move > old_strength:
-                            best_row = row_to_fullfile
-                            best_col = col_to_fullfile
-                            best_block = block
+                        move = self.try_block(row_to_fullfile,  col_to_fullfile, block)
+                        if move > best_move:
+                            best_move = move
+                        #strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
+                        
                 else:
                     for j in range(1, len(block.block_matrix)):
                         if block.block_matrix[0][j]:
                             if self.board.is_move_valid(row_to_fullfile - j, col_to_fullfile, block):
-                                strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
-                                if strength_of_move > old_strength:
-                                    best_row = row_to_fullfile - j
-                                    best_col = col_to_fullfile
-                                    best_block = block
+                                move = self.try_block(row_to_fullfile - j, col_to_fullfile, block)
+                                if move > best_move:
+                                    best_move = move
+                                #strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
+                                
                                     
 
                     for j in range(1, len(block.block_matrix[0])):
                         if block.block_matrix[j][0]:
                             if self.board.is_move_valid(row_to_fullfile, col_to_fullfile - j, block):
-                                strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
-                                if strength_of_move > old_strength:
-                                    best_row = row_to_fullfile 
-                                    best_col = col_to_fullfile - j
-                                    best_block = block
+                                move = self.try_block(row_to_fullfile, col_to_fullfile - j, block)
+                                if move > best_move:
+                                    best_move = move
+                                #strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
                                 
                                     
 
@@ -137,32 +144,30 @@ class AIPlayer(Player):
                 if element:
                     valid = self.board.is_move_valid(row_to_fullfile - len(block.block_matrix) + 1, col_to_fullfile, block)
                     if valid:
-                        strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
-                        if strength_of_move > old_strength:
-                            best_row = row_to_fullfile - len(block.block_matrix) + 1
-                            best_col = col_to_fullfile
-                            best_block = block
+                        move = self.try_block(row_to_fullfile - len(block.block_matrix) + 1, col_to_fullfile, block)
+                        if move > best_move:
+                            best_move = move
+                        #strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
                         
                 else:
                     for j in range(1, len(block.block_matrix)):
                         if block.block_matrix[-1][j]:
                             if self.board.is_move_valid(row_to_fullfile - len(block.block_matrix) + 1, col_to_fullfile - j, block):
-                                strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
-                                if strength_of_move > old_strength:
-                                    best_row = row_to_fullfile - len(block.block_matrix) + 1 
-                                    best_col = col_to_fullfile - j
-                                    best_block = block
+                                move = self.try_block(row_to_fullfile - len(block.block_matrix) + 1, col_to_fullfile - j, block)
+                                if move > best_move:
+                                    best_move = move
+                                #strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
+                                
                                     
                 
                     for j in range(1, len(block.block_matrix[0])):
                         if block.block_matrix[-j-1][0]:
                             if self.board.is_move_valid(row_to_fullfile - len(block.block_matrix) + 1 + j, col_to_fullfile, block):
-                                strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
-                                if strength_of_move > old_strength:
-                                    best_row = row_to_fullfile - len(block.block_matrix) + 1 + j
-                                    best_col = col_to_fullfile
-                                    best_block = block
-    
+                                move = self.try_block(row_to_fullfile - len(block.block_matrix) + 1 + j, col_to_fullfile, block)
+                                if move > best_move:
+                                    best_move = move
+                                #strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
+                                
 
                             
                 element = block.block_matrix[0][-1]
@@ -170,31 +175,31 @@ class AIPlayer(Player):
                 if element:
                     valid = self.board.is_move_valid(row_to_fullfile , col_to_fullfile - len(block.block_matrix)[0] + 1, block)
                     if valid:
-                        strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
-                        if strength_of_move > old_strength:
-                            best_row = row_to_fullfile
-                            best_col = col_to_fullfile - len(block.block_matrix)[0] + 1
-                            best_block = block
+                        move = self.try_block(row_to_fullfile , col_to_fullfile - len(block.block_matrix)[0] + 1, block)
+                        if move > best_move:
+                            best_move = move
+                        #strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
+                       
                         
                 else:
                     for j in range(1, len(block.block_matrix)):
                         if block.block_matrix[0][-j-1]:
                             if self.board.is_move_valid(row_to_fullfile, col_to_fullfile - len(block.block_matrix)[0] + 1 + j, block):
-                                strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
-                                if strength_of_move > old_strength:
-                                    best_row = row_to_fullfile
-                                    best_col = col_to_fullfile - len(block.block_matrix)[0] + 1 + j
-                                    best_block = block
+                                move = self.try_blockrow_to_fullfile, col_to_fullfile - len(block.block_matrix)[0] + 1 + j, block
+                                if move > best_move:
+                                    best_move = move
+                                #strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
+                                
                                    
                 
                     for j in range(1, len(block.block_matrix[0])):
                         if block.block_matrix[j][-1]:
                             if self.board.is_move_valid(row_to_fullfile -j, col_to_fullfile - len(block.block_matrix)[0] + 1, block):
-                                strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
-                                if strength_of_move > old_strength:
-                                    best_row = row_to_fullfile + j
-                                    best_col = col_to_fullfile - len(block.block_matrix)[0] + 1
-                                    best_block = block
+                                move = self.try_block(row_to_fullfile -j, col_to_fullfile - len(block.block_matrix)[0] + 1, block)
+                                if move > best_move:
+                                    best_move = move
+                                #strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
+                                
                                 
                             
                 
@@ -203,44 +208,59 @@ class AIPlayer(Player):
                 if element:
                     valid = self.board.is_move_valid(row_to_fullfile - len(block.block_matrix) + 1 , col_to_fullfile - len(block.block_matrix)[0] + 1, block)
                     if valid:
-                        strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
-                        if strength_of_move > old_strength:
-                            best_row = row_to_fullfile - len(block.block_matrix) + 1
-                            best_col = col_to_fullfile - len(block.block_matrix)[0] + 1
-                            best_block = block
+                        move = self.try_block(row_to_fullfile - len(block.block_matrix) + 1 , col_to_fullfile - len(block.block_matrix)[0] + 1, block)
+                        if move > best_move:
+                            best_move = movemove = self.try_block()
+        
+                        #strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
+                        
                      
                 else:
                     for j in range(1, len(block.block_matrix)):
                         if block.block_matrix[-1][-j-1]:
                             if self.board.is_move_valid(row_to_fullfile - len(block.block_matrix) + 1, col_to_fullfile - len(block.block_matrix)[0] + 1 + j, block):
-                                strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
-                                if strength_of_move > old_strength:
-                                    best_row = row_to_fullfile - len(block.block_matrix) + 1
-                                    best_col = col_to_fullfile - len(block.block_matrix)[0] + 1 + j
-                                    best_block = block    
+                                move = self.try_block(row_to_fullfile - len(block.block_matrix) + 1, col_to_fullfile - len(block.block_matrix)[0] + 1 + j, block)
+                                if move > best_move:
+                                    best_move = move
+                                #strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
+                                  
                                     
                 
                     for j in range(1, len(block.block_matrix[0])):
                         if block.block_matrix[-j-1][-1]:
                             if self.board.is_move_valid(row_to_fullfile - len(block.block_matrix) + 1 + j, col_to_fullfile - len(block.block_matrix)[0] + 1, block):
-                                strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
-                                if strength_of_move > old_strength:
-                                    best_row = row_to_fullfile - len(block.block_matrix) + 1 + j
-                                    best_col = col_to_fullfile - len(block.block_matrix)[0] + 1 + j
-                                    best_block = block 
+                                move = self.try_block(row_to_fullfile - len(block.block_matrix) + 1 + j, col_to_fullfile - len(block.block_matrix)[0] + 1, block)
+                                if move > best_move:
+                                    best_move = move
+                                #strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
+                                
                                 
 
                 block.rotate()
             block.reflect()
         
-        if strength_of_move == -500000:
-            return best_row, best_col
+        if best_move == Move(0, 0, 0, []):
+            return best_move
 
         pass
 
 
     def get_remaining_block_idx(self):
         return [idx for idx in self.blocks]
+    
+    def get_best_corner(self):
+        best_corner = (100, 100)
+        for row, col in self.corners:
+            if best_corner == (100, 100):
+                best_corner = (row, col)
+                old_strength = (row-9,5)**2 + (col-9,5)**2
+            else:
+                strength = (row-9,5)**2 + (col-9,5)**2
+                if strength < old_strength:
+                    old_strength = strength
+                    best_corner = (row, col)
+        return best_corner
+
 
 
         
@@ -293,4 +313,40 @@ new_board = Board()
 ai = AIPlayer("red", new_board)
 new_board.show_board()
 ai.set_first_block()
-new_board.show_board()
+
+def set_block(self):
+    best_move = Move(0, 0, 0, [])
+    new_board.show_board()
+    (best_row, best_col) = get_best_corner(self.corners)
+    block_idx, rand_block = self.get_random_block()
+
+    counter = 0
+
+    while counter < 8:
+
+        idx, block = get_random_block(self, "big")
+        new_best_move = find_block_position(self, best_row, best_col, idx: Block)
+        if best_move == Move(0, 0, 0, []):
+            best_move = new_best_move 
+        else:
+            if new_best_move > best_move:
+                best_move = new_best_move 
+        counter += 1
+
+
+    while best_move ==  Move(0, 0, 0, []) and counter < 16:
+        best_row, best_col = get_random_corner(self.corners)
+        idx, block = get_random_block(self)
+        new_best_move = find_block_position(self, best_row, best_col, idx: Block)
+        if best_move == Move(0, 0, 0, []):
+            best_move = new_best_move 
+        else:
+            if new_best_move > best_move:
+                best_move = new_best_move 
+        counter += 1
+
+
+
+
+
+
