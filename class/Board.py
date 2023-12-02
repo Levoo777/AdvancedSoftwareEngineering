@@ -15,7 +15,7 @@ class Board():
                 for j in range(len(block.block_matrix[i])):
 
                     if not block.block_matrix[i][j]:
-                        break
+                        continue
 
                 
                     if self.matrix[row + i][column + j] != None:

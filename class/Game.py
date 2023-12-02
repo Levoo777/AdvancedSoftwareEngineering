@@ -1,6 +1,8 @@
 from Block import Block
 from Board import Board
 from Player import Player
+from AIPlayer import AIPlayer
+import time
 
 class Game():
 
@@ -51,11 +53,36 @@ class Game():
                     break
             round_one = False
             
-PlayerA = Player("red", None)
-PlayerB = Player("blue", None)
-PlayerC = Player("green", None)
+#PlayerA = Player("red", None)
+#Players = [PlayerA] 
+#game = Game(Players)
+#game.start_new_game()
 
-Players = [PlayerA] + [PlayerB] + [PlayerC] 
+class AI_Game():
 
-game = Game(Players)
+    def __init__(self, players: list[AIPlayer], board: Board) -> None:
+        self.players = players
+        self.board = board
+        pass
+
+    def start_new_game(self):
+        self.board = Board()
+        round_one = True
+        for player in self.players:
+            player.board = self.board
+
+        while True:
+            for player in self.players:
+                time.sleep(3)
+                if round_one:
+                    player.set_first_block()
+                else:
+                    player.set_block()
+                self.board.show_board()
+            round_one = False
+
+aia = AIPlayer("red", None)
+aib = AIPlayer("blue", None)
+new_board = Board()
+game = AI_Game([aia, aib], new_board)
 game.start_new_game()

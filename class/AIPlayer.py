@@ -293,7 +293,8 @@ class AIPlayer(Player):
                     if self.is_corner(demo_board, row_i, col_i):
                         if (row_i, col_i) not in self.corners:
                             new_corners.append((row_i, col_i))
-            return Move(len(new_corners)-1, row, col, new_corners, block)
+            x = deepcopy(block)
+            return Move(len(new_corners)-1, row, col, new_corners, x)
         else:
             return Move(0, 0, 0, [])
     
@@ -317,7 +318,7 @@ class AIPlayer(Player):
             return False
 
         for i in [-1, 1]:
-            if board.matrix[row + i][col] == self.color:
+            if board.matrix[row+i][col] == self.color:
                 return False
             if board.matrix[row][col+i] == self.color:
                 return False
@@ -363,7 +364,7 @@ class AIPlayer(Player):
                     best_idx = idx
             counter += 1
 
-        self.player_insert(best_idx, best_move.row, best_move.col)
+        self.player_insert(best_idx, best_move.row, best_move.col, best_move.block)
         self.corners += best_move.new_corners
         #self.pop_corners()
         print(self.corners)

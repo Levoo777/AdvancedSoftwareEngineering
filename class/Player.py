@@ -15,8 +15,11 @@ class Player():
             self.blocks = Block.generate_block_set(color)
         
     # @ Lukas Buser, Levin Bolbas
-    def player_insert(self, block_idx: int, row: int, col: int):
-        self.board.board_insert(self.blocks[block_idx], row, col)
+    def player_insert(self, block_idx: int, row: int, col: int, block = None):
+        if not block:
+            self.board.board_insert(self.blocks[block_idx], row, col)
+        else:
+            self.board.board_insert(block, row, col)
         self.blocks.pop(block_idx)
 
     #@Leon Ams
