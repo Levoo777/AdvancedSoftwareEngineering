@@ -73,11 +73,13 @@ class AI_Game():
 
         while True:
             for player in self.players:
+                print(len(player.blocks))
                 time.sleep(3)
                 if round_one:
                     player.set_first_block()
                 else:
                     player.set_block()
+                print("test")
                 self.board.show_board()
             round_one = False
 

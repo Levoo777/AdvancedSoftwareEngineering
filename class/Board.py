@@ -28,18 +28,18 @@ class Board():
                         if column+i != 0:
                             if self.matrix[row-1+i][column-1+j] == block.color:
                                 corner = True
-                        if column+i != 20:
+                        if column+i != 19:
                             if self.matrix[row-1+i][column+1+j] == block.color:
                                 corner = True
                              
                              
-                    if row+i != 20:
+                    if row+i != 19:
                         if self.matrix[row+1+i][column+j] == block.color:
                             return False
                         if column+i != 0:
                             if self.matrix[row+1+i][column-1+j] == block.color:
                                 corner = True
-                        if column+i != 20:
+                        if column+i != 19:
                             if self.matrix[row+1+i][column+1+j] == block.color:
                                 corner = True
                         
@@ -47,7 +47,7 @@ class Board():
                         if self.matrix[row+i][column-1+j] == block.color:
                             return False
                         
-                    if column+j != 20:
+                    if column+j != 19:
                         if self.matrix[row+i][column+1+j] == block.color:
                             return False       
             
@@ -62,7 +62,8 @@ class Board():
     def board_insert(self, block: Block, row: int, col: int):
         for idx_row, x_row in enumerate(block.block_matrix):
             for idx_col, val in enumerate(x_row):
-                self.matrix[row + idx_row][col + idx_col] = val  
+                if not self.matrix[row + idx_row][col + idx_col]:
+                    self.matrix[row + idx_row][col + idx_col] = val  
 
     #@Leon Ams, Sercan Berkpinar
     def show_board(self):
