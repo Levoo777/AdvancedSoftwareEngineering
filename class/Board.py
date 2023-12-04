@@ -17,37 +17,42 @@ class Board():
                     if not block.block_matrix[i][j]:
                         continue
 
-                
+                    if row+i < 20 and row+i > 0 and column+j <20 and column+j>0:                # new
+                        pass
+                    else:
+                        return False
+
+                    
                     if self.matrix[row + i][column + j] != None:
                             if block.block_matrix[i][j]:
                                 return False
 
-                    if row+i != 0:
+                    if row+i > 0:
                         if self.matrix[row-1+i][column+j] == block.color:
                             return False
-                        if column+i != 0:
+                        if column+j > 0:
                             if self.matrix[row-1+i][column-1+j] == block.color:
                                 corner = True
-                        if column+i != 19:
+                        if column+j < 19:
                             if self.matrix[row-1+i][column+1+j] == block.color:
                                 corner = True
                              
                              
-                    if row+i != 19:
+                    if row+i < 19:
                         if self.matrix[row+1+i][column+j] == block.color:
                             return False
-                        if column+i != 0:
+                        if column+j > 0:
                             if self.matrix[row+1+i][column-1+j] == block.color:
                                 corner = True
-                        if column+i != 19:
+                        if column+j < 19:
                             if self.matrix[row+1+i][column+1+j] == block.color:
                                 corner = True
                         
-                    if column+j != 0:
+                    if column+j > 0:
                         if self.matrix[row+i][column-1+j] == block.color:
                             return False
                         
-                    if column+j != 19:
+                    if column+j < 19:
                         if self.matrix[row+i][column+1+j] == block.color:
                             return False       
             
@@ -63,6 +68,7 @@ class Board():
         for idx_row, x_row in enumerate(block.block_matrix):
             for idx_col, val in enumerate(x_row):
                 if not self.matrix[row + idx_row][col + idx_col]:
+                    print(f"INSERT {row + idx_row}, {col + idx_col}, {block.block_matrix}")
                     self.matrix[row + idx_row][col + idx_col] = val  
 
     #@Leon Ams, Sercan Berkpinar
