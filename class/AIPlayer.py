@@ -80,14 +80,14 @@ class AIPlayer(Player):
             elif not self.board.matrix[0][19]:
                 pos_row = 0
                 pos_col = 19
-                move = self.try_block_first(pos_row, pos_col, random_big_block -2)
+                move = self.try_block_first(pos_row, pos_col -2, random_big_block)
                 if random_big_block.block_matrix[0][-1] and len(random_big_block.block_matrix) == 3 and len(random_big_block.block_matrix[0]) == 3:
                     valid_move = True
 
             else:
                 pos_row = 19
                 pos_col = 19
-                move = self.try_block_first(pos_row,  -2, random_big_block -2)
+                move = self.try_block_first(pos_row, pos_col -2, random_big_block)
                 if random_big_block.block_matrix[-1][-1] and len(random_big_block.block_matrix) == 3 and len(random_big_block.block_matrix[0]) == 3:
                     valid_move = True
 
@@ -129,6 +129,7 @@ class AIPlayer(Player):
                 element = block.block_matrix[0][0]
                 
                 if element:
+                    #print(f"Check Move {row_to_fullfile}, {col_to_fullfile}")
                     if self.board.is_move_valid(row_to_fullfile, col_to_fullfile, block):
                         move = self.try_block(row_to_fullfile,  col_to_fullfile, block)
                         if move > best_move:
@@ -138,6 +139,7 @@ class AIPlayer(Player):
                 else:
                     for j in range(1, len(block.block_matrix[0])):
                         if block.block_matrix[0][j]:
+                            #print(f"Check Move {row_to_fullfile - j}, {col_to_fullfile}")
                             if self.board.is_move_valid(row_to_fullfile - j, col_to_fullfile, block):
                                 move = self.try_block(row_to_fullfile - j, col_to_fullfile, block)
                                 if move > best_move:
@@ -148,6 +150,7 @@ class AIPlayer(Player):
 
                     for j in range(1, len(block.block_matrix)):
                         if block.block_matrix[j][0]:
+                            #print(f"Check Move {row_to_fullfile - j}, {col_to_fullfile -j}")
                             if self.board.is_move_valid(row_to_fullfile, col_to_fullfile - j, block):
                                 move = self.try_block(row_to_fullfile, col_to_fullfile - j, block)
                                 if move > best_move:
