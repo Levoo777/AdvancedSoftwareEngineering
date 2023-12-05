@@ -74,17 +74,19 @@ class AI_Game():
         while True:
             for player in self.players:
                 print(len(player.blocks))
-                time.sleep(3)
+                time.sleep(1)
                 if round_one:
                     player.set_first_block()
                 else:
                     player.set_block()
                 print("test")
+                time.sleep(1)
                 self.board.show_board()
             round_one = False
 
 aia = AIPlayer("red", None)
 aib = AIPlayer("blue", None)
+aic = AIPlayer("green", None)
 new_board = Board()
-game = AI_Game([aia, aib], new_board)
+game = AI_Game([aia, aib, aic], new_board)
 game.start_new_game()

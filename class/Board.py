@@ -14,10 +14,10 @@ class Board():
             for i in range(len(block.block_matrix)):
                 for j in range(len(block.block_matrix[i])):
 
-                    if not block.block_matrix[i][j]:
-                        continue
+                    if not block.block_matrix[i][j]: 
+                        continue  
 
-                    if row+i < 20 and row+i > 0 and column+j <20 and column+j>0:                # new
+                    if row+i < 20 and row+i >= 0 and column+j <20 and column+j>= 0:                # new
                         pass
                     else:
                         return False
