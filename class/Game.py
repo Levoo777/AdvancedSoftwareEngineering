@@ -80,7 +80,7 @@ class AI_Game():
                 else:
                     player.set_block()
                 print("test")
-                time.sleep(1)
+                #time.sleep(1)
                 self.board.show_board()
             round_one = False
 
