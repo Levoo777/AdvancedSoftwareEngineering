@@ -1,0 +1,21 @@
+{% extends "index.html" %}
+
+{% block content %}
+<h1 class="title">
+  Welcome in Lobby {{lobby_id}}
+</h1>
+<a href="{{ url_for('lobby.room_leave_lobby') }}" class="btn btn-danger">Leave Lobby</a>
+
+<div class="game-container">
+  <h1>Game Page - Lobby {{ lobby_id }}</h1>
+  <h2>Users in the Lobby:</h2>
+  <ul class="lobby-users">
+      {% for user in users %}
+          <li>{{ user }}</li>
+      {% endfor %}
+  </ul>
+</div>
+<br>
+<br>
+<a href="{{ url_for('lobby.game_start') }}" class="btn btn-danger">Start Game</a>
+{% endblock %}
