@@ -63,9 +63,10 @@ class AI_Game():
     def __init__(self, players: list[AIPlayer], board: Board) -> None:
         self.players = players
         self.board = board
+        self.active_player = players[0]
         pass
 
-    def start_new_game(self):
+    def play_game(self):
         self.board = Board()
         round_one = True
         for player in self.players:
@@ -84,9 +85,22 @@ class AI_Game():
                 self.board.show_board()
             round_one = False
 
+    def init_game(self):
+        self.board = Board()
+        for player in self.players:
+            player.board = self.board
+        return self.board
+    
+    def get_next_active_player(self):
+        idx = self.players.index(self.active_player)
+        next_idx = idx + 1
+        if next_idx > len(self.players):
+            pass
+
+
 aia = AIPlayer("red", None)
 aib = AIPlayer("blue", None)
 aic = AIPlayer("green", None)
 new_board = Board()
 game = AI_Game([aia, aib, aic], new_board)
-game.start_new_game()
+game.play_game()
