@@ -7,14 +7,38 @@
     <script>
         var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-        socket.on('update_spielfeld', function(data) {
+        socket.on('update_board', function(data) {
             // Aktualisiere das Spielfeld auf dem Client
-            console.log('Aktualisiere Spielfeld:', data.spielfeld);
+            console.log("Hallo")
+            console.log('Aktualisiere Spielfeld:', data.board);
+            updateBoard(data.board);
         });
+        function updateBoard(updatedBoard) {
+        var boardList = document.getElementById('board-list');
+        boardList.innerHTML = ''; // Leere die aktuelle Liste
+
+        // Füge die aktualisierten Informationen hinzu
+        updatedBoard.forEach(function(row) {
+            var li = document.createElement('li');
+            li.textContent = row === null ? "None" : row;
+            boardList.appendChild(li);
+        });
+    }
 
         // Hier fügst du den Code für das Zugmachen hinzu und sendest die Zuginformationen an den Server
+        function makefirstMove(row, col, player) {
+            var row = document.getElementById("row")
+            var col = document.getElementById("col")
+            var zug = { 'row': row.value, 'col': col.value, 'first':true};
+            console.log(zug)
+            socket.emit('zug_gemacht', zug);
+        }
+
         function makeMove(row, col, player) {
-            var zug = { 'row': row, 'col': col, 'player': player };
+            var row = document.getElementById("row")
+            var col = document.getElementById("col")
+            var zug = { 'row': row.value, 'col': col.value, 'first': false };
+            console.log(zug)
             socket.emit('zug_gemacht', zug);
         }
     </script>
@@ -26,14 +50,24 @@
 <div class="game-container">
   <h1>Game Page - Lobby {{ lobby_id }}</h1>
   <h2>Users in the Lobby:</h2>
-  <ul class="lobby-users">
+  <ul class="lobby-users" id="board-list">
       {% for row in board %}
           <li>{{ row }}</li>
       {% endfor %}
   </ul>
 </div>
 <h2>Zug machen</h2>
-<form onsubmit="event.preventDefault(); makeMove();">
+<form onsubmit="event.preventDefault(); makefirstMove();">
+    <label for="row">Zeile:</label>
+    <input type="number" id="row" name="row" required>
+
+    <label for="col">Spalte:</label>
+    <input type="number" id="col" name="col" required>
+
+    <button type="submit">1. Zug machen</button>
+</form>
+
+<form onsubmit="event.preventDefault(); makeMove(first=0);">
     <label for="row">Zeile:</label>
     <input type="number" id="row" name="row" required>
 
@@ -42,5 +76,4 @@
 
     <button type="submit">Zug machen</button>
 </form>
-
 {% endblock %}

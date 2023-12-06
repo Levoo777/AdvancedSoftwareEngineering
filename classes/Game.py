@@ -93,7 +93,6 @@ class AI_Game():
 
 
     def play_game(self, round_one):
-        self.board = Board()
         if round_one:
             self.active_player.set_first_block()
         else:
@@ -110,7 +109,7 @@ class AI_Game():
     def get_next_active_player(self):
         idx = self.players.index(self.active_player)
         next_idx = idx + 1
-        if next_idx > len(self.players):
+        if next_idx > len(self.players) - 1:
             next_idx = 0
 
         self.active_player = self.players[next_idx]

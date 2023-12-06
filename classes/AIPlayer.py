@@ -51,8 +51,9 @@ class AIPlayer(Player):
     
     corners: list[tuple[int, int]]
     rnd_gen: SystemRandom
+    board: Board
 
-    def __init__(self, color, board: Board, blocks=None):
+    def __init__(self, color, board = None, blocks=None):
         super().__init__(color, board, blocks)
         self.corners = []
         self.rnd_gen = SystemRandom()
