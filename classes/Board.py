@@ -1,4 +1,7 @@
-from Block import Block
+try:
+    from classes.Block import Block
+except:
+    from Block import Block
 
 class Board():
     matrix: int

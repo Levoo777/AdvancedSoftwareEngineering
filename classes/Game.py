@@ -1,7 +1,13 @@
-from Block import Block
-from Board import Board
-from Player import Player
-from AIPlayer import AIPlayer
+try:
+    from classes.Block import Block
+    from classes.Board import Board
+    from classes.Player import Player
+    from classes.AIPlayer import AIPlayer
+except:
+    from Block import Block
+    from Board import Board
+    from Player import Player
+    from AIPlayer import AIPlayer
 import time
 
 class Game():
@@ -66,7 +72,7 @@ class AI_Game():
         self.active_player = players[0]
         pass
 
-    def play_game(self):
+    def play_new_game(self):
         self.board = Board()
         round_one = True
         for player in self.players:
@@ -85,17 +91,30 @@ class AI_Game():
                 self.board.show_board()
             round_one = False
 
+
+    def play_game(self, round_one):
+        self.board = Board()
+        if round_one:
+            self.active_player.set_first_block()
+        else:
+            self.active_player.set_block()
+        return self.board
+
+
     def init_game(self):
         self.board = Board()
         for player in self.players:
             player.board = self.board
         return self.board
-    
+
     def get_next_active_player(self):
         idx = self.players.index(self.active_player)
         next_idx = idx + 1
         if next_idx > len(self.players):
-            pass
+            next_idx = 0
+
+        self.active_player = self.players[next_idx]
+    
 
 
 aia = AIPlayer("red", None)
@@ -103,4 +122,4 @@ aib = AIPlayer("blue", None)
 aic = AIPlayer("green", None)
 new_board = Board()
 game = AI_Game([aia, aib, aic], new_board)
-game.play_game()
+#game.play_game()

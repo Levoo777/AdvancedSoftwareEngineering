@@ -1,5 +1,9 @@
-from Board import Board
-from Block import Block
+try:
+    from classes.Board import Board
+    from classes.Block import Block
+except:
+    from Board import Board
+    from Block import Block
 
 class Player():
 

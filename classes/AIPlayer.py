@@ -1,6 +1,12 @@
-from Player import Player
-from Board import Board
-from Block import Block
+try:
+    from classes.Player import Player
+    from classes.Board import Board
+    from classes.Block import Block
+except:    
+    from Player import Player
+    from Board import Board
+    from Block import Block
+    
 from secrets import SystemRandom
 import random
 from copy import deepcopy
