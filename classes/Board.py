@@ -86,6 +86,8 @@ class Board():
             print(row)
             print("_________" * 20 + "\n")
 
+   
+
 
 
 

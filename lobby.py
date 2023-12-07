@@ -15,6 +15,7 @@ BOARDS = [Board()] * 10
 PLAYER = []
 GAME = [AI_Game(["red"], Board()), AI_Game([AIPlayer("red"),AIPlayer("blue")], BOARDS[2])]
 GAMES = [None] * 10
+COUNT = [0]
 
 
 from functools import wraps
@@ -89,13 +90,29 @@ def handle_zug(zug):
     print("hallo")
     print(zug)
     game = GAME[current_user._lobby - 1]
-    if zug["first"]:
+    COUNT[0] = COUNT[0] + 1
+    if COUNT[0] <=2:
         game.play_game(True)
     else:
         game.play_game(False)
     game.get_next_active_player()
     print(game.board.matrix)
-    socketio.emit('update_board', {'board': game.board.matrix})
+    send_matrix = [["X" for _ in range(20)] for _ in range(20)]
+    for idx1, row in enumerate(game.board.matrix):
+        for idx2, y in enumerate(row):
+            if y:
+                send_matrix[idx1][idx2] = y
+    print(send_matrix)
+    socketio.emit('update_board', {'board': send_matrix})
+    return "Hi"
+
+@socketio.on('send_message')
+def handle_message(message):
+    print("testott")
+    print(message)
+    email = current_user._email
+    msg = f"{email}: {message}"
+    socketio.emit('chat_message', msg)
     return "Hi"
 
 
