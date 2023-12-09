@@ -2,8 +2,9 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash,
 from database.db_manager import DB_Manager
 from flask_login import login_user, logout_user, login_required, current_user
 from classes.User import User
-from classes.Game import AI_Game
+from classes.Game import AI_Game, Game
 from classes.Board import Board
+from classes.Player import Player
 from classes.AIPlayer import AIPlayer
 from flask_socketio import SocketIO, emit, join_room, leave_room
 
@@ -83,28 +84,22 @@ def room_leave_lobby():
 def game_start():
     game = GAME[current_user._lobby - 1]
     game.init_game()
-    return render_template("board.html", board = game.board.matrix)
-
-
-# #neue version noch nicht lauffähig
-# def game_start():
-#     game = GAME[current_user._lobby - 1]
-#     game.init_game()
-#     number_human_players = get_users_in_lobby(current_user._lobby)
+    number_human_players = get_users_in_lobby(current_user._lobby)
     
-#     colors = ["green", "yellow", "red", "blue"]
+    colors = ["green", "yellow", "red", "blue"]
     
-#     if number_human_players <= 4:
-#         players = [Player(colors[i]) for i in range(number_human_players)]
-#         ai_players = [AIPlayer(color) for color in colors[number_human_players:]]
+    if number_human_players <= 4:
+        players = [Player(colors[i]) for i in range(number_human_players)]
+        ai_players = [AIPlayer(color) for color in colors[number_human_players:]]
         
-#         all_players = players + ai_players
+        all_players = players + ai_players
         
-#         GAME[current_user._lobby] = Game(all_players, BOARDS[current_user._lobby])
-#     else:
-#         print("Zu viele Spieler")
+        GAME[current_user._lobby] = Game(all_players, BOARDS[current_user._lobby])
+    else:
+        print("Zu viele Spieler")
     
-#     return render_template("board.html", board=game.board.matrix)
+    return render_template("board.html", board=game.board.matrix)
+
 
 @socketio.on('zug_gemacht')
 def handle_zug(zug):
@@ -125,17 +120,18 @@ def handle_zug(zug):
                 send_matrix[idx1][idx2] = y
     print(send_matrix)
     socketio.emit('update_board', {'board': send_matrix})
-    if len(game.active_player.blocks) == 0:
-        print("Player wins!")
-    
-    # if zug == (0, 0, False, 0):
-    #     counter +=1 
-    # else:
-    #     counter = 0
 
-    # if counter == 4:
-    #     winner = game.calculate_points()
-    #     return f"{winner} wins the game!"
+    if len(game.active_player.blocks) == 0:
+        return "Player wins!"
+    
+    if zug == (0, 0, False, 0):
+        counter +=1 
+    else:
+        counter = 0
+
+    if counter == 4:
+        winner = game.calculate_points()
+        return f"{winner} wins the game!"
         
 
     game.get_next_active_player()
@@ -151,6 +147,16 @@ def handle_message(message):
     return "Hi"
 
 
+# @socketio.on('send_message')
+# def handle_message(message):
+#     print("testott")
+#     print(message)
+#     email = current_user._email
+#     msg = f"{email}: {message}"
+#     socketio.emit('chat_message', msg, room=lobby_id)
+#     return "Hi"
+
+
 
 @socketio.on('join_room')
 def join_room(lobby_id):
@@ -160,9 +166,9 @@ def join_room(lobby_id):
     return 'Joined lobby'
 
 
+
 def get_users_in_lobby(lobby_id):
     # Annahme: Es gibt ein Attribut 'lobby' in der User-Klasse, das die Lobby-ID speichert.
     users_in_lobby = User.query.filter_by(lobby=lobby_id).all()
     return users_in_lobby
-
 

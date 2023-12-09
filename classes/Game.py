@@ -54,6 +54,11 @@ class Game():
                         block_idx = int(input("Choose Block\n"))
                         player.blocks[block_idx].reflect()
                         turn_active = True
+                    
+                    if len(player.blocks) == 0:
+                        print(f"{player} wins the game")
+                        exit = True
+
                 if action == "exit":
                     exit = True
                     break
@@ -113,6 +118,24 @@ class AI_Game():
             next_idx = 0
 
         self.active_player = self.players[next_idx]
+
+    
+    def calculate_points(self):
+        for player in self.players:
+            best_value = 1000
+            negative_points = 0
+            for block in player.blocks:
+                for i in len(block):
+                    for j in len(block[0]):
+                        if block[i][j]:
+                            negative_points += 1
+            if negative_points <= best_value:
+                winner = player.color
+                best_value = negative_points
+        return winner
+            
+                
+
     
 
 
