@@ -99,10 +99,10 @@ class CustomTestRunner(unittest.TextTestRunner):
     def run(self, test):
         result = CustomTestResult(self.stream, self.descriptions, self.verbosity)
         test(result)
-        self.stream.writeln("\nTestergebnisse:")
+        self.stream.writeln("\nTest results:")
         for class_name, test_count in result.class_test_counts.items():
             success_count = result.class_success_counts.get(class_name, 0)
-            self.stream.writeln(f"{class_name}: {success_count} von {test_count} korrekt")
+            self.stream.writeln(f"{class_name}: {success_count} from {test_count} correct")
         return result
     
 if __name__ == '__main__':
