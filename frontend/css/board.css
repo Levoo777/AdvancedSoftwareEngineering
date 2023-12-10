@@ -1,0 +1,95 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000;
+}
+
+.square {
+    width: 16px;
+    height: 16px;
+    background-color: #1d1d1d;
+    box-shadow: 0 0 2px #000;
+    transition: 1s ease;
+}
+
+.square.dragenter {
+    box-shadow: 0 0 2px gold;
+}
+
+.blocksquare-true{
+    width: 16px;
+    height: 16px;
+    background-color: cyan;
+    box-shadow: 0 0 2px cyan;
+    transition: 1s ease;
+}
+
+.blocksquare-false {
+    width: 16px;
+    height: 16px;
+    visibility: hidden;
+}
+
+.square:hover {
+    transition-duration: 0s;
+} 
+
+.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(20, 20px);
+    grid-template-rows: repeat(20, 20px);
+}
+
+.wrapper-left-side {
+    position: absolute;
+    width: 400px;
+    top: 50%;
+    left: 20%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.blocks {
+    height: 100%;
+    align-items: center;
+}
+
+.block {
+    display: grid;
+    grid-template-columns: repeat(5, 20px);
+    grid-template-rows: repeat(5, 20px);
+    align-items: center;
+    /* margin: 1% 1%; */
+}
+
+.block.dragging {
+    opacity: 0.2;
+}
+
+
+#blocks1 {
+    width: calc(100%/3);
+    float: left;
+}
+
+#blocks2 {
+    width: calc(100%/3);
+    float: left;
+}
+
+#blocks3 {
+    width: calc(100%/3);
+    float: left;
+}
+
