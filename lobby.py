@@ -5,7 +5,9 @@ from classes.User import User
 from classes.Game import AI_Game
 from classes.Board import Board
 from classes.AIPlayer import AIPlayer
+from classes.Player import Player
 from flask_socketio import SocketIO, emit, join_room, leave_room
+import random
 
 from extensions import socketio
 
@@ -15,10 +17,14 @@ BOARDS = [Board()] * 10
 PLAYER = []
 GAME = [AI_Game(["red"], Board()), AI_Game([AIPlayer("red"),AIPlayer("blue"), AIPlayer("green"), AIPlayer("yellow")], BOARDS[2])]
 GAMES = [None] * 10
+<<<<<<< Updated upstream
 COUNT = [0]
 COUNTER = 0
 SEND_MATRIX_OLD = []
 
+=======
+COUNT = [0, 0]
+>>>>>>> Stashed changes
 
 
 from functools import wraps
@@ -51,21 +57,13 @@ def join_post():
     db.update_user((user_id, "lobby", lobby_id))
     db.disconnect()
     join_room(lobby_id)
-    #emit('join_lobby', {'user_id': user_id}, room=lobby_id)
-    #eturn 'Joined lobby'
     return redirect(url_for('lobby.room'))
 
 @lobby.route('/game')
 @login_required
 @lobby_required
 def room():
-    db = DB_Manager("database/kundendatenbank.sql", "users")
-    db.connect()
-    loaded_users = db.get_users_in_lobby(current_user._lobby)
-    users = []
-    for user in loaded_users:
-        users.append(user[0])
-    db.disconnect()
+    users = get_lobby_user()
     return render_template("game.html", lobby_id=current_user._lobby, users=users, board=None)
 
 @lobby.route("/game/leave_lobby")
@@ -84,11 +82,40 @@ def room_leave_lobby():
 @login_required
 @lobby_required
 def game_start():
-    game = GAME[current_user._lobby - 1]
-    game.init_game()
-    return render_template("board.html", board = game.board.matrix)
+    lobby = current_user._lobby - 1
+    print(lobby)
+    if lobby == 1:
+        BOARDS[lobby] = Board()
+        GAME[lobby] = AI_Game([AIPlayer("red"),AIPlayer("blue"), AIPlayer("green"), AIPlayer("yellow")], BOARDS[lobby])
+        game = GAME[lobby]
+        game.init_game()
+        COUNT[lobby] = 0
+        return render_template("board.html", board = game.board.matrix, name=current_user._name)
 
+    if lobby == 0:
+        BOARDS[lobby] = Board()
+        users = get_lobby_user()
+        for i in range(4 - len(users)):
+            users.append("AI")
+        colors = ["red", "blue", "green", "yellow"]
+        random.shuffle(colors)
+        random.shuffle(users)
+        order = []
+        players = []
+        for idx, user in enumerate(users):
+            if user == "AI":
+                players.append(AIPlayer(colors[idx]))
+            else:
+                players.append(Player(colors[idx]))
+            order.append((user, colors[idx]))
 
+        GAME[lobby] = AI_Game(players, BOARDS[lobby])
+        game = GAME[lobby]
+        game.init_game()
+        COUNT[lobby] = 0
+        return render_template("user_board.html", board = game.board.matrix, order=order)
+        
+    return "Lobby not found (please use lobby 1 for usergame or 2 for ai game)"
 # #neue version noch nicht lauffähig
 # def game_start():
 #     game = GAME[current_user._lobby - 1]
@@ -113,6 +140,7 @@ def game_start():
 
 @socketio.on('zug_gemacht')
 def handle_zug(zug):
+<<<<<<< Updated upstream
     global COUNTER
     global SEND_MATRIX_OLD
     #print("hallo")
@@ -120,6 +148,14 @@ def handle_zug(zug):
     game = GAME[current_user._lobby - 1]
     COUNT[0] = COUNT[0] + 1
     if COUNT[0] <=4:
+=======
+    print("hallo")
+    print(zug)
+    lobby = current_user._lobby - 1
+    game = GAME[current_user._lobby - 1]
+    COUNT[lobby] = COUNT[lobby] + 1
+    if COUNT[lobby] <=4:
+>>>>>>> Stashed changes
         game.play_game(True)
     else:
         game.play_game(False)
@@ -153,6 +189,38 @@ def handle_zug(zug):
     game.get_next_active_player()
     return "Hi"
 
+
+
+@socketio.on('set_block_user_game')
+def handle_zug(zug):
+    lobby = current_user._lobby - 1
+    game = GAME[current_user._lobby - 1]
+    if not isinstance(game.active_player, AIPlayer):
+        flash("Kein AI Spieler")
+        game.get_next_active_player()
+        return "Kein AI Spieler"
+
+    COUNT[lobby] = COUNT[lobby] + 1
+    if COUNT[lobby] <=4:
+        game.play_game(True)
+    else:
+        game.play_game(False)
+    
+    print(game.board.matrix)
+    send_matrix = [["X" for _ in range(20)] for _ in range(20)]
+    for idx1, row in enumerate(game.board.matrix):
+        for idx2, y in enumerate(row):
+            if y:
+                send_matrix[idx1][idx2] = y
+    print(send_matrix)
+    socketio.emit('update_board', {'board': send_matrix})
+    if len(game.active_player.blocks) == 0:
+        print("Player wins!")
+    
+    game.get_next_active_player()
+    return "Hi"
+
+
 @socketio.on('send_message')
 def handle_message(message):
     print("testott")
@@ -172,9 +240,18 @@ def join_room(lobby_id):
     return 'Joined lobby'
 
 
-def get_users_in_lobby(lobby_id):
-    # Annahme: Es gibt ein Attribut 'lobby' in der User-Klasse, das die Lobby-ID speichert.
-    users_in_lobby = User.query.filter_by(lobby=lobby_id).all()
-    return users_in_lobby
+# def get_users_in_lobby(lobby_id):
+#     # Annahme: Es gibt ein Attribut 'lobby' in der User-Klasse, das die Lobby-ID speichert.
+#     users_in_lobby = User.query.filter_by(lobby=lobby_id).all()
+#     return users_in_lobby
 
 
+def get_lobby_user():
+    db = DB_Manager("database/kundendatenbank.sql", "users")
+    db.connect()
+    loaded_users = db.get_users_in_lobby(current_user._lobby)
+    users = []
+    for user in loaded_users:
+        users.append(user[0])
+    db.disconnect()
+    return users
