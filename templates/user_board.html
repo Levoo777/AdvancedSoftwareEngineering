@@ -32,12 +32,18 @@
         socket.on('update_board', function(data) {
             console.log("Hallo")
             console.log('Aktualisiere Spielfeld:', data.board);
+            console.log('Blöcke', data.blocks)
             updateBoard(data.board);
+            updateBlocks(data.blocks)
         });
 
         function updateBoard(updatedBoard) {
         updateGrid(updatedBoard);
     }
+
+        function updateBlocks(updatedBlocks){
+            return
+        }
 
 
 function changeColorGameBoard(y, x, color) {

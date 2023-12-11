@@ -149,20 +149,48 @@ def set_block(data):
 
     block = Block(block_matrix, color)
     print(color)
-    print(data["x"], data["y"], block.block_matrix)
-    if game.board.is_first_move_valid(data["x"], data["y"], block):
-        print("IS_VALID")
-        game.active_player.player_insert(data["block"], data["y"], data["x"])
-        game.get_next_active_player()
+    lobby = current_user._lobby - 1
+    COUNT[lobby] = COUNT[lobby] + 1
+    if COUNT[lobby] <=4:
+        if game.board.is_first_move_valid(data["y"], data["x"], block):
+            print("IS_VALID")
+            game.active_player.player_insert(data["block"], data["y"], data["x"])
+            # remaining_blocks = game.active_player.blocks
+            # remaining_list = remaining_blocks.keys()
+            # for i in range(1,22):
+            #     if i not in remaining_list:
+            #         remaining_blocks[i] = 0
 
-        send_matrix = [["X" for _ in range(20)] for _ in range(20)]
-        for idx1, row in enumerate(game.board.matrix):
-            for idx2, y in enumerate(row):
-                if y:
-                    send_matrix[idx1][idx2] = y
-        socketio.emit('update_board', {'board': send_matrix})
+            game.get_next_active_player()
 
-        return "Hi"
+            send_matrix = [["X" for _ in range(20)] for _ in range(20)]
+            for idx1, row in enumerate(game.board.matrix):
+                for idx2, y in enumerate(row):
+                    if y:
+                        send_matrix[idx1][idx2] = y
+            
+            socketio.emit('update_board', {'board': send_matrix})
+            return "Hi"
+    else:
+        if game.board.is_move_valid(data["y"], data["x"], block):
+            game.active_player.player_insert(data["block"], data["y"], data["x"])
+            # remaining_blocks = game.active_player.blocks
+            # remaining_list = remaining_blocks.keys()
+            # for i in range(1,22):
+            #     if i not in remaining_list:
+            #         remaining_blocks[i] = 0
+
+            game.get_next_active_player()
+
+            send_matrix = [["X" for _ in range(20)] for _ in range(20)]
+            for idx1, row in enumerate(game.board.matrix):
+                for idx2, y in enumerate(row):
+                    if y:
+                        send_matrix[idx1][idx2] = y
+            
+            socketio.emit('update_board', {'board': send_matrix})
+            return "Hi"
+
     print("IS_NOT_VALID")
     return "Hi"
 

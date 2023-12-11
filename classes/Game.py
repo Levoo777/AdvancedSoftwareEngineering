@@ -125,9 +125,9 @@ class AI_Game():
             best_value = 1000
             negative_points = 0
             for block in player.blocks:
-                for i in len(block.matrix):
-                    for j in len(block.matrix[0]):
-                        if block.matrix[i][j]:
+                for i in len(player.blocks[block].block_matrix):
+                    for j in len(player.blocks[block].block_matrix[0]):
+                        if player.blocks[block].block_matrix[i][j]:
                             negative_points += 1
             if negative_points <= best_value:
                 winner = player.color
