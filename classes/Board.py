@@ -71,7 +71,7 @@ class Board():
         for idx_row, x_row in enumerate(block.block_matrix):
             for idx_col, val in enumerate(x_row):
                 if not self.matrix[row + idx_row][col + idx_col]:
-                    print(f"INSERT {row + idx_row}, {col + idx_col}, {block.block_matrix}")
+                    #print(f"INSERT {row + idx_row}, {col + idx_col}, {block.block_matrix}")
                     self.matrix[row + idx_row][col + idx_col] = val  
 
     #@Leon Ams, Sercan Berkpinar
@@ -83,8 +83,8 @@ class Board():
                 if len(cell_value) < 5:
                     cell_value = cell_value.ljust(5)
                 row += f"  {cell_value} |"
-            print(row)
-            print("_________" * 20 + "\n")
+            #print(row)
+            #print("_________" * 20 + "\n")
 
    
 

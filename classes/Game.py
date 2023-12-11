@@ -28,7 +28,7 @@ class Game():
                 turn_active = True
                 while turn_active:
                     turn_active = False
-                    print(f"\nPlayer {player.color}'s turn\n\nRemaining blocks:")
+                    #print(f"\nPlayer {player.color}'s turn\n\nRemaining blocks:")
                     player.show_remaining_blocks()
                     self.board.show_board()
                     action = input("\nChoose Action   (insert, rotate, reflect, exit)\n")
@@ -43,7 +43,7 @@ class Game():
                             if valid:
                                 player.player_insert(block_idx, row, col)
                             else: 
-                                print("Move not valid!")
+                                #print("Move not valid!")
                                 turn_active = True
 
                     elif action == "rotate":
@@ -85,13 +85,13 @@ class AI_Game():
 
         while True:
             for player in self.players:
-                print(len(player.blocks))
+                #print(len(player.blocks))
                 time.sleep(1)
                 if round_one:
                     player.set_first_block()
                 else:
                     player.set_block()
-                print("test")
+                #print("test")
                 #time.sleep(1)
                 self.board.show_board()
             round_one = False
@@ -125,9 +125,9 @@ class AI_Game():
             best_value = 1000
             negative_points = 0
             for block in player.blocks:
-                for i in len(block):
-                    for j in len(block[0]):
-                        if block[i][j]:
+                for i in len(block.matrix):
+                    for j in len(block.matrix[0]):
+                        if block.matrix[i][j]:
                             negative_points += 1
             if negative_points <= best_value:
                 winner = player.color

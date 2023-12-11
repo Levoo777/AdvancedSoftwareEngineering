@@ -70,18 +70,18 @@ class AIPlayer(Player):
         valid_move = False
 
         while valid_move == False:
-            print("Hallo")
+            #print("Hallo")
             random_block_idx = len(self.blocks) - self.rnd_gen.randint(0,7)
             random_big_block = self.blocks[random_block_idx]
-            print("Block")
-            print(random_big_block.block_matrix)
+            #print("Block")
+            #print(random_big_block.block_matrix)
 
             if not self.board.matrix[0][0]:
                 pos_row = 0
                 pos_col = 0
-                print("a")
+                #print("a")
                 move = self.try_block_first(pos_row, pos_col, random_big_block)
-                print("b")
+                #print("b")
                 if random_big_block.block_matrix[0][0]:
                     valid_move = True
 
@@ -109,7 +109,7 @@ class AIPlayer(Player):
         self.player_insert(random_block_idx, move.row, move.col)
         self.corners += move.new_corners
         self.pop_corners()
-        print(self.corners)
+        #print(self.corners)
     
    
 
@@ -283,7 +283,7 @@ class AIPlayer(Player):
     #@Lukas Buser, Sercan Berkpinar
     def get_best_corner(self):
         self.pop_corners()
-        print(f"corner: {self.corners}")
+        #print(f"corner: {self.corners}")
         best_corner = (100, 100)
         for row, col in self.corners:
             if best_corner == (100, 100):
@@ -312,7 +312,7 @@ class AIPlayer(Player):
                 if self.is_corner(demo_board, row_i, col_i):
                     if (row_i, col_i) not in self.corners:
                         new_corners.append((row_i, col_i))
-        print(len(new_corners))
+        #print(len(new_corners))
         return Move(len(new_corners)-1, row, col, new_corners, block)
     
     #@Leon Ams
@@ -422,14 +422,14 @@ class AIPlayer(Player):
                     best_idx = idx
             counter += 1
 
-        print ("end1")
-        print(str(best_move))
-        print(counter)
-        print(best_move == Move(0, 0, 0, []))
+        #print ("end1")
+        #print(str(best_move))
+        #print(counter)
+        #print(best_move == Move(0, 0, 0, []))
         best_move_start = best_move
 
         while best_move_start == Move(0, 0, 0, []) and counter < 30:
-            print("start2")
+            #print("start2")
             best_row, best_col = self.get_random_corner()
             idx, block = self.get_random_block("big")
             new_best_move = self.find_block_position(best_row, best_col, block)
@@ -443,11 +443,11 @@ class AIPlayer(Player):
                     best_move = new_best_move 
                     best_idx = idx
             counter += 1
-            print(f"insert: {best_idx, best_move.row, best_move.col, best_move.block}")
+            #print(f"insert: {best_idx, best_move.row, best_move.col, best_move.block}")
 
         
         while not best_move.block and counter < 50:
-            print("start2")
+            #print("start2")
             best_row, best_col = self.get_random_corner()
             idx, block = self.get_random_block("small")
             new_best_move = self.find_block_position(best_row, best_col, block)
@@ -461,7 +461,7 @@ class AIPlayer(Player):
                     best_move = new_best_move 
                     best_idx = idx
             counter += 1
-            print(f"insert: {best_idx, best_move.row, best_move.col, best_move.block}")
+            #print(f"insert: {best_idx, best_move.row, best_move.col, best_move.block}")
 
 
         if best_move.block:
@@ -470,7 +470,7 @@ class AIPlayer(Player):
         else:
             print("UAAAAAAAAAAAAAH")
         #self.pop_corners()
-        print(self.corners)
+        #print(self.corners)
 
         
     # @Sercan Berkpinar
