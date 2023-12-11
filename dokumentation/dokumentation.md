@@ -32,3 +32,10 @@
 - Teammitglieder werden auf den aktuellen Stand gebracht
 - Gedanken machen über das Front-End
 - Erkundigen, ob jemand im Team hilfe braucht
+
+<h2>Meeting 6 - 11.12.2023</h2>
+<h4>Thema: Alles muss fertig werden!!!</h4>
+
+- Abstimmung wer welche Aufgabe übernimmt
+- Festlegen welche Funktionalitäten priorität haben
+
