@@ -267,13 +267,19 @@ function dragndrop () {
             let y = Number(yx_array[0])
             let x = Number(yx_array[1])
 
-            //data = {[y, x, blocks_array[draggingBlockId]]}
-            socket.emit('user_set_block', message);
+            data = {
+                "action": "block_insert",
+                "y": y,
+                "x": x,
+                "block": draggingBlockId +1,
+                "block_matrix": blocks_array[draggingBlockId]
+                }
+            socket.emit('user_set_block', data);
 
             
 
 
-            setBlockGameBoard(y, x, blocks_array[draggingBlockId], "cyan")
+            //setBlockGameBoard(y, x, blocks_array[draggingBlockId], "cyan")
 
             
             
@@ -281,6 +287,21 @@ function dragndrop () {
     })
 
 }
+
+function updateGrid(currentGrid) {
+
+    for (i in currentGrid) {
+        for (j in currentGrid[i])
+            if (currentGrid[i][j] == "X") {
+                continue;
+
+            } else {
+                changeColorGameBoard(i, j, currentGrid[i][j])
+             }
+    }
+}
+
+
 
 dragndrop()
 

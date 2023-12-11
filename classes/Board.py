@@ -69,14 +69,20 @@ class Board():
             corner = False
             for i in range(len(block.block_matrix)):
                 for j in range(len(block.block_matrix[i])):
-
                     if not block.block_matrix[i][j]: 
                         continue  
+                    
+                    if row+i == 19 or row + i == 0:
+                        if column+j == 19 or column+j == 0:
+                            if block.block_matrix[i][j]:
+                                corner = True
+
 
                     if row+i < 20 and row+i >= 0 and column+j <20 and column+j>= 0:                # new
                         pass
                     else:
-                        return False
+                        if block.block_matrix[i][j]:
+                            return False
 
                     
                     if self.matrix[row + i][column + j] != None:

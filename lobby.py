@@ -5,6 +5,7 @@ from classes.User import User
 from classes.Game import AI_Game
 from classes.Board import Board
 from classes.AIPlayer import AIPlayer
+from classes.Block import Block
 from classes.Player import Player
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import random
@@ -132,6 +133,38 @@ def game_start():
 #     return render_template("board.html", board=game.board.matrix)
 
 
+@socketio.on('user_set_block')
+def set_block(data):
+    print(data)
+    game = GAME[current_user._lobby - 1]
+    color = game.active_player.color
+
+    block_matrix = data["block_matrix"]
+
+    for idx1, x in enumerate(block_matrix):
+        for idx2, y in enumerate(x):
+            if y == False:
+                block_matrix[idx1][idx2] = None
+
+
+    block = Block(block_matrix, color)
+    print(color)
+    print(data["x"], data["y"], block.block_matrix)
+    if game.board.is_first_move_valid(data["x"], data["y"], block):
+        print("IS_VALID")
+        game.active_player.player_insert(data["block"], data["y"], data["x"])
+        game.get_next_active_player()
+
+        send_matrix = [["X" for _ in range(20)] for _ in range(20)]
+        for idx1, row in enumerate(game.board.matrix):
+            for idx2, y in enumerate(row):
+                if y:
+                    send_matrix[idx1][idx2] = y
+        socketio.emit('update_board', {'board': send_matrix})
+
+        return "Hi"
+    print("IS_NOT_VALID")
+    return "Hi"
 
 @socketio.on('zug_gemacht')
 def handle_zug(zug):
@@ -193,13 +226,12 @@ def handle_zug(zug):
     else:
         game.play_game(False)
     
-    print(game.board.matrix)
     send_matrix = [["X" for _ in range(20)] for _ in range(20)]
     for idx1, row in enumerate(game.board.matrix):
         for idx2, y in enumerate(row):
             if y:
                 send_matrix[idx1][idx2] = y
-    print(send_matrix)
+ 
     socketio.emit('update_board', {'board': send_matrix})
     if len(game.active_player.blocks) == 0:
         print("Player wins!")
