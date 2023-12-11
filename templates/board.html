@@ -23,7 +23,6 @@
         var socket = io.connect('http://' + document.domain + ':' + location.port);
 
         socket.on('update_board', function(data) {
-            // Aktualisiere das Spielfeld auf dem Client
             console.log("Hallo")
             console.log('Aktualisiere Spielfeld:', data.board);
             updateBoard(data.board);
@@ -65,7 +64,6 @@ function changeColorGameBoard(y, x, color) {
 }
 
 
-        // Hier fügst du den Code für das Zugmachen hinzu und sendest die Zuginformationen an den Server
         function makefirstMove(row, col, player) {
             var row = document.getElementById("row")
             var col = document.getElementById("col")
@@ -162,10 +160,9 @@ function changeColorGameBoard(y, x, color) {
 </body>
 
 <script>
-    // Dein vorhandener Socket.io-Code
+
 
     socket.on('chat_message', function(message) {
-        // Neuen Chat-Nachrichtenempfang behandeln
         var chatList = document.getElementById('chat-list');
         var li = document.createElement('li');
         li.textContent = message;
@@ -173,7 +170,6 @@ function changeColorGameBoard(y, x, color) {
     });
 
     function sendMessage() {
-        // Funktion zum Senden von Chat-Nachrichten an den Server
         var messageInput = document.getElementById('message');
         var message = messageInput.value.trim();
         if (message !== '') {

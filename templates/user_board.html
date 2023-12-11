@@ -41,21 +41,11 @@
 
         socket.on('finish_game', function(ranking) {
         console.log("Ranking", ranking);
-
-        // Annahme: Ihre HTML-Tabelle hat eine ID mit dem Namen 'rankingTable'
         var table = document.getElementById('rankingTable');
-
-        // Löschen Sie den vorhandenen Inhalt der Tabelle (optional)
         table.innerHTML = '';
-
-        // Iterieren Sie über jedes Tupel im Ranking
         ranking.forEach(function(tuple) {
-        // Erstellen Sie eine neue Zeile
             var row = table.insertRow();
-
-        // Iterieren Sie über jedes Element im Tupel
             tuple.forEach(function(element) {
-            // Fügen Sie eine Zelle für jedes Element hinzu
                 var cell = row.insertCell();
                 cell.appendChild(document.createTextNode(element));
             });
@@ -79,8 +69,6 @@ function changeColorGameBoard(y, x, color) {
     element.style.boxShadow = `0 0 2px ${color}, 0 0 10px ${color}`
 }
 
-
-        // Hier fügst du den Code für das Zugmachen hinzu und sendest die Zuginformationen an den Server
         function makefirstMove(row, col, player) {
             var row = document.getElementById("row")
             var col = document.getElementById("col")
@@ -189,10 +177,8 @@ function changeColorGameBoard(y, x, color) {
 </body>
 
 <script>
-    // Dein vorhandener Socket.io-Code
 
     socket.on('chat_message', function(message) {
-        // Neuen Chat-Nachrichtenempfang behandeln
         var chatList = document.getElementById('chat-list');
         var li = document.createElement('li');
         li.textContent = message;
@@ -200,7 +186,6 @@ function changeColorGameBoard(y, x, color) {
     });
 
     function sendMessage() {
-        // Funktion zum Senden von Chat-Nachrichten an den Server
         var messageInput = document.getElementById('message');
         var message = messageInput.value.trim();
         if (message !== '') {

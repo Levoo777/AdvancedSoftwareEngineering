@@ -18,9 +18,9 @@
         document.addEventListener("DOMContentLoaded", function() {
             var form = document.querySelector("form");
             form.addEventListener("submit", function(event) {
-                event.preventDefault(); // Verhindert das sofortige Absenden des Formulars
+                event.preventDefault(); 
                 hashPassword().then(function() {
-                    form.submit(); // Sendet das Formular, nachdem das Passwort gehasht wurde
+                    form.submit();
                 });
             });
         });
@@ -35,7 +35,7 @@
             console.log(hashedPassword);
     
             hashedPasswordInput.value = hashedPassword;
-            passwordInput.value = ''; // Löscht das originale Passwortfeld
+            passwordInput.value = ''; 
     
         }
     
@@ -62,7 +62,7 @@
                     {% endif %}
                     {% endwith %}
                     <form method="POST" action="/signup" onsubmit="hashPassword()">
-                        <!-- Email input -->
+ 
                         <div class="form-floating mb-4">
                             <input type="email" name="email_input" id="email_input" class="form-control bg-light">
                             <label for="email_input">E-Mail</label>
@@ -73,7 +73,6 @@
                             <label for="username_input">Username</label>
                         </div>
 
-                        <!-- Password input -->
                         <div class="form-floating mb-4">
                             <input type="password" id="password_input" class="form-control bg-light">
                             <label for="password_input">Password</label>

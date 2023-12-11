@@ -173,6 +173,5 @@ def join_room(lobby_id):
 
 
 def get_users_in_lobby(lobby_id):
-    # Annahme: Es gibt ein Attribut 'lobby' in der User-Klasse, das die Lobby-ID speichert.
     users_in_lobby = User.query.filter_by(lobby=lobby_id).all()
     return users_in_lobby
