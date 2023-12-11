@@ -22,9 +22,9 @@ USERS = [{}, None]
 ACTIVE_GAME = [False, False]
 GAMES = [None] * 10
 COUNT = [0, 0]
-COUNTER = 0
-SEND_MATRIX_OLD = []
-
+COUNTER = [0, 0]
+SEND_MATRIX_OLD = [None, None]
+GIVE_UP_COUNTER = [0, 0]
 
 from functools import wraps
 from flask import abort
@@ -190,26 +190,62 @@ def set_block(data):
                     if y:
                         send_matrix[idx1][idx2] = y
             
-            socketio.emit('update_board', {'board': send_matrix, 'blocks': remaining_blocks, 'color': game.active_player.color})
+            SEND_MATRIX_OLD[lobby] = send_matrix
+            if isinstance(game.active_player, AIPlayer):
+                user_frontend = "AI"
+            else:
+                for user in USERS[lobby]:
+                    if USERS[lobby][user] == color:
+                        user_frontend = user
+            socketio.emit('update_board', {'board': send_matrix, 'blocks': remaining_blocks, 'color': game.active_player.color, 'user': user_frontend})
             return "Hi"
+    
+    
     else:
         if game.board.is_move_valid(data["y"], data["x"], block):
             game.active_player.player_insert(data["block"], data["y"], data["x"])
-            # remaining_blocks = game.active_player.blocks
-            # remaining_list = remaining_blocks.keys()
-            # for i in range(1,22):
-            #     if i not in remaining_list:
-            #         remaining_blocks[i] = 0
-
-            game.get_next_active_player()
 
             send_matrix = [["X" for _ in range(20)] for _ in range(20)]
             for idx1, row in enumerate(game.board.matrix):
                 for idx2, y in enumerate(row):
                     if y:
                         send_matrix[idx1][idx2] = y
-            
+
+            SEND_MATRIX_OLD[lobby] = send_matrix
+
             socketio.emit('update_board', {'board': send_matrix})
+
+            if len(game.active_player.blocks) == 0:
+                socketio.emit('update_board', {'board': send_matrix})
+                ranking = []
+                all_players = game.finished_players + game.players
+                for player in all_players:
+                    points = player.calc_points()
+                    ranking.append((points, player.color))
+                ranking.sort(key=lambda x: x[0])
+                ranking = ranking[::-1]
+                socketio.emit('finish_game', ranking)
+                return 
+           
+
+            game.get_next_active_player()
+
+            remaining_blocks = deepcopy(game.active_player.blocks)
+            remaining_list = remaining_blocks.keys()
+            for i in range(1,22):
+                if i not in remaining_list:
+                    remaining_blocks[i] = 0
+                else:
+                    remaining_blocks[i] = remaining_blocks[i].block_matrix
+
+            if isinstance(game.active_player, AIPlayer):
+                user_frontend = "AI"
+            else:
+                for user in USERS[lobby]:
+                    if USERS[lobby][user] == game.active_player.color:
+                        user_frontend = user
+            
+            socketio.emit('update_board', {'board': send_matrix, 'blocks': remaining_blocks, 'color': game.active_player.color, 'user': user_frontend})
             return "Hi"
 
     print("IS_NOT_VALID")
@@ -262,6 +298,8 @@ def handle_zug(zug):
 
 @socketio.on('set_block_user_game')
 def handle_zug(zug):
+
+
     lobby = current_user._lobby - 1
     ACTIVE_GAME[lobby] = True
     game = GAME[current_user._lobby - 1]
@@ -281,10 +319,41 @@ def handle_zug(zug):
         for idx2, y in enumerate(row):
             if y:
                 send_matrix[idx1][idx2] = y
- 
+    
+    if send_matrix == SEND_MATRIX_OLD[lobby]:
+        
+        surrender_color = game.active_player.color
+        game.get_next_active_player()
+        for i in range(len(game.players) - 1, -1, -1):
+            if game.players[i].color == surrender_color:
+                surrendering_player = game.players.pop(i)
+        
+        points = surrendering_player.calc_points()
+        game.finished_players.append(surrendering_player)
+        if len(game.finished_players) == 4:
+            ranking = []
+            for player in game.finished_players:
+                points = player.calc_points()
+                ranking.append((points, player.color))
+            ranking.sort(key=lambda x: x[0])
+            ranking = ranking[::-1]
+            socketio.emit('finish_game', ranking)
+        print(f"Removed Player {surrendering_player.color} with {points} P")
+        return 
+
+    SEND_MATRIX_OLD[lobby] = send_matrix
     socketio.emit('update_board', {'board': send_matrix})
+
     if len(game.active_player.blocks) == 0:
-        print("Player wins!")
+        ranking = []
+        all_players = game.finished_players + game.players
+        for player in all_players:
+            points = player.calc_points()
+            ranking.append((points, player.color))
+        ranking.sort(key=lambda x: x[0])
+        ranking = ranking[::-1]
+        socketio.emit('finish_game', ranking)
+        return 
     
     game.get_next_active_player()
     return "Hi"
@@ -317,7 +386,13 @@ def surrender():
     points = surrendering_player.calc_points()
     game.finished_players.append(surrendering_player)
     if len(game.finished_players) == 4:
-        socketio.emit('finished_game')
+        ranking = []
+        for player in game.finished_players:
+            points = player.calc_points()
+            ranking.append((points, player.color))
+        ranking.sort(key=lambda x: x[0])
+        ranking = ranking[::-1]
+        socketio.emit('finish_game', ranking)
     print(f"Removed Player {surrendering_player.color} with {points} P")
     return
         

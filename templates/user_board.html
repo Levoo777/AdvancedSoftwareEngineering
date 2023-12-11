@@ -34,9 +34,34 @@
             console.log('Aktualisiere Spielfeld:', data.board);
             console.log('Blöcke', data.blocks)
             console.log('Farbe', data.color)
+            console.log('USer', data.user)
             updateBoard(data.board);
             updateBlocks(data.blocks)
         });
+
+        socket.on('finish_game', function(ranking) {
+        console.log("Ranking", ranking);
+
+        // Annahme: Ihre HTML-Tabelle hat eine ID mit dem Namen 'rankingTable'
+        var table = document.getElementById('rankingTable');
+
+        // Löschen Sie den vorhandenen Inhalt der Tabelle (optional)
+        table.innerHTML = '';
+
+        // Iterieren Sie über jedes Tupel im Ranking
+        ranking.forEach(function(tuple) {
+        // Erstellen Sie eine neue Zeile
+            var row = table.insertRow();
+
+        // Iterieren Sie über jedes Element im Tupel
+            tuple.forEach(function(element) {
+            // Fügen Sie eine Zelle für jedes Element hinzu
+                var cell = row.insertCell();
+                cell.appendChild(document.createTextNode(element));
+            });
+        });
+    });
+
 
         function updateBoard(updatedBoard) {
         updateGrid(updatedBoard);
@@ -78,8 +103,12 @@ function changeColorGameBoard(y, x, color) {
     </script>
 </html>
 <h1 class="text-center text-light">
-  AI-Game Board
+  USER-Game Board
 </h1>
+
+<table id="rankingTable">
+   
+</table>
 
 <!-- <div class="board-content">
 <div class="chat-container">
