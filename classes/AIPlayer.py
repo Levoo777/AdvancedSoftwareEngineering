@@ -428,7 +428,7 @@ class AIPlayer(Player):
         #print(best_move == Move(0, 0, 0, []))
         best_move_start = best_move
 
-        while best_move_start == Move(0, 0, 0, []) and counter < 30:
+        while best_move_start == Move(0, 0, 0, []) and counter < 50:
             #print("start2")
             best_row, best_col = self.get_random_corner()
             idx, block = self.get_random_block("big")
@@ -446,7 +446,7 @@ class AIPlayer(Player):
             #print(f"insert: {best_idx, best_move.row, best_move.col, best_move.block}")
 
         
-        while not best_move.block and counter < 50:
+        while not best_move.block and counter < 100:
             #print("start2")
             best_row, best_col = self.get_random_corner()
             idx, block = self.get_random_block("small")

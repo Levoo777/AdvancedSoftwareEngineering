@@ -219,8 +219,7 @@ def set_block(data):
 def handle_zug(zug):
     global COUNTER
     global SEND_MATRIX_OLD
-    print("hallo")
-    print(zug)
+
     lobby = current_user._lobby - 1
     ACTIVE_GAME[lobby] = True
     game = GAME[current_user._lobby - 1]
@@ -301,6 +300,27 @@ def handle_message(message):
     return "Hi"
 
 
+@socketio.on('give_up')
+def surrender():
+    lobby = current_user._lobby - 1
+    ACTIVE_GAME[lobby] = True
+    game = GAME[current_user._lobby - 1]
+    color = game.active_player.color
+    surrender_color = USERS[lobby][current_user._email] 
+    if surrender_color == color:
+        game.get_next_active_player()
+    
+    for i in range(len(game.players) - 1, -1, -1):
+        if game.players[i].color == surrender_color:
+            surrendering_player = game.players.pop(i)
+    
+    points = surrendering_player.calc_points()
+    game.finished_players.append(surrendering_player)
+    if len(game.finished_players) == 4:
+        socketio.emit('finished_game')
+    print(f"Removed Player {surrendering_player.color} with {points} P")
+    return
+        
 
 @socketio.on('join_room')
 def join_room(lobby_id):

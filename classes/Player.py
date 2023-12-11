@@ -36,6 +36,15 @@ class Player():
     def get_block(self, index):
         return self.blocks[index]
 
+    def calc_points(self):
+        points = 89
+        for block in self.blocks:
+            for idx1, row in enumerate(self.blocks[block].block_matrix):
+                for idx2, y in enumerate(row):
+                    if self.blocks[block].block_matrix[idx1][idx2]:
+                        points -= 1
+        return points        
+
 #board = Board()
 #player = Player("red", board)
 #player.player_insert(3, 1, 2)

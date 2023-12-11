@@ -71,6 +71,10 @@ function changeColorGameBoard(y, x, color) {
             console.log(zug)
             socket.emit('set_block_user_game', zug);
         }
+
+        function giveUp() {
+            socket.emit('give_up');
+        }
     </script>
 </html>
 <h1 class="text-center text-light">
@@ -137,6 +141,10 @@ function changeColorGameBoard(y, x, color) {
     <input type="number" id="col" name="col" hidden>
 
     <button type="submit" class="btn btn-success">GO!</button>
+</form>
+
+<form onsubmit="event.preventDefault(); giveUp();">
+    <button type="submit" class="btn btn-danger">Surrender</button>
 </form>
 </div>
 <!-- 

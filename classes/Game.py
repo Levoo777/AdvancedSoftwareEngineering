@@ -71,6 +71,8 @@ class Game():
 
 class AI_Game():
 
+    finished_players = []
+
     def __init__(self, players: list[AIPlayer], board: Board) -> None:
         self.players = players
         self.board = board
@@ -133,7 +135,7 @@ class AI_Game():
                 winner = player.color
                 best_value = negative_points
         return winner
-            
+    
                 
 
     
