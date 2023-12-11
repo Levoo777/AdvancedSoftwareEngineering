@@ -99,8 +99,8 @@ class Board():
                         if self.matrix[row+i][column+1+j] == block.color:
                             return False 
 
-                    if self.matrix[0][0] == block.color or self.matrix[0][19] == block.color or self.matrix[19][0] == block.color or self.matrix[19][19] == block.color    
-            
+                    if self.matrix[0][0] == block.color or self.matrix[0][19] == block.color or self.matrix[19][0] == block.color or self.matrix[19][19] == block.color:    
+                        corner = True
             return corner
 
 
