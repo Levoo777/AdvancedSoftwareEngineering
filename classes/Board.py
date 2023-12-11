@@ -64,7 +64,48 @@ class Board():
             # for i in range(len(block)):
             #     for j in range(len(block[i])):
             #                 self.matrix[row + i][column + j] = block[i][j]
+    def is_first_move_valid(self, row: int, column: int, block: Block):
+
+            corner = False
+            for i in range(len(block.block_matrix)):
+                for j in range(len(block.block_matrix[i])):
+
+                    if not block.block_matrix[i][j]: 
+                        continue  
+
+                    if row+i < 20 and row+i >= 0 and column+j <20 and column+j>= 0:                # new
+                        pass
+                    else:
+                        return False
+
+                    
+                    if self.matrix[row + i][column + j] != None:
+                            if block.block_matrix[i][j]:
+                                return False
+
+                    if row+i > 0:
+                        if self.matrix[row-1+i][column+j] == block.color:
+                            return False
+                                  
+                    if row+i < 19:
+                        if self.matrix[row+1+i][column+j] == block.color:
+                            return False
+                        
+                    if column+j > 0:
+                        if self.matrix[row+i][column-1+j] == block.color:
+                            return False
+                        
+                    if column+j < 19:
+                        if self.matrix[row+i][column+1+j] == block.color:
+                            return False 
+
+                    if self.matrix[0][0] == block.color or self.matrix[0][19] == block.color or self.matrix[19][0] == block.color or self.matrix[19][19] == block.color    
             
+            return corner
+
+
+
+
     
     #@Leon Ams
     def board_insert(self, block: Block, row: int, col: int):
