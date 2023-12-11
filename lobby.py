@@ -9,6 +9,7 @@ from classes.Block import Block
 from classes.Player import Player
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import random
+from copy import deepcopy
 
 from extensions import socketio
 
@@ -17,6 +18,8 @@ lobby = Blueprint('lobby', __name__)
 BOARDS = [Board()] * 10
 PLAYER = []
 GAME = [AI_Game(["red"], Board()), AI_Game([AIPlayer("red"),AIPlayer("blue"), AIPlayer("green"), AIPlayer("yellow")], BOARDS[2])]
+USERS = [{}, None]
+ACTIVE_GAME = [False, False]
 GAMES = [None] * 10
 COUNT = [0, 0]
 COUNTER = 0
@@ -80,6 +83,10 @@ def room_leave_lobby():
 def game_start():
     lobby = current_user._lobby - 1
     print(lobby)
+    if ACTIVE_GAME[lobby]:
+        flash("Spiel in dieser Lobby läuft gerade")
+        return redirect(url_for('lobby.join'))
+
     if lobby == 1:
         BOARDS[lobby] = Board()
         GAME[lobby] = AI_Game([AIPlayer("red"),AIPlayer("blue"), AIPlayer("green"), AIPlayer("yellow")], BOARDS[lobby])
@@ -91,6 +98,8 @@ def game_start():
     if lobby == 0:
         BOARDS[lobby] = Board()
         users = get_lobby_user()
+        if len(users) > 4:
+            users = users[:4]
         for i in range(4 - len(users)):
             users.append("AI")
         colors = ["red", "blue", "green", "yellow"]
@@ -109,11 +118,15 @@ def game_start():
         game = GAME[lobby]
         game.init_game()
         COUNT[lobby] = 0
+
+        for user, color in order:
+            USERS[lobby][user] = color
+    
         return render_template("user_board.html", board = game.board.matrix, order=order)
         
     return "Lobby not found (please use lobby 1 for usergame or 2 for ai game)"
 # #neue version noch nicht lauffähig
-# def game_start():
+# def game_start()
 #     game = GAME[current_user._lobby - 1]
 #     game.init_game()
 #     number_human_players = get_users_in_lobby(current_user._lobby)
@@ -136,8 +149,13 @@ def game_start():
 @socketio.on('user_set_block')
 def set_block(data):
     print(data)
+    lobby = current_user._lobby - 1
+    ACTIVE_GAME[lobby] = True
     game = GAME[current_user._lobby - 1]
     color = game.active_player.color
+
+    if not USERS[lobby][current_user._email] == color:
+        return 
 
     block_matrix = data["block_matrix"]
 
@@ -149,19 +167,22 @@ def set_block(data):
 
     block = Block(block_matrix, color)
     print(color)
-    lobby = current_user._lobby - 1
     COUNT[lobby] = COUNT[lobby] + 1
     if COUNT[lobby] <=4:
         if game.board.is_first_move_valid(data["y"], data["x"], block):
             print("IS_VALID")
             game.active_player.player_insert(data["block"], data["y"], data["x"])
-            # remaining_blocks = game.active_player.blocks
-            # remaining_list = remaining_blocks.keys()
-            # for i in range(1,22):
-            #     if i not in remaining_list:
-            #         remaining_blocks[i] = 0
-
+        
             game.get_next_active_player()
+
+            remaining_blocks = deepcopy(game.active_player.blocks)
+            remaining_list = remaining_blocks.keys()
+            for i in range(1,22):
+                if i not in remaining_list:
+                    remaining_blocks[i] = 0
+                else:
+                    remaining_blocks[i] = remaining_blocks[i].block_matrix
+
 
             send_matrix = [["X" for _ in range(20)] for _ in range(20)]
             for idx1, row in enumerate(game.board.matrix):
@@ -169,7 +190,7 @@ def set_block(data):
                     if y:
                         send_matrix[idx1][idx2] = y
             
-            socketio.emit('update_board', {'board': send_matrix})
+            socketio.emit('update_board', {'board': send_matrix, 'blocks': remaining_blocks, 'color': game.active_player.color})
             return "Hi"
     else:
         if game.board.is_move_valid(data["y"], data["x"], block):
@@ -201,6 +222,7 @@ def handle_zug(zug):
     print("hallo")
     print(zug)
     lobby = current_user._lobby - 1
+    ACTIVE_GAME[lobby] = True
     game = GAME[current_user._lobby - 1]
     COUNT[lobby] = COUNT[lobby] + 1
     if COUNT[lobby] <=4:
@@ -242,10 +264,11 @@ def handle_zug(zug):
 @socketio.on('set_block_user_game')
 def handle_zug(zug):
     lobby = current_user._lobby - 1
+    ACTIVE_GAME[lobby] = True
     game = GAME[current_user._lobby - 1]
     if not isinstance(game.active_player, AIPlayer):
         flash("Kein AI Spieler")
-        game.get_next_active_player()
+        #game.get_next_active_player()
         return "Kein AI Spieler"
 
     COUNT[lobby] = COUNT[lobby] + 1
