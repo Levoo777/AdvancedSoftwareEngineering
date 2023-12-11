@@ -18,6 +18,8 @@ PLAYER = []
 GAME = [AI_Game(["red"], Board()), AI_Game([AIPlayer("red"),AIPlayer("blue"), AIPlayer("green"), AIPlayer("yellow")], BOARDS[2])]
 GAMES = [None] * 10
 COUNT = [0, 0]
+COUNTER = 0
+SEND_MATRIX_OLD = []
 
 
 from functools import wraps
@@ -133,6 +135,8 @@ def game_start():
 
 @socketio.on('zug_gemacht')
 def handle_zug(zug):
+    global COUNTER
+    global SEND_MATRIX_OLD
     print("hallo")
     print(zug)
     lobby = current_user._lobby - 1
