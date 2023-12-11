@@ -267,7 +267,15 @@ function dragndrop () {
             let y = Number(yx_array[0])
             let x = Number(yx_array[1])
 
+            //data = {[y, x, blocks_array[draggingBlockId]]}
+            socket.emit('user_set_block', message);
+
+            
+
+
             setBlockGameBoard(y, x, blocks_array[draggingBlockId], "cyan")
+
+            
             
         })
     })

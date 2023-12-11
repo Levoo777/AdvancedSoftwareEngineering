@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title> 
-    <link rel="stylesheet" href="/static/style1.css">
+    <link rel="stylesheet" href="/static/board.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
@@ -30,39 +30,15 @@
         var socket = io.connect('http://' + document.domain + ':' + location.port);
 
         socket.on('update_board', function(data) {
-            // Aktualisiere das Spielfeld auf dem Client
             console.log("Hallo")
             console.log('Aktualisiere Spielfeld:', data.board);
             updateBoard(data.board);
         });
 
         function updateBoard(updatedBoard) {
-        // var boardList = document.getElementById('board-list');
-        // boardList.innerHTML = ''; // Leere die aktuelle Liste
-
-        // // Füge die aktualisierten Informationen hinzu
-        // updatedBoard.forEach(function(row) {
-        //     var li = document.createElement('li');
-        //     li.textContent = row === null ? "None" : row;
-        //     boardList.appendChild(li);
-        // });
-        //console.log(updatedBoard);
         updateGrid(updatedBoard);
     }
 
-//     function updateGrid(currentGrid) {
-//     console.log("Testo");
-//     console.log(currentGrid);
-//     for (i in currentGrid) {
-//         for (j in currentGrid[i])
-//             if (currentGrid[i][j] == "X") {
-                
-
-//             } else {
-//                 changeColorGameBoard(i, j, currentGrid[i][j])
-//              }
-//     }
-// }
 
 function changeColorGameBoard(y, x, color) {
     let element = document.getElementById(`y${y}, x${x}`)
@@ -131,7 +107,7 @@ function changeColorGameBoard(y, x, color) {
     
     <div style="color: white;" draggable="true"></div>
 
-    <script src="/static/board.js"></script>
+    <script src="/static/user_board.js"></script>
 
     <div class="wrapper-right-side">
     <div class="chat-container">
