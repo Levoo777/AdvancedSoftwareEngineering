@@ -12,7 +12,7 @@ class Player():
     board: Board
 
     # @ Lukas Buser, Levin Bolbas
-    def __init__(self, color, board: Board, blocks = None):
+    def __init__(self, color, board= None, blocks = None):
         self.color = color
         self.board = board
         if not blocks:

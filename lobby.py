@@ -17,14 +17,7 @@ BOARDS = [Board()] * 10
 PLAYER = []
 GAME = [AI_Game(["red"], Board()), AI_Game([AIPlayer("red"),AIPlayer("blue"), AIPlayer("green"), AIPlayer("yellow")], BOARDS[2])]
 GAMES = [None] * 10
-<<<<<<< Updated upstream
-COUNT = [0]
-COUNTER = 0
-SEND_MATRIX_OLD = []
-
-=======
 COUNT = [0, 0]
->>>>>>> Stashed changes
 
 
 from functools import wraps
@@ -140,22 +133,12 @@ def game_start():
 
 @socketio.on('zug_gemacht')
 def handle_zug(zug):
-<<<<<<< Updated upstream
-    global COUNTER
-    global SEND_MATRIX_OLD
-    #print("hallo")
-    #print(zug)
-    game = GAME[current_user._lobby - 1]
-    COUNT[0] = COUNT[0] + 1
-    if COUNT[0] <=4:
-=======
     print("hallo")
     print(zug)
     lobby = current_user._lobby - 1
     game = GAME[current_user._lobby - 1]
     COUNT[lobby] = COUNT[lobby] + 1
     if COUNT[lobby] <=4:
->>>>>>> Stashed changes
         game.play_game(True)
     else:
         game.play_game(False)
