@@ -16,15 +16,17 @@ from extensions import socketio
 lobby = Blueprint('lobby', __name__)
 
 BOARDS = [Board()] * 10
-PLAYER = []
+#PLAYER = []
 GAME = [AI_Game(["red"], Board()), AI_Game([AIPlayer("red"),AIPlayer("blue"), AIPlayer("green"), AIPlayer("yellow")], BOARDS[2])]
 USERS = [{}, None]
 ACTIVE_GAME = [False, False]
-GAMES = [None] * 10
+#GAMES = [None] * 10
 COUNT = [0, 0]
 COUNTER = [0, 0]
 SEND_MATRIX_OLD = [None, None]
 GIVE_UP_COUNTER = [0, 0]
+ORDER = [None, None]
+FINISHED_GAME = [False, False]
 
 from functools import wraps
 from flask import abort
@@ -85,10 +87,10 @@ def room_leave_lobby():
 @lobby_required
 def game_start():
     lobby = current_user._lobby - 1
-    print(lobby)
-    if ACTIVE_GAME[lobby]:
-        flash("Spiel in dieser Lobby läuft gerade")
-        return redirect(url_for('lobby.join'))
+    print(f"active game: {ACTIVE_GAME[lobby]}, old_matrix: {SEND_MATRIX_OLD[lobby]}, users: {USERS[lobby-1]}, order: {ORDER[lobby]}")
+    #if ACTIVE_GAME[lobby]:
+        #flash("Spiel in dieser Lobby läuft gerade")
+        #return redirect(url_for('lobby.join'))
 
     if lobby == 1:
         BOARDS[lobby] = Board()
@@ -99,6 +101,8 @@ def game_start():
         return render_template("board.html", board = game.board.matrix, name=current_user._name)
 
     if lobby == 0:
+        print(f"FINISHED GAME: {FINISHED_GAME[lobby]}")
+        FINISHED_GAME[lobby] = False
         BOARDS[lobby] = Board()
         users = get_lobby_user()
         if len(users) > 4:
@@ -117,15 +121,17 @@ def game_start():
                 players.append(Player(colors[idx]))
             order.append((user, colors[idx]))
 
-        GAME[lobby] = AI_Game(players, BOARDS[lobby])
-        game = GAME[lobby]
-        game.init_game()
-        COUNT[lobby] = 0
-
-        for user, color in order:
-            USERS[lobby][user] = color
-    
-        return render_template("user_board.html", board = game.board.matrix, order=order)
+        if not ORDER[lobby]:
+            GAME[lobby] = AI_Game(players, BOARDS[lobby])
+            game = GAME[lobby]
+            game.init_game()
+            COUNT[lobby] = 0
+            ORDER[lobby] = order
+            for user, color in order:
+                USERS[lobby][user] = color
+            return render_template("user_board.html", board = game.board.matrix, order=ORDER[lobby])
+        
+        return render_template("user_board.html", board = Board().matrix, order=ORDER[lobby])
         
     return "Lobby not found (please use lobby 1 for usergame or 2 for ai game)"
 # #neue version noch nicht lauffähig
@@ -155,7 +161,7 @@ def game_start():
 def set_block(data):
     print(data)
     lobby = current_user._lobby - 1
-    ACTIVE_GAME[lobby] = True
+    #ACTIVE_GAME[lobby] = True
     game = GAME[current_user._lobby - 1]
     color = game.active_player.color
 
@@ -204,6 +210,9 @@ def set_block(data):
                         user_frontend = user
             socketio.emit('update_board', {'board': send_matrix, 'blocks': remaining_blocks, 'color': game.active_player.color, 'user': user_frontend})
             return "Hi"
+        else:
+            COUNT[lobby] = COUNT[lobby]-1
+
     
     
     else:
@@ -229,6 +238,10 @@ def set_block(data):
                     ranking.append((points, player.color))
                 ranking.sort(key=lambda x: x[0])
                 ranking = ranking[::-1]
+                #ACTIVE_GAME[lobby] = False
+                ORDER[lobby] = None
+                USERS[lobby] = {}
+                SEND_MATRIX_OLD[lobby] = None
                 socketio.emit('finish_game', ranking)
                 return 
            
@@ -252,18 +265,24 @@ def set_block(data):
             
             socketio.emit('update_board', {'board': send_matrix, 'blocks': remaining_blocks, 'color': game.active_player.color, 'user': user_frontend})
             return "Hi"
+        else:
+            COUNT[lobby] = COUNT[lobby]-1
 
-    print("IS_NOT_VALID")
     return "Hi"
 
 # AI sets block in Usergame
 @socketio.on('set_block_user_game')
 def handle_zug(zug):
-
-
     lobby = current_user._lobby - 1
-    ACTIVE_GAME[lobby] = True
     game = GAME[current_user._lobby - 1]
+
+    #if FINISHED_GAME[lobby]:
+        #ACTIVE_GAME[lobby] = False
+        #return
+    
+
+    #ACTIVE_GAME[lobby] = True
+
     if not isinstance(game.active_player, AIPlayer):
         flash("Kein AI Spieler")
         #game.get_next_active_player()
@@ -299,6 +318,10 @@ def handle_zug(zug):
             ranking.sort(key=lambda x: x[0])
             ranking = ranking[::-1]
             socketio.emit('finish_game', ranking)
+            #ACTIVE_GAME[lobby] = False
+            ORDER[lobby] = None
+            USERS[lobby] = {}
+            SEND_MATRIX_OLD[lobby] = None
         print(f"Removed Player {surrendering_player.color} with {points} P")
         return 
 
@@ -312,19 +335,28 @@ def handle_zug(zug):
             points = player.calc_points()
             ranking.append((points, player.color))
         ranking.sort(key=lambda x: x[0])
-        ranking = ranking[::-1]
+        ranking = ranking[::-1]      
         socketio.emit('finish_game', ranking)
+        #ACTIVE_GAME[lobby] = False
+        ORDER[lobby] = None
+        USERS[lobby] = {}
+        SEND_MATRIX_OLD[lobby] = None
+        print("JETZT IST FERTGI")
+        FINISHED_GAME[lobby] = True  
+
         return 
     
     game.get_next_active_player()
     return "Hi"
 
+
+
 @socketio.on('give_up')
 def surrender():
     lobby = current_user._lobby - 1
-    ACTIVE_GAME[lobby] = True
     game = GAME[current_user._lobby - 1]
     color = game.active_player.color
+    COUNT[lobby] = COUNT[lobby] + 1
     surrender_color = USERS[lobby][current_user._email] 
     if surrender_color == color:
         game.get_next_active_player()
@@ -342,7 +374,12 @@ def surrender():
             ranking.append((points, player.color))
         ranking.sort(key=lambda x: x[0])
         ranking = ranking[::-1]
+        #ACTIVE_GAME[lobby] = False
+        ORDER[lobby] = None
+        USERS[lobby] = {}
+        SEND_MATRIX_OLD[lobby-1] = None
         socketio.emit('finish_game', ranking)
+
     print(f"Removed Player {surrendering_player.color} with {points} P")
     return
 
@@ -365,7 +402,7 @@ def handle_zug(zug):
     global SEND_MATRIX_OLD
 
     lobby = current_user._lobby - 1
-    ACTIVE_GAME[lobby] = True
+    #ACTIVE_GAME[lobby] = True
     game = GAME[current_user._lobby - 1]
     COUNT[lobby] = COUNT[lobby] + 1
     if COUNT[lobby] <=4:
@@ -414,6 +451,17 @@ def join_room(lobby_id):
     socketio.emit('join_lobby', {'user_id': user_id}, room=lobby_id)
     return 'Joined lobby'
 
+@socketio.on('disconnect')
+def user_disconnect():
+    print(current_user._email)
+    print("USER DISCONNECT")
+    surrender()
+    db = DB_Manager("database/kundendatenbank.sql", "users")
+    db.connect()
+    db.update_user((current_user._id, "lobby", 0))
+    db.disconnect()
+    logout_user()
+    return 'Joined lobby'
 
 def get_lobby_user():
     db = DB_Manager("database/kundendatenbank.sql", "users")
@@ -424,3 +472,11 @@ def get_lobby_user():
         users.append(user[0])
     db.disconnect()
     return users
+
+def finish_game(lobby):
+    print("GAME_OVER")
+    #ACTIVE_GAME[lobby-1] = False
+    ORDER[lobby-1] = None
+    USERS[lobby-1] = {}
+    SEND_MATRIX_OLD[lobby-1] = None
+    return
