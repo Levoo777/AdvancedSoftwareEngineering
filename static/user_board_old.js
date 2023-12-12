@@ -1,268 +1,13 @@
-const blocks_object =  {
-    "1": [
-      [
-        "green"
-      ]
-    ],
-    "2": [
-      [
-        "green",
-        "green"
-      ]
-    ],
-    "3": [
-      [
-        "green",
-        "green"
-      ],
-      [
-        null,
-        "green"
-      ]
-    ],
-    "4": [
-      [
-        "green",
-        "green",
-        "green"
-      ]
-    ],
-    "5": [
-      [
-        "green",
-        "green",
-        "green",
-        "green"
-      ]
-    ],
-    "6": [
-      [
-        null,
-        null,
-        "green"
-      ],
-      [
-        "green",
-        "green",
-        "green"
-      ]
-    ],
-    "7": [
-      [
-        "green",
-        "green",
-        null
-      ],
-      [
-        null,
-        "green",
-        "green"
-      ]
-    ],
-    "8": [
-      [
-        "green",
-        "green"
-      ],
-      [
-        "green",
-        "green"
-      ]
-    ],
-    "9": [
-      [
-        null,
-        "green",
-        null
-      ],
-      [
-        "green",
-        "green",
-        "green"
-      ]
-    ],
-    "10": [
-      [
-        null,
-        "green",
-        "green"
-      ],
-      [
-        "green",
-        "green",
-        null
-      ],
-      [
-        null,
-        "green",
-        null
-      ]
-    ],
-    "11": [
-      [
-        "green",
-        "green",
-        "green",
-        "green",
-        "green"
-      ]
-    ],
-    "12": [
-      [
-        "green",
-        "green",
-        "green",
-        "green"
-      ],
-      [
-        null,
-        null,
-        null,
-        "green"
-      ]
-    ],
-    "13": [
-      [
-        "green",
-        "green",
-        "green",
-        null
-      ],
-      [
-        null,
-        null,
-        "green",
-        "green"
-      ]
-    ],
-    "14": [
-      [
-        "green",
-        "green",
-        "green"
-      ],
-      [
-        null,
-        "green",
-        "green"
-      ]
-    ],
-    "15": [
-      [
-        "green",
-        "green",
-        "green"
-      ],
-      [
-        null,
-        "green",
-        null
-      ],
-      [
-        null,
-        "green",
-        null
-      ]
-    ],
-    "16": [
-      [
-        "green",
-        "green",
-        "green"
-      ],
-      [
-        "green",
-        null,
-        "green"
-      ]
-    ],
-    "17": [
-      [
-        "green",
-        "green",
-        "green"
-      ],
-      [
-        null,
-        null,
-        "green"
-      ],
-      [
-        null,
-        null,
-        "green"
-      ]
-    ],
-    "18": [
-      [
-        null,
-        null,
-        "green"
-      ],
-      [
-        null,
-        "green",
-        "green"
-      ],
-      [
-        "green",
-        "green",
-        null
-      ]
-    ],
-    "19": [
-      [
-        null,
-        "green",
-        null
-      ],
-      [
-        "green",
-        "green",
-        "green"
-      ],
-      [
-        null,
-        "green",
-        null
-      ]
-    ],
-    "20": [
-      [
-        "green",
-        "green",
-        "green",
-        "green"
-      ],
-      [
-        null,
-        null,
-        "green",
-        null
-      ]
-    ],
-    "21": [
-      [
-        "green",
-        "green",
-        null
-      ],
-      [
-        null,
-        "green",
-        null
-      ],
-      [
-        null,
-        "green",
-        "green"
-      ]
-    ]
-  }
+const board = document.querySelector('#board');
+const colors = ['blue', 'green', 'red', 'yellow'];
+const SQUARES_NUMBER = 20*20;
 
+const BLOCKS_OBJECT =  {1: [[true]], 2: [[true,true]], 3: [[true,true],[false,true]], 4: [[true,true,true]], 5: [[true,true,true, true]], 6: [[false, false, true],[true,true,true]], 7: [[true, true, false], [false, true, true]], 8: [[true, true], [true, true]], 9: [[false, true, false], [true, true, true]], 10: [[false, true, true], [true, true, false], [false, true, false]], 11: [[true, true, true, true, true]], 12: [[true, true, true, true], [false, false, false, true]], 13: [[true, true, true, false], [false, false, true, true]], 14: [[true, true, true], [false, true, true]], 15: [[true, true, true], [false, true, false], [false, true, false]], 16: [[true, true, true], [true, false, true]], 17: [[true, true, true], [false, false, true], [false, false, true]], 18: [[false, false, true], [false, true, true], [true, true, false]], 19: [[false, true, false], [true, true, true], [false, true, false]], 20: [[true, true, true, true], [false, false, true, false]], 21: [[true, true, false], [false, true, false], [false, true, true]]}
 const DEFAULT_BLOCK_GRID = [[false, false, false, false, false], [false, false, false, false, false], [false, false, false, false, false], [false, false, false, false, false], [false, false, false, false, false]]
-let BOARD_ARRAY = createBoardMatrix()
 
+let BOARD_ARRAY = createBoardMatrix()
+let BLOCKS_ARRAY = createBlockMatrix()
+let BLOCKS_IN_DEFAULT_GRID = insertBlocksInDefaultBlockArray()
 
 const BOARD_BLOCKS1 = document.querySelector('#blocks1')
 const BOARD_BLOCKS2 = document.querySelector('#blocks2')
@@ -278,7 +23,6 @@ function createBoardMatrix () {
     return matrix;
 }
 
-
 // renders the game board
 function createBoard () {
     for (let i = 0; i < BOARD_ARRAY.length; i++) {
@@ -293,59 +37,20 @@ function createBoard () {
 
 createBoard();
 
-
-function createBlock (block) {
-    let blockGrid = structuredClone(DEFAULT_BLOCK_GRID)
-    let newBlock = blockGrid
-
-
-    for (let i = 0; i < blockGrid.length; i++) {
-
-        if (block.length <= i) break; 
-
-        for (let j = 0; j < blockGrid[i].length; j++) {
-
-            if (block.length[i] <= j) break; 
-
-            if (block[i][j] != null) {
-                newBlock[i][j] = true;
-
-            } /* else if (block[i][j] == "red") {
-                newBlock[i][j] = "red";
-
-            } else if (block[i][j] == "blue") {
-                newBlock[i][j] = "blue";
-
-            } else if (block[i][j] == "blue") {
-                newBlock[i][j] = "blue";
-            } */
-        }
+// creates the array in which the game blocks are held
+function createBlockMatrix () {
+    let matrix = []
+    for (let i = 0; i < 63; i++) {
+        matrix.push([false, false, false, false])
     }
 
-    return newBlock
+    return matrix;
 }
 
-
-
-function createListOfBlocksGrid (blocks_object) {
-    let BlocksGrid = []
-    let block;
-
-    for (const [key, value] of Object.entries(blocks_object)) {
-
-        block = createBlock(value)
-        BlocksGrid.push(block)
-
-    }
-
-    return BlocksGrid
-}
-
-
-
-function renderAllBlocks (blocks_object_update) {
+// renders the grid in which the game blocks are held
+function renderAllBlocks () {
     let current_BOARD_BLOCKS = 0;
-    const block_grid_layout = createListOfBlocksGrid(blocks_object_update);
+    const block_grid_layout = createListOfBlocksGrid();
      
         let i = 0;     
     
@@ -390,14 +95,113 @@ function renderAllBlocks (blocks_object_update) {
         }
 }
 
+renderAllBlocks()
 
-renderAllBlocks(blocks_object)
+
+// changes the color of one coordinate on the game board
+function changeColorGameBoard(y, x, color) {
+    let element = document.getElementById(`${y},${x}`)
+    element.style.backgroundColor = color;
+
+    element.style.boxShadow = `0 0 2px ${color}, 0 0 10px ${color}`
+}
+
+// changes the color of on coordinate on the block placeholder
+function changeColorBlockBoard(y, x, color) {
+    let element = document.getElementById(`${y},${x}`)
+    element.style.backgroundColor = color;
+
+    element.style.boxShadow = `0 0 2px ${color}, 0 0 10px ${color}`
+}
 
 
-function dragndrop (blocks_object_update) {
+// inserts the blocks in the array, where the blocks are held
+function insertBlocksInDefaultBlockArray () {
+
+    let listOfBlocksInDefaultGrid = createListOfBlocksGrid()
+    let blocksArray = structuredClone(BLOCKS_ARRAY)
+
+
+    let j = 0
+    let k = 0
+
+    for (i in blocksArray) {
+
+
+        if (i % 3 == 0 && i != 0) j++;
+        if (k % 3 == 0 && k != 0) k = 0;
+ 
+
+            for (l in listOfBlocksInDefaultGrid[j][k]) {
+
+                if (listOfBlocksInDefaultGrid[j][k][l] == true) blocksArray[i][l] = true;
+            }
+
+        k++
+    } 
+
+    return blocksArray
+}
+
+
+// sets the block and color one the game board
+function setBlockGameBoard(y, x, block, color) {
+
+    for (let i = 0; i < block.length; i++) {
+        for (let j = 0; j < block[i].length; j++) {
+            if (block[i][j] == true) {
+                changeColorGameBoard(y+i, x+j, color)
+
+            }
+        }
+    }
+}
+
+
+// creates a block in the default layout
+function createBlock (block) {
+    let blockGrid = structuredClone(DEFAULT_BLOCK_GRID)
+    let newBlock = blockGrid
+
+
+    for (let i = 0; i < blockGrid.length; i++) {
+
+        if (block.length <= i) break; 
+
+        for (let j = 0; j < blockGrid[i].length; j++) {
+
+            if (block.length[i] <= j) break; 
+
+            if (block[i][j] == true) {
+                newBlock[i][j] = true;
+            }
+        }
+    }
+
+    return newBlock
+}
+
+// returns the list of game blocks in the default layout
+function createListOfBlocksGrid () {
+    let BlocksGrid = []
+    let block;
+    const BlockMatrix = structuredClone(BLOCKS_OBJECT)
+
+    for (const [key, value] of Object.entries(BlockMatrix)) {
+
+        block = createBlock(value)
+        BlocksGrid.push(block)
+
+    }
+
+    return BlocksGrid
+}
+
+// drag and drop for the blocks and gameboard
+function dragndrop () {
     const draggables = document.querySelectorAll(".block")
     const squares = document.querySelectorAll(".square")
-    const blocks_array = createListOfBlocksGrid(blocks_object_update)
+    const blocks_array = createListOfBlocksGrid()
 
     draggables.forEach(draggable => {
         draggable.addEventListener("dragstart", () =>{
@@ -500,23 +304,9 @@ function dragndrop (blocks_object_update) {
 
 }
 
-// changes the color of one coordinate on the game board
-function changeColorGameBoard(y, x, color) {
-    let element = document.getElementById(`${y},${x}`)
-    element.style.backgroundColor = color;
 
-    element.style.boxShadow = `0 0 2px ${color}, 0 0 10px ${color}`
-}
 
-// changes the color of on coordinate on the block placeholder
-function changeColorBlockBoard(y, x, color) {
-    let element = document.getElementById(`${y},${x}`)
-    element.style.backgroundColor = color;
-
-    element.style.boxShadow = `0 0 2px ${color}, 0 0 10px ${color}`
-}
-
-dragndrop(blocks_object)
+dragndrop()
 
 function updateGameBoardGrid(currentGrid) {
 
@@ -530,3 +320,22 @@ function updateGameBoardGrid(currentGrid) {
              }
     }
 }
+
+
+function updateGameBlocks (gameBlocksArray) {
+    renderAllBlocks
+}
+
+// dragndrop()
+
+// function updateGrid(currentGrid) {
+//     for (i in currentGrid) {
+//         for (j in currentGrid[i])
+//             if (currentGrid[i][j] == "X") {
+//                 break;
+
+//             } else {
+//                 changeColorGameBoard(i, j, currentGrid[i][j])
+//              }
+//     }
+// }

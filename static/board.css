@@ -22,8 +22,12 @@ body {
     width: 16px;
     height: 16px;
     background-color: cyan;
-    box-shadow: 0 0 2px cyan;
+    box-shadow: 0 0 2px cyan, 0 0 10px cyan;
     transition: 1s ease;
+}
+
+.blocksquare-true.click {
+    box-shadow: 0 0 2px gold, 0 0 10px gold;
 }
 
 .blocksquare-false {
