@@ -343,12 +343,11 @@ function createListOfBlocksGrid (blocks_object) {
   return BlocksGrid
 }
 
-console.log(createListOfBlocksGrid(blocks_object))
 
-function renderAllBlocks (blocks_object_update) {
+function renderAllBlocks (blocks_object_update, color) {
   let current_BOARD_BLOCKS = 0;
   const block_grid_layout = createListOfBlocksGrid(blocks_object_update);
-   
+      console.log(color)
       let i = 0;     
   
       for (j in block_grid_layout) {
@@ -384,7 +383,7 @@ function renderAllBlocks (blocks_object_update) {
                     const square = document.createElement("div")
 
                     if (block_grid_layout[j][k][l] == true) {
-                        square.classList.add("blocksquare-true")
+                        square.classList.add(`blocksquare-true-${color}`)
                         square.setAttribute("id",  `block y${i}, x${l}`)
                         block.append(square);
   
@@ -414,10 +413,6 @@ function dragndrop (blocks_object_update) {
       draggable.addEventListener("dragstart", () =>{
           draggable.classList.add("dragging")
       })
-
-      // draggable.addEventListener("keydown", (ev) => {
-      //     console.log("keydown")
-      // })
 
       draggable.addEventListener("dragend", () => {
           console.log("abgebrochen")
@@ -559,8 +554,8 @@ function removeChildsForBlockUpdate () {
   }
 }
 
-function updateGameBlocks(updatet_version) {
+function updateGameBlocks(updatet_version, color) {
   removeChildsForBlockUpdate()
-  renderAllBlocks(updatet_version)
+  renderAllBlocks(updatet_version, color)
   dragndrop(blocks_object)
 }
