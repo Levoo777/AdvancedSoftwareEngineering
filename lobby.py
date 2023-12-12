@@ -144,16 +144,7 @@ def game_start():
             ORDER[lobby] = order
             for user, color in order:
                 USERS[lobby][user] = color
-
-            remaining_blocks = deepcopy(game.active_player.blocks)
-            remaining_list = remaining_blocks.keys()
-            for i in range(1,22):
-                if i not in remaining_list:
-                    remaining_blocks[i] = 0
-                else:
-                    remaining_blocks[i] = remaining_blocks[i].block_matrix
-
-            return render_template("user_board.html", board = game.board.matrix, order=ORDER[lobby], blocks = game.active_player.blocks)
+            return render_template("user_board.html", board = game.board.matrix, order=ORDER[lobby])
         
         return render_template("user_board.html", board = Board().matrix, order=ORDER[lobby])
         

@@ -544,17 +544,17 @@ function updateGameBoardGrid(currentGrid) {
 
 function removeChildsForBlockUpdate () {
   let element = document.getElementById("blocks1")
-  while (element.firstChild()) {
+  while (element.firstChild) {
     element.removeChild(element.firstChild)
   }
 
   element = document.getElementById("blocks2")
-  while (element.firstChild()) {
+  while (element.firstChild) {
     element.removeChild(element.firstChild)
   }
 
   element = document.getElementById("blocks3")
-  while (element.firstChild()) {
+  while (element.firstChild) {
     element.removeChild(element.firstChild)
   }
 }
