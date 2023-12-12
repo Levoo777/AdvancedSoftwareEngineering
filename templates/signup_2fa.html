@@ -19,6 +19,7 @@
             <label for="secret"></label>
             <input type="text" class="form-control" id="secret" value="{{ secret }}" readonly style="font-size: 1.5em;">
         </div>
+        <br>
         <div class="text-center">
             <button type="button" class="btn btn-primary" onclick="copySecret()">Copy token</button>
         </div>
@@ -56,6 +57,7 @@
           <input type="hidden" name="secret" value="{{ secret }}" required>
           <input type="number" class="form-control" id="otp" name="otp" required style="font-size: 1.5em;">
         </div>
+        <br>
         <div class="text-center">
           <button type="submit" class="btn btn-primary">Check token and save 2FA settings</button>
         </div>
