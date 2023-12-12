@@ -26,7 +26,7 @@
 <a href="{{ url_for('lobby.game_start') }}" class="btn btn-success">Start Game</a>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
+
 <div class="wrapper-right-side">
   <div class="chat-container">
       <h2 class="text-light">Chat</h2>
@@ -38,7 +38,7 @@
   </div>
 </div>
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
 <script>
   var socket = io.connect('http://' + document.domain + ':' + location.port);
 

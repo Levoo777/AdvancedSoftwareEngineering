@@ -21,6 +21,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
     <script>
         var socket = io.connect('http://' + document.domain + ':' + location.port);
+        socket.on('finish_ai_game', function(ranking) {
+        console.log("Ranking", ranking);
+        var table = document.getElementById('rankingTable');
+        table.innerHTML = '';
+        ranking.forEach(function(tuple) {
+            var row = table.insertRow();
+            tuple.forEach(function(element) {
+                var cell = row.insertCell();
+                cell.appendChild(document.createTextNode(element));
+            });
+        });
+    });
 
         socket.on('update_board', function(data) {
             console.log("Hallo")
@@ -84,6 +96,11 @@ function changeColorGameBoard(y, x, color) {
 <h1 class="text-center text-light">
   AI-Game Board
 </h1>
+
+<table id="rankingTable">
+   
+</table>
+
 
 <!-- <div class="board-content">
 <div class="chat-container">
