@@ -15,6 +15,7 @@ username VARCHAR(20),
 joining DATE,
 password VARCHAR(64),
 salt VARCHAR(64),
+mfa VARCHAR(64) NULL,
 lobby INTEGER DEFAULT 0);"""
 cursor.execute(sql_command)
 

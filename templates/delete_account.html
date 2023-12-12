@@ -1,0 +1,67 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var form = document.querySelector("form");
+        form.addEventListener("submit", function(event) {
+            event.preventDefault(); // Verhindert das sofortige Absenden des Formulars
+            hashPassword().then(function() {
+                form.submit(); // Sendet das Formular, nachdem das Passwort gehasht wurde
+            });
+        });
+    });
+
+    async function hashPassword() {
+        var passwordInput = document.getElementById('password');
+        var hashedPasswordInput = document.getElementById('hashedPassword');
+        console.log(passwordInput)
+
+        var password = passwordInput.value;
+        var hashedPassword = await sha256(password);
+        console.log(hashedPassword);
+
+        hashedPasswordInput.value = hashedPassword;
+        passwordInput.value = ''; // Löscht das originale Passwortfeld
+
+    }
+
+    function sha256(str) {
+        var buffer = new TextEncoder("utf-8").encode(str);
+        return crypto.subtle.digest("SHA-256", buffer).then(function(hash) {
+            return Array.prototype.map.call(new Uint8Array(hash), function(x) {
+                return ('00' + x.toString(16)).slice(-2);
+            }).join('');
+        });
+    }
+</script>
+
+<div class="column is-4 is-offset-4">
+    <h1>Delete Account</h1>
+    <div class="box">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+        <form method="POST" action="/delete_account" onsubmit="hashPassword()">
+
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input type="hidden" id="hashedPassword" name="hashedPassword">
+                </div>
+            </div>
+            <button class="button is-block is-danger is-large is-fullwidth">Delete</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

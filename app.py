@@ -19,6 +19,8 @@ def create_app():
         db = DB_Manager("database/kundendatenbank.sql", "users")
         db.connect()
         data = db.get_mail_and_name_by_id(user_id)
+        if not data:
+            return None
         lobby = db.get_lobby(user_id)
         db.disconnect()                                  
         return User(int(user_id), data[0], data[1], lobby[0])

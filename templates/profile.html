@@ -2,6 +2,62 @@
 
 {% block content %}
 <h1 class="title">
-  Welcome, {{ name }} {{lobby}}!
+  Welcome, {{ name }} you are currently in Lobby {{lobby}}!
 </h1>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    <div class="notification is-success">
+        {{ messages[0] }}
+    </div>
+{% endif %}
+{% endwith %}
+<div class="container mt-5">
+
+  <div class="row">
+    <div class="col-md-4">
+      <button type="button" onclick="redirectToResetPW()" class="btn btn-primary btn-block mb-3">
+        Change Password  <i class="fa fa-key"></i>
+      </button>
+    </div>
+    <div class="col-md-4">
+      <button type="button" onclick="redirectToAdd2FA()" class="btn btn-success btn-block mb-3">
+        Add new 2FA Token <i class="fa fa-key"></i>
+      </button>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-4">
+      <button type="button" onclick="redirectToDeleteAccount()" class="btn btn-danger btn-block mb-3">
+        Delete Account  <i class="fa fa-trash"></i>
+      </button>
+    </div>
+    <div class="col-md-4">
+      <button type="button" onclick="redirectToRemove2FA()" class="btn btn-danger btn-block mb-3">
+        Remove 2FA  <i class="fa fa-trash"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function redirectToResetPW() {
+    window.location.href = "{{ url_for('auth.reset_password') }}";
+  }
+
+  function redirectToDeleteAccount() {
+    window.location.href = "{{ url_for('auth.delete_account') }}";
+  }
+
+  function redirectToAdd2FA() {
+    window.location.href = "{{ url_for('auth.signup_2fa') }}";
+  }
+
+  function redirectToRemove2FA() {
+    window.location.href = "{{ url_for('auth.delete_2fa') }}";
+  }
+</script>
+
+
 {% endblock %}

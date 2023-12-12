@@ -1,0 +1,79 @@
+{% extends "index.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-12">
+      <div>
+        <h2>Zwei-Faktor Authentifizierung einrichten</h4>
+      </div>
+      <br><br>
+    </div>
+    <div class="col-lg-5">
+        <div class="form-group">
+            <label for="qr-code"></label>
+            <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code" style="width: 75%; height: auto;">
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="secret"></label>
+            <input type="text" class="form-control" id="secret" value="{{ secret }}" readonly style="font-size: 1.5em;">
+        </div>
+        <div class="text-center">
+            <button type="button" class="btn btn-primary" onclick="copySecret()">Token kopieren</button>
+        </div>
+    
+    </div>
+    <div class="col-lg-5">
+      <p>
+        Um die Zwei-Faktor-Authentifizierung (2FA) einzurichten, folge diesen Schritten:
+      </p>
+      <ol>
+        <li>
+          Scanne den QR-Code oben mit deiner bevorzugten Authenticator-App, wie z.B. Google Authenticator.
+        </li>
+        <li>
+          Der Authenticator wird automatisch ein neues Konto hinzufügen, und du siehst ein Token.
+        </li>
+        <li>
+          Lasse den aktuellen Token ablaufen und gib den neu generierten Token in das unten stehende Feld ein und klicke auf "Token prüfen und 2FA Einstellungen speichern".
+        </li>
+      </ol>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }}" role="alert">
+        {{ message }}
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+      <form method="POST">
+        <div class="form-group">
+          <label for="otp"></label>
+          <br>
+          <input type="hidden" name="secret" value="{{ secret }}" required>
+          <input type="number" class="form-control" id="otp" name="otp" required style="font-size: 1.5em;">
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary">Token prüfen und 2FA Einstellungen speichern</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function copySecret() {
+    var copyText = document.getElementById("secret");
+
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); 
+
+    document.execCommand("copy");
+
+    alert("Successfully copied TOTP secret token!");
+  }
+</script>
+{% endblock %}

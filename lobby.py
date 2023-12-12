@@ -40,6 +40,9 @@ def lobby_required(func):
         return func(*args, **kwargs)
     return decorated_function
 
+
+### LOBBY ACTIONS
+
 @lobby.route('/lobby')
 @login_required
 def join():
@@ -145,7 +148,9 @@ def game_start():
     
 #     return render_template("board.html", board=game.board.matrix)
 
+### USER GAME EVENTS
 
+# user inserts a block
 @socketio.on('user_set_block')
 def set_block(data):
     print(data)
@@ -251,51 +256,7 @@ def set_block(data):
     print("IS_NOT_VALID")
     return "Hi"
 
-@socketio.on('zug_gemacht')
-def handle_zug(zug):
-    global COUNTER
-    global SEND_MATRIX_OLD
-
-    lobby = current_user._lobby - 1
-    ACTIVE_GAME[lobby] = True
-    game = GAME[current_user._lobby - 1]
-    COUNT[lobby] = COUNT[lobby] + 1
-    if COUNT[lobby] <=4:
-        game.play_game(True)
-    else:
-        game.play_game(False)
-    
-    #print(game.board.matrix)
-    send_matrix = [["X" for _ in range(20)] for _ in range(20)]
-    for idx1, row in enumerate(game.board.matrix):
-        for idx2, y in enumerate(row):
-            if y:
-                send_matrix[idx1][idx2] = y
-    
-    if SEND_MATRIX_OLD == send_matrix:
-        COUNTER += 1
-    else: 
-        COUNTER = 0
-
-    print(COUNTER)
-
-    
-    SEND_MATRIX_OLD = send_matrix
-    #print(send_matrix)
-    socketio.emit('update_board', {'board': send_matrix})
-    if len(game.active_player.blocks) == 0:
-        print("Player wins!")
-
-    if COUNTER == 4:
-        winner = game.calculate_points()
-        print(f"{winner} wins the game!")
-        
-
-    game.get_next_active_player()
-    return "Hi"
-
-
-
+# AI sets block in Usergame
 @socketio.on('set_block_user_game')
 def handle_zug(zug):
 
@@ -358,17 +319,6 @@ def handle_zug(zug):
     game.get_next_active_player()
     return "Hi"
 
-
-@socketio.on('send_message')
-def handle_message(message):
-    print("testott")
-    print(message)
-    email = current_user._email
-    msg = f"{email}: {message}"
-    socketio.emit('chat_message', msg)
-    return "Hi"
-
-
 @socketio.on('give_up')
 def surrender():
     lobby = current_user._lobby - 1
@@ -395,7 +345,67 @@ def surrender():
         socketio.emit('finish_game', ranking)
     print(f"Removed Player {surrendering_player.color} with {points} P")
     return
+
+@socketio.on('send_message')
+def handle_message(message):
+    print("testott")
+    print(message)
+    email = current_user._email
+    msg = f"{email}: {message}"
+    socketio.emit('chat_message', msg)
+    return "Hi"
+
+
+### AI GAME EVENTS
+
+# AI sets block
+@socketio.on('zug_gemacht')
+def handle_zug(zug):
+    global COUNTER
+    global SEND_MATRIX_OLD
+
+    lobby = current_user._lobby - 1
+    ACTIVE_GAME[lobby] = True
+    game = GAME[current_user._lobby - 1]
+    COUNT[lobby] = COUNT[lobby] + 1
+    if COUNT[lobby] <=4:
+        game.play_game(True)
+    else:
+        game.play_game(False)
+    
+    #print(game.board.matrix)
+    send_matrix = [["X" for _ in range(20)] for _ in range(20)]
+    for idx1, row in enumerate(game.board.matrix):
+        for idx2, y in enumerate(row):
+            if y:
+                send_matrix[idx1][idx2] = y
+    
+    if SEND_MATRIX_OLD == send_matrix:
+        COUNTER += 1
+    else: 
+        COUNTER = 0
+
+    print(COUNTER)
+
+    
+    SEND_MATRIX_OLD = send_matrix
+    #print(send_matrix)
+    socketio.emit('update_board', {'board': send_matrix})
+    if len(game.active_player.blocks) == 0:
+        print("Player wins!")
+
+    if COUNTER == 4:
+        winner = game.calculate_points()
+        print(f"{winner} wins the game!")
         
+
+    game.get_next_active_player()
+    return "Hi"
+
+
+
+
+## Further Functions
 
 @socketio.on('join_room')
 def join_room(lobby_id):
@@ -403,12 +413,6 @@ def join_room(lobby_id):
     print(user_id, lobby_id)
     socketio.emit('join_lobby', {'user_id': user_id}, room=lobby_id)
     return 'Joined lobby'
-
-
-# def get_users_in_lobby(lobby_id):
-#     # Annahme: Es gibt ein Attribut 'lobby' in der User-Klasse, das die Lobby-ID speichert.
-#     users_in_lobby = User.query.filter_by(lobby=lobby_id).all()
-#     return users_in_lobby
 
 
 def get_lobby_user():

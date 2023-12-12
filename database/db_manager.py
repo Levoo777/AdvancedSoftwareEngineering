@@ -46,6 +46,16 @@ class DB_Manager:
         self.cursor.execute(sql_command)
         return self.cursor.fetchone()
 
+    def get_mfa_by_id(self, id):
+        sql_command = f"SELECT mfa FROM {self.table_name} where customer_number = {id}"
+        self.cursor.execute(sql_command)
+        return self.cursor.fetchone()
+
+    def remove_mfa(self, customer_number):
+        sql_command = f"UPDATE {self.table_name} SET mfa = NULL WHERE customer_number = {customer_number}"
+        self.cursor.execute(sql_command)
+        self.connection.commit()
+
     def get_mail_and_name_by_id(self, id):
         sql_command = f"SELECT email, username FROM {self.table_name} where customer_number = {id}"
         self.cursor.execute(sql_command)

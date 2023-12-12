@@ -74,16 +74,21 @@
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
                             <a href="{{ url_for('main.index') }}" class="navbar-item">Home</a>
+                            {% if user_authenticated %}
                             <a href="{{ url_for('lobby.room') }}" class="navbar-item">Lobby</a>
                             <a href="{{ url_for('main.profile') }}" class="navbar-item">Profile</a>
+                            {% else %}
                             <a href="{{ url_for('auth.signup') }}" class="navbar-item">Sign Up</a>
+                            {% endif %}
                         </div>
                     </div>
-                    <div >
+                    <div >{% if not user_authenticated %}
                         <a href="{{ url_for('auth.login') }}" class="navbar-item">Login</a>    
                     </div>
                     <div >
-                        <a href="{{ url_for('auth.logout') }}" class="navbar-item">Logout</a>    
+                        {% else %}
+                        <a href="{{ url_for('auth.logout') }}" class="navbar-item">Logout</a>
+                        {% endif %}    
                     </div>
                 </div>
             </nav>

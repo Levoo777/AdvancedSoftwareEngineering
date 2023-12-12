@@ -6,9 +6,9 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', user_authenticated = current_user.is_authenticated)
 
 @main.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', name=current_user._name, lobby=current_user._lobby)
+    return render_template('profile.html', name=current_user._name, lobby=current_user._lobby, user_authenticated = current_user.is_authenticated)
