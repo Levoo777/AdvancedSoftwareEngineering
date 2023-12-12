@@ -48,7 +48,7 @@ def lobby_required(func):
 @lobby.route('/lobby')
 @login_required
 def join():
-    return render_template('join_lobby.html')
+    return render_template('join_lobby.html', user_authenticated = current_user.is_authenticated)
 
 @lobby.route('/lobby', methods=['POST'])
 @login_required
@@ -68,7 +68,7 @@ def join_post():
 @lobby_required
 def room():
     users = get_lobby_user()
-    return render_template("game.html", lobby_id=current_user._lobby, users=users, board=None)
+    return render_template("game.html", lobby_id=current_user._lobby, users=users, board=None, user_authenticated = current_user.is_authenticated)
 
 @lobby.route("/game/leave_lobby")
 @login_required
