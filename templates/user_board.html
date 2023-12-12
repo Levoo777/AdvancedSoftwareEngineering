@@ -179,6 +179,8 @@ function changeColorGameBoard(y, x, color) {
 <form onsubmit="event.preventDefault(); giveUp();">
     <button type="submit" class="btn btn-danger">Surrender</button>
 </form>
+
+<a href="{{ url_for('main.profile') }}" class="text-white">Leave Game</a>
 </div>
 <!-- 
 <form onsubmit="event.preventDefault(); makeMove(first=0);">
