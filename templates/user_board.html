@@ -69,25 +69,34 @@ function changeColorGameBoard(y, x, color) {
     element.style.boxShadow = `0 0 2px ${color}, 0 0 10px ${color}`
 }
 
-        function makefirstMove(row, col, player) {
-            var row = document.getElementById("row")
-            var col = document.getElementById("col")
-            var zug = { 'row': row.value, 'col': col.value, 'first':true};
-            console.log(zug)
-            socket.emit('zug_gemacht', zug);
-        }
+            function makefirstMove(row, col, player) {
+                var row = document.getElementById("row")
+                var col = document.getElementById("col")
+                var zug = { 'row': row.value, 'col': col.value, 'first':true};
+                console.log(zug)
+                socket.emit('zug_gemacht', zug);
+            }
 
-        function makeMove(row, col, player) {
-            var row = document.getElementById("row")
-            var col = document.getElementById("col")
-            var zug = { 'row': row.value, 'col': col.value, 'first': false };
-            console.log(zug)
-            socket.emit('set_block_user_game', zug);
-        }
+            function makeMove(row, col, player) {
+                var row = document.getElementById("row")
+                var col = document.getElementById("col")
+                var zug = { 'row': row.value, 'col': col.value, 'first': false };
+                console.log(zug)
+                socket.emit('set_block_user_game', zug);
+            }
 
-        function giveUp() {
-            socket.emit('give_up');
-        }
+            function giveUp() {
+                socket.emit('give_up');
+            }
+
+            socket.on('connect', () => {
+            console.log('Connect');
+            });
+
+            socket.on('disconnect', () => {
+            console.log('Disconnect');
+            socket.emit('disconnect');
+            });
     </script>
 </html>
 <h1 class="text-center text-light">
