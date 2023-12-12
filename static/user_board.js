@@ -402,7 +402,7 @@ function renderAllBlocks (blocks_object_update) {
 }
 
 
-//renderAllBlocks(blocks_object)
+renderAllBlocks(blocks_object)
 
 
 function dragndrop (blocks_object_update) {
@@ -562,4 +562,5 @@ function removeChildsForBlockUpdate () {
 function updateGameBlocks(updatet_version) {
   removeChildsForBlockUpdate()
   renderAllBlocks(updatet_version)
+  dragndrop(blocks_object)
 }
