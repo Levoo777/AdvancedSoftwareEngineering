@@ -145,6 +145,13 @@ function changeColorGameBoard(y, x, color) {
     <div style="color: white;" draggable="true"></div>
 
     <script src="/static/user_board.js"></script>
+    <script>
+        var playerColor = "{{ color }}";
+        renderAllBlocks(blocks_object, playerColor)
+        dragndrop(blocks_object)
+        console.log(playerColor);
+    </script>
+    
 
     <div class="wrapper-right-side">
     <div class="chat-container">
@@ -172,6 +179,8 @@ function changeColorGameBoard(y, x, color) {
 <form onsubmit="event.preventDefault(); giveUp();">
     <button type="submit" class="btn btn-danger">Surrender</button>
 </form>
+
+<a href="{{ url_for('main.profile') }}" class="text-white">Leave Game</a>
 </div>
 <!-- 
 <form onsubmit="event.preventDefault(); makeMove(first=0);">
@@ -202,5 +211,6 @@ function changeColorGameBoard(y, x, color) {
             messageInput.value = '';
         }
     }
+
 </script> 
 </html>

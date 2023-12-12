@@ -35,7 +35,6 @@ def lobby_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if current_user._lobby == 0:
-            flash('You must join a lobby first.', 'warning')
             print("Nicht in Lobby")
             return redirect(url_for('lobby.join'))
         print("in_lobby")
@@ -68,7 +67,6 @@ def join_post():
 @lobby.route('/lobby/clear_lobby')
 @login_required
 def clear_lobby():
-    print("HERE")
     lobby = current_user._lobby
     user_id = current_user._id
     db = DB_Manager("database/kundendatenbank.sql", "users")
@@ -113,7 +111,7 @@ def game_start():
         game = GAME[lobby]
         game.init_game()
         COUNT[lobby] = 0
-        return render_template("board.html", board = game.board.matrix, name=current_user._name)
+        return render_template("board.html", board = game.board.matrix, name=current_user._name, color = game.active_player.color)
 
     if lobby == 0:
         print(f"FINISHED GAME: {FINISHED_GAME[lobby]}")
@@ -144,9 +142,11 @@ def game_start():
             ORDER[lobby] = order
             for user, color in order:
                 USERS[lobby][user] = color
-            return render_template("user_board.html", board = game.board.matrix, order=ORDER[lobby])
+            return render_template("user_board.html", board = game.board.matrix, order=ORDER[lobby], color = game.active_player.color)
         
-        return render_template("user_board.html", board = Board().matrix, order=ORDER[lobby])
+        game = GAME[lobby]
+        COUNT[lobby] = 0
+        return render_template("user_board.html", board = Board().matrix, order=ORDER[lobby], color=game.active_player.color)
         
     return "Lobby not found (please use lobby 1 for usergame or 2 for ai game)"
 # #neue version noch nicht lauffähig
@@ -299,7 +299,6 @@ def handle_zug(zug):
     #ACTIVE_GAME[lobby] = True
 
     if not isinstance(game.active_player, AIPlayer):
-        flash("Kein AI Spieler")
         #game.get_next_active_player()
         return "Kein AI Spieler"
 
@@ -532,6 +531,7 @@ def join_room(lobby_id):
 @socketio.on('disconnect')
 def user_disconnect():
     print(current_user._email)
+    lobby = current_user._lobby - 1
     print("USER DISCONNECT")
     try:
         surrender()
@@ -539,15 +539,32 @@ def user_disconnect():
         db.connect()
         db.update_user((current_user._id, "lobby", 0))
         db.disconnect()
+        if not get_lobby_user(lobby + 1):
+            print("RESET")
+            FINISHED_GAME[lobby] = True
+            ORDER[lobby] = None
+            USERS[lobby] = {}
+            SEND_MATRIX_OLD[lobby] = None
+            GAME[lobby] = None
+            
+
         logout_user()
     except:
         pass
     return 'Joined lobby'
 
-def get_lobby_user():
+# @socketio.on('disconnect_info')
+# def handle_disconnect_info(data):
+#     print(f"Disconnect triggered from page: {data['page']}")
+#     # Additional handling based on the page information
+
+def get_lobby_user(lobby = None):
     db = DB_Manager("database/kundendatenbank.sql", "users")
     db.connect()
-    loaded_users = db.get_users_in_lobby(current_user._lobby)
+    if not lobby:
+        loaded_users = db.get_users_in_lobby(current_user._lobby)
+    else:
+        loaded_users = db.get_users_in_lobby(lobby)
     users = []
     for user in loaded_users:
         users.append(user[0])
@@ -561,3 +578,6 @@ def finish_game(lobby):
     USERS[lobby-1] = {}
     SEND_MATRIX_OLD[lobby-1] = None
     return
+
+def update_highscore(ranking):
+    pass

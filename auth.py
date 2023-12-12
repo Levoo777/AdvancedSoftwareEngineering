@@ -229,6 +229,16 @@ def logout():
     logout_user()
     return redirect(url_for('main.index'))
 
+@auth.route('/highscore')
+@login_required
+def highscore():
+    db = DB_Manager("database/kundendatenbank.sql", "users")
+    db.connect()
+    highscore =db.get_highscore(current_user._id)
+    db.disconnect()
+    return render_template('highscore.html', highscore=highscore[0])
+
+
 @user_logged_out.connect
 def on_user_logged_out(sender, user, **extra):
     db = DB_Manager("database/kundendatenbank.sql", "users")

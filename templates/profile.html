@@ -26,6 +26,11 @@
         Add new 2FA Token <i class="fa fa-key"></i>
       </button>
     </div>
+    <div class="col-md-4">
+      <button type="button" onclick="redirectToHighscore()" class="btn btn-success btn-block mb-3">
+        View Highscore <i class="fa fa-key"></i>
+      </button>
+    </div>
   </div>
 
   <div class="row justify-content-center">
@@ -58,6 +63,10 @@
 
   function redirectToRemove2FA() {
     window.location.href = "{{ url_for('auth.delete_2fa') }}";
+  }
+
+  function redirectToHighscore() {
+    window.location.href = "{{ url_for('auth.highscore') }}";
   }
 </script>
 

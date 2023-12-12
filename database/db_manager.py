@@ -46,6 +46,11 @@ class DB_Manager:
         self.cursor.execute(sql_command)
         return self.cursor.fetchone()
     
+    def get_highscore(self, customer_number):
+        sql_command = f"SELECT highscore FROM {self.table_name} where customer_number = {customer_number}"
+        self.cursor.execute(sql_command)
+        return self.cursor.fetchone()
+    
     def get_login_data_by_mail(self, mail):
         sql_command = f"SELECT password, salt, customer_number FROM {self.table_name} where email = \"{mail}\""
         self.cursor.execute(sql_command)
