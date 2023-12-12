@@ -51,7 +51,7 @@
     .play-now-btn {
         display: inline-block;
         padding: 10px 20px;
-        background-color: #007bff;
+        background-color: #b81c1c;
         color: white;
         text-decoration: none;
         border-radius: 5px;
@@ -59,7 +59,7 @@
     }
 
     .play-now-btn:hover {
-        background-color: #0056b3;
+        background-color: lightcoral;
     }
 
     @keyframes rotate {
@@ -81,7 +81,7 @@
 
 
 <div class="header">
-    <h1>Blokus Online</h1>
+    <img src="/static/logo.png">
 </div>
 <div class="body">
     <h2>Welcome to the Ultimate Blokus Experience!</h2>
@@ -94,7 +94,6 @@
     <div class="play-now-container">
         <a href="{{ url_for('lobby.room') }}" class="play-now-btn">Play Now</a>
     </div>
-    <br><br>
     <div class="content-container">
         <div class="content-box">
             <h3>What's new?</h3>
@@ -108,7 +107,7 @@
         </div>
         <div class="content-box">
             <h3>Events</h3>
-            <p class="events-message">
+            <p style="font-size: large;">
                 Sorry, there are currently no active events, but don't worry, we are always striving to organize
                 exciting
                 events for you! Stay tuned for the next upcoming event.
