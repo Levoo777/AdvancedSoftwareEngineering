@@ -485,8 +485,8 @@ def handle_zug(zug):
 
     
     SEND_MATRIX_OLD[lobby] = send_matrix
-    #print(send_matrix)
-    socketio.emit('update_ai_board', {'board': send_matrix})
+    #
+    # socketio.emit('update_ai_board', {'board': send_matrix})
     if len(game.active_player.blocks) == 0:
         print("Player wins!")
 
@@ -496,7 +496,26 @@ def handle_zug(zug):
         
 
     game.get_next_active_player()
+
+    remaining_blocks = deepcopy(game.active_player.blocks)
+    remaining_list = remaining_blocks.keys()
+    for i in range(1,22):
+        if i not in remaining_list:
+            remaining_blocks[i] = 0
+        else:
+            remaining_blocks[i] = remaining_blocks[i].block_matrix
+
+    if isinstance(game.active_player, AIPlayer):
+        user_frontend = "AI"
+    else:
+        for user in USERS[lobby]:
+            if USERS[lobby][user] == game.active_player.color:
+                user_frontend = user    
+    
+
+    socketio.emit('update_ai_board', {'board': send_matrix, 'blocks': remaining_blocks, 'color': game.active_player.color, 'user': user_frontend})   
     return "Hi"
+
 
 
 
