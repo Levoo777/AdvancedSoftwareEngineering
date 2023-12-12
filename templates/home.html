@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "index.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Blokus Online!</title>
+{% block content %}
+
     <style>
         html,
         body {
@@ -70,9 +67,9 @@
             animation: rotate 5s linear infinite;
         }
     </style>
-</head>
 
-<body>
+
+
 
     <div class="header">
         <h1>Blokus Online</h1>
@@ -82,7 +79,7 @@
         <p style="font-size: x-large;">Join players from around the world in this exciting strategy game. Challenge your
             mind, have fun, and connect
             with others. Ready to make your move?</p>
-        <img src="blo.png" class="rotate">
+        <img src="/static/blo.png" class="rotate">
         <br><br>
         <br><br>
         <a href="play.html" class="play-button">Play Now</a>
@@ -109,6 +106,5 @@
             </div>
         </div>
     </div>
-</body>
 
-</html>
+{% endblock %}
