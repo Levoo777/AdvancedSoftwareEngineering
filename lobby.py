@@ -423,6 +423,42 @@ def handle_message(message):
     return "Hi"
 
 
+@socketio.on('user_rotate_block')
+def rotate_block(block_id):
+    block_id = int(block_id) + 1
+    lobby = current_user._lobby - 1
+    game = GAME[current_user._lobby - 1]
+    color = game.active_player.color
+
+    if not USERS[lobby][current_user._email] == color:
+        return 
+
+    game.active_player.blocks[block_id].rotate()
+
+    remaining_blocks = deepcopy(game.active_player.blocks)
+    remaining_list = remaining_blocks.keys()
+    for i in range(1,22):
+        if i not in remaining_list:
+            remaining_blocks[i] = 0
+        else:
+            remaining_blocks[i] = remaining_blocks[i].block_matrix
+
+    if isinstance(game.active_player, AIPlayer):
+        user_frontend = "AI"
+    else:
+        for user in USERS[lobby]:
+            if USERS[lobby][user] == game.active_player.color:
+                user_frontend = user
+
+    send_matrix = [["X" for _ in range(20)] for _ in range(20)]
+    for idx1, row in enumerate(game.board.matrix):
+        for idx2, y in enumerate(row):
+            if y:
+                send_matrix[idx1][idx2] = y  
+
+    socketio.emit('update_board', {'board': send_matrix, 'blocks': remaining_blocks, 'color': game.active_player.color, 'user': user_frontend})   
+    return "Hi"
+
 ### AI GAME EVENTS
 
 # AI sets block

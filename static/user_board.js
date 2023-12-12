@@ -466,8 +466,9 @@ function dragndrop(blocks_object_update) {
         let y = Number(yx_array[0])
         let x = Number(yx_array[1])
 
-
+        console.log(draggable)
         let currentBlock = blocks_array[Number(draggingBlockId)]
+        console.log(currentBlock)
 
         for (i in currentBlock) {
 
@@ -583,7 +584,7 @@ function removeChildsForBlockUpdate() {
 function updateGameBlocks(updatet_version, color) {
   removeChildsForBlockUpdate()
   renderAllBlocks(updatet_version, color)
-  dragndrop(blocks_object)
+  dragndrop(updatet_version)
 }
 
 
@@ -603,6 +604,8 @@ document.addEventListener("keyup", (key) => {
       rotateNumber = (rotateNumber + 1) % 4
       console.log(rotateNumber)
       clickedBlock.setAttribute("data-rotate", rotateNumber)
+      socket.emit('user_rotate_block', document.querySelector(".block.click").getAttribute("id"));
+
       
     } else if (key.code == "Escape") {
       clickedBlock.classList.remove("click")
