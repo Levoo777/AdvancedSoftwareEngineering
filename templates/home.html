@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Blokus Online!</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+            background: linear-gradient(to bottom, #b3d9ff, #e6f2ff);
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            text-align: center;
+        }
+
+        body {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: linear-gradient(to bottom, #b3d9ff, #e6f2ff);
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+        .content-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px;
+        }
+
+        .content-box {
+            width: 45%;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            background: #ffffff;
+        }
+
+        .content-box h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .content-box p {
+            color: #666;
+        }
+
+
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .rotate {
+            animation: rotate 5s linear infinite;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Blokus Online</h1>
+    </div>
+    <div class="body">
+        <h2>Welcome to the Ultimate Blokus Experience!</h2>
+        <p style="font-size: x-large;">Join players from around the world in this exciting strategy game. Challenge your
+            mind, have fun, and connect
+            with others. Ready to make your move?</p>
+        <img src="blo.png" class="rotate">
+        <br><br>
+        <br><br>
+        <a href="play.html" class="play-button">Play Now</a>
+        <br><br>
+        <br><br>
+        <div class="content-container">
+            <div class="content-box">
+                <h3>What's new?</h3>
+                <p style="font-size: large;">Take on the ultimate challenge and test your skills against our unbeatable
+                    AI! Dare
+                    to play and discover if you
+                    have what it takes to outsmart the most advanced artificial intelligence in Blokus. Are you ready
+                    for the
+                    thrill
+                    of the game? Play now and make your mark!</p>
+            </div>
+            <div class="content-box">
+                <h3>Events</h3>
+                <p class="events-message">
+                    Sorry, there are currently no active events, but don't worry, we are always striving to organize
+                    exciting
+                    events for you! Stay tuned for the next upcoming event.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
