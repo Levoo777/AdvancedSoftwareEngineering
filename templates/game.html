@@ -2,60 +2,119 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="/static/style1.css">
-
-<h1 class="title">
-  Welcome in Lobby {{lobby_id}}
-</h1>
-<a href="{{ url_for('lobby.room_leave_lobby') }}" class="btn btn-danger">Leave Lobby</a>
-
-<a href="{{ url_for('lobby.clear_lobby') }}" class="btn btn-info">Clear Lobby</a>
-
-
-<div class="game-container">
-  <h1>Game Page - Lobby {{ lobby_id }}</h1>
-  <h2>Users in the Lobby:</h2>
-  <ul class="lobby-users">
-      {% for user in users %}
-          <li>{{ user }}</li>
-      {% endfor %}
-  </ul>
+<div class="welcome-container">
+  <h1 class="title">
+    Welcome in Lobby {{ lobby_id }}
+  </h1>
 </div>
-<br>
-<br>
-<a href="{{ url_for('lobby.game_start') }}" class="btn btn-success">Start Game</a>
 
+<div class="container-fluid main-container">
+  <div class="row align-items-start">
+    <div class="col-md-4 text-center">
+      <a href="{{ url_for('lobby.game_start') }}" class="btn btn-success btn-lg mb-2 game-button">Start
+        Game</a><br><br><br><br>
+      <a href="{{ url_for('lobby.room_leave_lobby') }}" class="btn btn-danger btn-lg mb-2 game-button">Leave
+        Lobby</a><br><br><br><br>
+      <a href="{{ url_for('lobby.clear_lobby') }}" class="btn btn-info btn-lg mb-2 game-button">Clear Lobby</a>
+    </div>
 
+    <div class="col-md-4 text-center">
+      <h2>Users in the Lobby:</h2>
+      <ul class="lobby-users">
+        {% for user in users %}
+        <li>{{ user }}</li>
+        {% endfor %}
+      </ul>
+    </div>
 
-<div class="wrapper-right-side">
-  <div class="chat-container">
-      <h2>Chat</h2>
-      <ul id="chat-list" style="list-style-type:none;"></ul>
-      <form onsubmit="event.preventDefault(); sendMessage();">
-          <input type="text" id="message" placeholder="Type your message">
+    <div class="col-md-4 text-center">
+      <div class="chat-container">
+        <h2>Chat</h2>
+        <ul id="chat-list" style="list-style-type:none;"></ul>
+        <form onsubmit="event.preventDefault(); sendMessage();">
+          <input type="text" id="message" placeholder="Type your message" class="mb-2">
           <button type="submit" class="btn btn-primary">Send</button>
-      </form>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
+
+<style>
+  .welcome-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+  }
+
+  .title {
+    text-align: center;
+    font-size: 4rem;
+    margin: 0;
+  }
+
+  .main-container {
+    margin-top: 20px;
+  }
+
+  .lobby-users {
+    list-style-type: none;
+    padding-left: 0;
+  }
+
+  .row.align-items-start {
+    justify-content: center;
+  }
+
+  .chat-container {
+    text-align: left;
+  }
+
+  #chat-list {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  @media (max-width: 768px) {
+
+    .left-side,
+    .right-side {
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  .game-button {
+    padding: .5rem 1.5rem;
+    font-size: 1.5rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .text-center br {
+    display: none;
+  }
+</style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
 <script>
   var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-  socket.on('chat_message', function(message) {
-      var chatList = document.getElementById('chat-list');
-      var li = document.createElement('li');
-      li.textContent = message;
-      chatList.appendChild(li);
+  socket.on('chat_message', function (message) {
+    var chatList = document.getElementById('chat-list');
+    var li = document.createElement('li');
+    li.textContent = message;
+    chatList.appendChild(li);
   });
 
   function sendMessage() {
-      var messageInput = document.getElementById('message');
-      var message = messageInput.value.trim();
-      if (message !== '') {
-          socket.emit('send_message', message);
-          messageInput.value = '';
-      }
+    var messageInput = document.getElementById('message');
+    var message = messageInput.value.trim();
+    if (message !== '') {
+      socket.emit('send_message', message);
+      messageInput.value = '';
+    }
   }
-</script> 
+</script>
 {% endblock %}
