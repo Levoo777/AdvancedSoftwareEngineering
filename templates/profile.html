@@ -1,22 +1,24 @@
 {% extends "index.html" %}
 
 {% block content %}
-<h1 class="title">
-  Welcome, {{ name }} you are currently in Lobby {{lobby}}!
-</h1>
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-    <div class="notification is-success">
-        {{ messages[0] }}
-    </div>
-{% endif %}
-{% endwith %}
-<div class="container mt-5">
+<style>
+  .title {
+    font-size: 4em; 
+  }
 
-  <div class="row">
+  .btn {
+    font-size: 1.5em; 
+    padding: 15px 30px; 
+  }
+</style>
+<h1 class="title">
+  Welcome {{ name }}!
+</h1>
+<div class="container mt-5">
+  <div class="row justify-content-center">
     <div class="col-md-4">
       <button type="button" onclick="redirectToResetPW()" class="btn btn-primary btn-block mb-3">
-        Change Password  <i class="fa fa-key"></i>
+        Change Password <i class="fa fa-key"></i>
       </button>
     </div>
     <div class="col-md-4">
@@ -25,16 +27,16 @@
       </button>
     </div>
   </div>
-  
-  <div class="row">
+
+  <div class="row justify-content-center">
     <div class="col-md-4">
       <button type="button" onclick="redirectToDeleteAccount()" class="btn btn-danger btn-block mb-3">
-        Delete Account  <i class="fa fa-trash"></i>
+        Delete Account <i class="fa fa-trash"></i>
       </button>
     </div>
     <div class="col-md-4">
       <button type="button" onclick="redirectToRemove2FA()" class="btn btn-danger btn-block mb-3">
-        Remove 2FA  <i class="fa fa-trash"></i>
+        Remove 2FA <i class="fa fa-trash"></i>
       </button>
     </div>
   </div>
