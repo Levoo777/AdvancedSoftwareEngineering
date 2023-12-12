@@ -35,7 +35,6 @@ def lobby_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if current_user._lobby == 0:
-            flash('You must join a lobby first.', 'warning')
             print("Nicht in Lobby")
             return redirect(url_for('lobby.join'))
         print("in_lobby")
@@ -299,7 +298,6 @@ def handle_zug(zug):
     #ACTIVE_GAME[lobby] = True
 
     if not isinstance(game.active_player, AIPlayer):
-        flash("Kein AI Spieler")
         #game.get_next_active_player()
         return "Kein AI Spieler"
 
