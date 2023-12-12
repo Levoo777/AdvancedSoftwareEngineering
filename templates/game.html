@@ -104,7 +104,8 @@
   socket.on('chat_message', function (message) {
     var chatList = document.getElementById('chat-list');
     var li = document.createElement('li');
-    li.textContent = message;
+    var timestamp = new Date().toLocaleTimeString();
+    li.textContent = '[' + timestamp + '] ' + message;
     chatList.appendChild(li);
   });
 
@@ -112,9 +113,11 @@
     var messageInput = document.getElementById('message');
     var message = messageInput.value.trim();
     if (message !== '') {
+      var timestamp = new Date().toLocaleTimeString();
       socket.emit('send_message', message);
       messageInput.value = '';
     }
   }
 </script>
+
 {% endblock %}
