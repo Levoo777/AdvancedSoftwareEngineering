@@ -18,7 +18,7 @@ body {
     box-shadow: 0 0 2px gold;
 }
 
-.blocksquare-true-red{
+.blocksquare-true.red{
     width: 16px;
     height: 16px;
     background-color: red;
@@ -26,14 +26,14 @@ body {
     transition: 1s ease;
 }
 
-.blocksquare-true-blue{
+.blocksquare-true.blue{
     width: 16px;
     height: 16px;
     background-color: blue;
     box-shadow: 0 0 2px blue, 0 0 10px blue;
     transition: 1s ease;
 }
-.blocksquare-true-yellow{
+.blocksquare-true.yellow{
     width: 16px;
     height: 16px;
     background-color: yellow;
@@ -41,7 +41,7 @@ body {
     transition: 1s ease;
 }
 
-.blocksquare-true-green{
+.blocksquare-true.green{
     width: 16px;
     height: 16px;
     background-color: green;
@@ -50,7 +50,7 @@ body {
 }
 
 .blocksquare-true.click {
-    box-shadow: 0 0 2px gold, 0 0 10px gold;
+    box-shadow: 0 0 2px white, 0 0 15px white;
 }
 
 .blocksquare-false {
