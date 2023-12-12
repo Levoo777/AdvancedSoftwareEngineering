@@ -26,9 +26,12 @@
     .content-box {
         width: 45%;
         padding: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 50px;
+        background: linear-gradient(to bottom right, #e0e4e8, #c8ced4);
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.15),
+            -5px -5px 15px rgba(255, 255, 255, 0.15);
         border-radius: 5px;
-        background: #ffffff;
+        border: 1px solid #b0bec5;
     }
 
     .content-box h3 {
@@ -42,32 +45,21 @@
 
     .play-now-container {
         text-align: center;
-        /* Zentriert den Inhalt des Containers */
         margin: 20px 0;
-        /* Gibt etwas Abstand oben und unten */
     }
 
     .play-now-btn {
-        /* Gestaltung Ihres Buttons, z.B. mit einer Klasse von Bootstrap oder Bulma */
         display: inline-block;
-        /* Damit die Text-Ausrichtung wirkt */
         padding: 10px 20px;
-        /* Padding für den Button */
         background-color: #007bff;
-        /* Hintergrundfarbe */
         color: white;
-        /* Textfarbe */
         text-decoration: none;
-        /* Entfernt die Unterstreichung des Links */
         border-radius: 5px;
-        /* Abgerundete Ecken */
         transition: background-color 0.3s;
-        /* Übergangseffekt für den Hover-Zustand */
     }
 
     .play-now-btn:hover {
         background-color: #0056b3;
-        /* Dunklere Hintergrundfarbe beim Hover */
     }
 
     @keyframes rotate {
@@ -102,7 +94,6 @@
     <div class="play-now-container">
         <a href="{{ url_for('lobby.room') }}" class="play-now-btn">Play Now</a>
     </div>
-    <br><br>
     <br><br>
     <div class="content-container">
         <div class="content-box">
