@@ -18,11 +18,34 @@ body {
     box-shadow: 0 0 2px gold;
 }
 
-.blocksquare-true{
+.blocksquare-true-red{
     width: 16px;
     height: 16px;
-    background-color: cyan;
-    box-shadow: 0 0 2px cyan, 0 0 10px cyan;
+    background-color: red;
+    box-shadow: 0 0 2px red, 0 0 10px red;
+    transition: 1s ease;
+}
+
+.blocksquare-true-blue{
+    width: 16px;
+    height: 16px;
+    background-color: blue;
+    box-shadow: 0 0 2px blue, 0 0 10px blue;
+    transition: 1s ease;
+}
+.blocksquare-true-yellow{
+    width: 16px;
+    height: 16px;
+    background-color: yellow;
+    box-shadow: 0 0 2px yellow, 0 0 10px yellow;
+    transition: 1s ease;
+}
+
+.blocksquare-true-green{
+    width: 16px;
+    height: 16px;
+    background-color: green;
+    box-shadow: 0 0 2px green, 0 0 10px green;
     transition: 1s ease;
 }
 
