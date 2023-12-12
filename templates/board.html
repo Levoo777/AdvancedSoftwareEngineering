@@ -34,7 +34,7 @@
         });
     });
 
-        socket.on('update_board', function(data) {
+        socket.on('update_ai_board', function(data) {
             console.log("Hallo")
             console.log('Aktualisiere Spielfeld:', data.board);
             updateBoard(data.board);

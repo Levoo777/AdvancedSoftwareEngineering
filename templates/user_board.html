@@ -36,7 +36,7 @@
             console.log('Farbe', data.color)
             console.log('USer', data.user)
             updateBoard(data.board);
-            updateBlocks(data.blocks)
+            updateGameBlocks(data.blocks)
         });
 
         socket.on('finish_game', function(ranking) {
@@ -54,7 +54,7 @@
 
 
         function updateBoard(updatedBoard) {
-        updateGrid(updatedBoard);
+        updateGameBoardGrid(updatedBoard);
     }
 
         function updateBlocks(updatedBlocks){

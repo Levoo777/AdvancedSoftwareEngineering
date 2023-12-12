@@ -144,7 +144,16 @@ def game_start():
             ORDER[lobby] = order
             for user, color in order:
                 USERS[lobby][user] = color
-            return render_template("user_board.html", board = game.board.matrix, order=ORDER[lobby])
+
+            remaining_blocks = deepcopy(game.active_player.blocks)
+            remaining_list = remaining_blocks.keys()
+            for i in range(1,22):
+                if i not in remaining_list:
+                    remaining_blocks[i] = 0
+                else:
+                    remaining_blocks[i] = remaining_blocks[i].block_matrix
+
+            return render_template("user_board.html", board = game.board.matrix, order=ORDER[lobby], blocks = game.active_player.blocks)
         
         return render_template("user_board.html", board = Board().matrix, order=ORDER[lobby])
         
@@ -341,7 +350,6 @@ def handle_zug(zug):
         return 
 
     SEND_MATRIX_OLD[lobby] = send_matrix
-    socketio.emit('update_board', {'board': send_matrix})
 
     if len(game.active_player.blocks) == 0:
         ranking = []
@@ -360,8 +368,25 @@ def handle_zug(zug):
         FINISHED_GAME[lobby] = True  
 
         return 
-    
+
     game.get_next_active_player()
+
+    remaining_blocks = deepcopy(game.active_player.blocks)
+    remaining_list = remaining_blocks.keys()
+    for i in range(1,22):
+        if i not in remaining_list:
+            remaining_blocks[i] = 0
+        else:
+            remaining_blocks[i] = remaining_blocks[i].block_matrix
+
+    if isinstance(game.active_player, AIPlayer):
+        user_frontend = "AI"
+    else:
+        for user in USERS[lobby]:
+            if USERS[lobby][user] == game.active_player.color:
+                user_frontend = user    
+
+    socketio.emit('update_board', {'board': send_matrix, 'blocks': remaining_blocks, 'color': game.active_player.color, 'user': user_frontend})   
     return "Hi"
 
 
@@ -470,7 +495,7 @@ def handle_zug(zug):
     
     SEND_MATRIX_OLD[lobby] = send_matrix
     #print(send_matrix)
-    socketio.emit('update_board', {'board': send_matrix})
+    socketio.emit('update_ai_board', {'board': send_matrix})
     if len(game.active_player.blocks) == 0:
         print("Player wins!")
 
