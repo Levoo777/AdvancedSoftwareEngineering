@@ -530,3 +530,7 @@ function updateGameBoardGrid(currentGrid) {
              }
     }
 }
+
+function updateGameBlocks(updatet_version) {
+  renderAllBlocks(updatet_version)
+}
