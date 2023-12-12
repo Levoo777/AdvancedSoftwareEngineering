@@ -1,10 +1,16 @@
 {% extends "index.html" %}
 
 {% block content %}
+
+<link rel="stylesheet" href="/static/style1.css">
+
 <h1 class="title">
   Welcome in Lobby {{lobby_id}}
 </h1>
 <a href="{{ url_for('lobby.room_leave_lobby') }}" class="btn btn-danger">Leave Lobby</a>
+
+<a href="{{ url_for('lobby.clear_lobby') }}" class="btn btn-info">Clear Lobby</a>
+
 
 <div class="game-container">
   <h1>Game Page - Lobby {{ lobby_id }}</h1>
@@ -17,5 +23,39 @@
 </div>
 <br>
 <br>
-<a href="{{ url_for('lobby.game_start') }}" class="btn btn-danger">Start Game</a>
+<a href="{{ url_for('lobby.game_start') }}" class="btn btn-success">Start Game</a>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
+<div class="wrapper-right-side">
+  <div class="chat-container">
+      <h2 class="text-light">Chat</h2>
+      <ul id="chat-list" style="list-style-type:none;"></ul>
+      <form onsubmit="event.preventDefault(); sendMessage();">
+          <input type="text" id="message" placeholder="Type your message">
+          <button type="submit" class="btn btn-primary">Send</button>
+      </form>
+  </div>
+</div>
+
+
+<script>
+  var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+  socket.on('chat_message', function(message) {
+      var chatList = document.getElementById('chat-list');
+      var li = document.createElement('li');
+      li.textContent = message;
+      chatList.appendChild(li);
+  });
+
+  function sendMessage() {
+      var messageInput = document.getElementById('message');
+      var message = messageInput.value.trim();
+      if (message !== '') {
+          socket.emit('send_message', message);
+          messageInput.value = '';
+      }
+  }
+</script> 
 {% endblock %}

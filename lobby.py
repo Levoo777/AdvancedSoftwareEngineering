@@ -50,6 +50,8 @@ def lobby_required(func):
 def join():
     return render_template('join_lobby.html', user_authenticated = current_user.is_authenticated)
 
+
+
 @lobby.route('/lobby', methods=['POST'])
 @login_required
 def join_post():
@@ -61,6 +63,18 @@ def join_post():
     db.update_user((user_id, "lobby", lobby_id))
     db.disconnect()
     join_room(lobby_id)
+    return redirect(url_for('lobby.room'))
+
+@lobby.route('/lobby/clear_lobby')
+@login_required
+def clear_lobby():
+    print("HERE")
+    lobby = current_user._lobby
+    user_id = current_user._id
+    db = DB_Manager("database/kundendatenbank.sql", "users")
+    db.connect()
+    db.clear_lobby(lobby, user_id)
+    db.disconnect()
     return redirect(url_for('lobby.room'))
 
 @lobby.route('/game')

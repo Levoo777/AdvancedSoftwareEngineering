@@ -36,6 +36,11 @@ class DB_Manager:
         self.cursor.execute(sql_command)
         self.connection.commit()
 
+    def clear_lobby(self, lobby_id, user_id):
+        sql_command = f"UPDATE {self.table_name} SET lobby = 0 WHERE lobby = {lobby_id} AND customer_number != {user_id}"
+        self.cursor.execute(sql_command)
+        self.connection.commit()
+
     def get_user(self, customer_number):
         sql_command = f"SELECT * FROM {self.table_name} where customer_number = {customer_number}"
         self.cursor.execute(sql_command)
