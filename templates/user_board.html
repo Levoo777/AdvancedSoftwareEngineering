@@ -145,6 +145,15 @@ function changeColorGameBoard(y, x, color) {
     <div style="color: white;" draggable="true"></div>
 
     <script src="/static/user_board.js"></script>
+    <script>
+        // Access the color variable in JavaScript
+        var playerColor = "{{ color }}";
+        renderAllBlocks(blocks_object, playerColor)
+        dragndrop(blocks_object)
+        // Now you can use the 'playerColor' variable in your JavaScript code
+        console.log(playerColor);
+    </script>
+    
 
     <div class="wrapper-right-side">
     <div class="chat-container">
@@ -202,5 +211,6 @@ function changeColorGameBoard(y, x, color) {
             messageInput.value = '';
         }
     }
+
 </script> 
 </html>

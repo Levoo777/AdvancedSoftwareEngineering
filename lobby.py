@@ -67,7 +67,6 @@ def join_post():
 @lobby.route('/lobby/clear_lobby')
 @login_required
 def clear_lobby():
-    print("HERE")
     lobby = current_user._lobby
     user_id = current_user._id
     db = DB_Manager("database/kundendatenbank.sql", "users")
@@ -143,9 +142,11 @@ def game_start():
             ORDER[lobby] = order
             for user, color in order:
                 USERS[lobby][user] = color
-            return render_template("user_board.html", board = game.board.matrix, order=ORDER[lobby])
+            return render_template("user_board.html", board = game.board.matrix, order=ORDER[lobby], color = game.active_player.color)
         
-        return render_template("user_board.html", board = Board().matrix, order=ORDER[lobby])
+        game = GAME[lobby]
+        COUNT[lobby] = 0
+        return render_template("user_board.html", board = Board().matrix, order=ORDER[lobby], color=game.active_player.color)
         
     return "Lobby not found (please use lobby 1 for usergame or 2 for ai game)"
 # #neue version noch nicht lauffähig
@@ -541,6 +542,11 @@ def user_disconnect():
     except:
         pass
     return 'Joined lobby'
+
+# @socketio.on('disconnect_info')
+# def handle_disconnect_info(data):
+#     print(f"Disconnect triggered from page: {data['page']}")
+#     # Additional handling based on the page information
 
 def get_lobby_user():
     db = DB_Manager("database/kundendatenbank.sql", "users")
