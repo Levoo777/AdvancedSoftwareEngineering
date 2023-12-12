@@ -34,9 +34,9 @@
             console.log('Aktualisiere Spielfeld:', data.board);
             console.log('Blöcke', data.blocks)
             console.log('Farbe', data.color)
-            console.log('USer', data.user)
+            console.log('User', data.user)
             updateBoard(data.board);
-            updateGameBlocks(data.blocks)
+            updateGameBlocks(data.blocks, data.color)
         });
 
         socket.on('finish_game', function(ranking) {
