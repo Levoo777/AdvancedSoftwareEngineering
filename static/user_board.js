@@ -542,6 +542,24 @@ function updateGameBoardGrid(currentGrid) {
   }
 }
 
+function removeChildsForBlockUpdate () {
+  let element = document.getElementById("blocks1")
+  while (element.firstChild()) {
+    element.removeChild(element.firstChild)
+  }
+
+  element = document.getElementById("blocks2")
+  while (element.firstChild()) {
+    element.removeChild(element.firstChild)
+  }
+
+  element = document.getElementById("blocks3")
+  while (element.firstChild()) {
+    element.removeChild(element.firstChild)
+  }
+}
+
 function updateGameBlocks(updatet_version) {
-renderAllBlocks(updatet_version)
+  removeChildsForBlockUpdate()
+  renderAllBlocks(updatet_version)
 }
