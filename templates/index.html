@@ -11,58 +11,42 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script> 
+        crossorigin="anonymous"></script>
 </head>
 
 <style>
-.board-content {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
-    flex-wrap: wrap;
-}
+    body,
+    body * {
+        color: black !important;
+    }
 
-.board-content > section {
-    flex: 1;
-    margin: 10px;
-    min-width: 250px;
-    box-sizing: border-box;
-}
+    a,
+    a:hover,
+    a:visited,
+    a:active {
+        color: black !important;
+    }
 
+    .board-content {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .board-content>section {
+        flex: 1;
+        margin: 10px;
+        min-width: 250px;
+        box-sizing: border-box;
+    }
 </style>
+
 <body>
-    
-    <section class="hero is-primary is-fullheight"  style="background-color: #1D70A2;">
+
+    <section class="hero is-primary is-fullheight" style="background: linear-gradient(to bottom, #b3d9ff, #e6f2ff);">
 
         <div class="hero-head">
-            <!-- <nav class="navbar">
-                <div class="container">
-
-                    <div id="navbarMenuHeroA" class="navbar-menu">
-                        <div class="navbar-end">
-                            <a href="{{ url_for('main.index') }}" class="navbar-item">
-                                Home
-                            </a>
-                            <a href="{{ url_for('main.profile') }}" class="navbar-item">
-                                Profile
-                            </a>
-                            <a href="{{ url_for('auth.login') }}" class="navbar-item">
-                                Login
-                            </a>
-                            <a href="{{ url_for('auth.signup') }}" class="navbar-item">
-                                Sign Up
-                            </a>
-                            <a href="{{ url_for('lobby.room') }}" class="navbar-item">
-                                Lobby
-                            </a>
-                            <a href="{{ url_for('auth.logout') }}" class="navbar-item">
-                                Logout
-                            </a>
-
-                        </div>
-                    </div>
-                </div>
-            </nav> -->
             <nav class="navbar navbar-dark navbar-expand-lg bg-primary">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="#">Blokus</a>
@@ -82,13 +66,13 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div >{% if not user_authenticated %}
-                        <a href="{{ url_for('auth.login') }}" class="navbar-item">Login</a>    
+                    <div>{% if not user_authenticated %}
+                        <a href="{{ url_for('auth.login') }}" class="navbar-item">Login</a>
                     </div>
-                    <div >
+                    <div>
                         {% else %}
                         <a href="{{ url_for('auth.logout') }}" class="navbar-item">Logout</a>
-                        {% endif %}    
+                        {% endif %}
                     </div>
                 </div>
             </nav>
@@ -96,8 +80,8 @@
 
         <div class="hero-body">
             <div class="container has-text-centered">
-               {% block content %}
-               {% endblock %}
+                {% block content %}
+                {% endblock %}
             </div>
         </div>
     </section>
