@@ -408,7 +408,7 @@ function renderAllBlocks(blocks_object_update, color) {
 }
 
 
-renderAllBlocks(blocks_object)
+//renderAllBlocks(blocks_object)
 
 
 function dragndrop(blocks_object_update) {
@@ -631,6 +631,7 @@ document.addEventListener("keyup", (key) => {
 
       
     } else if (key.code == "KeyM") {
+      socket.emit('user_reflect_block', document.querySelector(".block.click").getAttribute("id"));
 
 
     } else if (key.code == "Escape") {
