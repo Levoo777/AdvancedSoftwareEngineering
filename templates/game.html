@@ -27,18 +27,6 @@
       </ul>
     </div>
 
-    <!-- <div class="col-md-4 text-center">
-      <div class="chat-container">
-        <h2>Chat</h2>
-        <ul id="chat-list" style="list-style-type:none;"></ul>
-        <form onsubmit="event.preventDefault(); sendMessage();">
-          <input type="text" id="message" placeholder="Type your message" class="mb-2">
-          <button type="submit" class="btn btn-primary">Send</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div> -->
 
 <style>
   .welcome-container {
@@ -96,28 +84,5 @@
     display: none;
   }
 </style>
-<!-- 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
-<script>
-  var socket = io.connect('http://' + document.domain + ':' + location.port);
-
-  socket.on('chat_message', function (message) {
-    var chatList = document.getElementById('chat-list');
-    var li = document.createElement('li');
-    var timestamp = new Date().toLocaleTimeString();
-    li.textContent = '[' + timestamp + '] ' + message;
-    chatList.appendChild(li);
-  });
-
-  function sendMessage() {
-    var messageInput = document.getElementById('message');
-    var message = messageInput.value.trim();
-    if (message !== '') {
-      var timestamp = new Date().toLocaleTimeString();
-      socket.emit('send_message', message);
-      messageInput.value = '';
-    }
-  }
-</script> -->
 
 {% endblock %}
