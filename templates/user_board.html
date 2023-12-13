@@ -120,6 +120,24 @@
         dragndrop(blocks_object)
         console.log(playerColor);
     </script>
+        <div>
+            <h2>Next Move</h2>
+            <form onsubmit="event.preventDefault(); makeMove();">
+                <label for="row"></label>
+                <input type="number" id="row" name="row" hidden>
+    
+                <label for="col"></label>
+                <input type="number" id="col" name="col" hidden>
+    
+                <button type="submit" class="btn btn-success">GO!</button>
+            </form>
+            <br><br>
+            <form onsubmit="event.preventDefault(); giveUp();">
+                <button type="submit" class="btn btn-danger">Surrender</button>
+            </form>
+            <br><br>
+            <a href="{{ url_for('main.profile') }}" class="btn btn-danger">Leave Game</a>
+        </div>
 </div>
 
     <div class="col-md-4 text-center">
@@ -131,6 +149,8 @@
         
         </table>
         <br><br>
+        <br><br>
+        <br><br>
         <div class="chat-container">
             <h2>Chat</h2>
             <ul id="chat-list" style="list-style-type:none;"></ul>
@@ -141,25 +161,6 @@
         </div>
     </div>
     </div>
-    </div>
-
-    <div>
-        <h2>Next Move</h2>
-        <form onsubmit="event.preventDefault(); makeMove();">
-            <label for="row"></label>
-            <input type="number" id="row" name="row" hidden>
-
-            <label for="col"></label>
-            <input type="number" id="col" name="col" hidden>
-
-            <button type="submit" class="btn btn-success">GO!</button>
-        </form>
-
-        <form onsubmit="event.preventDefault(); giveUp();">
-            <button type="submit" class="btn btn-danger">Surrender</button>
-        </form>
-
-        <a href="{{ url_for('main.profile') }}" class="btn btn-danger">Leave Game</a>
     </div>
     <style>
         .chat-container {
