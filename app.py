@@ -39,11 +39,9 @@ def create_app():
     app.register_blueprint(game_blueprint)
 
     socketio.init_app(app)
-    #app.register_blueprint(socketio_blueprint, url_prefix='/socketio')
     return app
 
 app = create_app()
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
-    #app.run(host='localhost', port=5000, debug=True)

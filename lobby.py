@@ -147,7 +147,6 @@ def game_start():
 @socketio.on('user_set_block')
 def set_block(data):
     lobby = current_user._lobby - 1
-    #ACTIVE_GAME[lobby] = True
     game = GAME[current_user._lobby - 1]
     color = game.active_player.color
 
@@ -212,10 +211,7 @@ def set_block(data):
 
             SEND_MATRIX_OLD[lobby] = send_matrix
 
-            #socketio.emit('update_board', {'board': send_matrix})
-
             if len(game.active_player.blocks) == 0:
-                #socketio.emit('update_board', {'board': send_matrix})
                 ranking = []
                 all_players = game.finished_players + game.players
                 for player in all_players:
@@ -223,7 +219,6 @@ def set_block(data):
                     ranking.append((points, player.color))
                 ranking.sort(key=lambda x: x[0])
                 ranking = ranking[::-1]
-                #ACTIVE_GAME[lobby] = False
                 ORDER[lobby] = None
                 USERS[lobby] = {}
                 SEND_MATRIX_OLD[lobby] = None
@@ -255,21 +250,13 @@ def set_block(data):
 
     return "Hi"
 
-# AI sets block in Usergame
+
 @socketio.on('set_block_user_game')
 def handle_zug(zug):
     lobby = current_user._lobby - 1
     game = GAME[current_user._lobby - 1]
 
-    #if FINISHED_GAME[lobby]:
-        #ACTIVE_GAME[lobby] = False
-        #return
-    
-
-    #ACTIVE_GAME[lobby] = True
-
     if not isinstance(game.active_player, AIPlayer):
-        #game.get_next_active_player()
         return "Kein AI Spieler"
 
     COUNT[lobby] = COUNT[lobby] + 1
@@ -302,7 +289,6 @@ def handle_zug(zug):
             ranking.sort(key=lambda x: x[0])
             ranking = ranking[::-1]
             socketio.emit('finish_game', ranking)
-            #ACTIVE_GAME[lobby] = False
             ORDER[lobby] = None
             USERS[lobby] = {}
             SEND_MATRIX_OLD[lobby] = None
@@ -319,7 +305,6 @@ def handle_zug(zug):
         ranking.sort(key=lambda x: x[0])
         ranking = ranking[::-1]      
         socketio.emit('finish_game', ranking)
-        #ACTIVE_GAME[lobby] = False
         ORDER[lobby] = None
         USERS[lobby] = {}
         SEND_MATRIX_OLD[lobby] = None
@@ -372,7 +357,6 @@ def surrender():
             ranking.append((points, player.color))
         ranking.sort(key=lambda x: x[0])
         ranking = ranking[::-1]
-        #ACTIVE_GAME[lobby] = False
         ORDER[lobby] = None
         USERS[lobby] = {}
         SEND_MATRIX_OLD[lobby-1] = None
@@ -520,7 +504,6 @@ def handle_zug(zug):
             ranking.sort(key=lambda x: x[0])
             ranking = ranking[::-1]
             socketio.emit('finish_ai_game', ranking)
-            #ACTIVE_GAME[lobby] = False
             game.finished_players=[]
             ORDER[lobby] = None
             USERS[lobby] = {}
