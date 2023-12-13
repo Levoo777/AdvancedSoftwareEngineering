@@ -35,7 +35,7 @@ Anschließend haben wir ein Use Case Diagramm erstellt und daraus resultierend e
 Die drei erstellten Diagramme sind hier zu finden: https://github.com/Levoo777/AdvancedSoftwareEngineering/tree/main/dokumentation
 
 ## Design (siehe Tasks in Vorlesung)
-Wir haben das Entwurfsmuster Observer Pattern angewendet.
+Wir haben versucht das Entwurfsmuster Observer Pattern anzuwenden. Dabei ist unser Observer quasi die Spielinstanz, welche auf entsprechende Eingaben der Spieler reagiert und über das Spielbrett Information an alle weiteren teilnehmenden Spielern weitergibt.
  
 
 ## Qualitätssicherung
@@ -59,10 +59,53 @@ Zu Beginn wurde Frontend und Backend seperat entwickelt. Sobald das AI Game fert
 Nachfolgend wurde jede weitere implementierung aus dem Backend, direkt mit dem Frontend integriert um zu validieren, dass die Funktion auf der Weboberfläsche wie gewünscht agiert.
 
 ## Dokumentation (Benutzersicht)
-(Wie wird die Software gebaut/gestartet?)
+Sie können das Projekt mit Docker starten. Die Befehle dafür sind in der README.md beschrieben.
+
+Während der Entwicklung haben wir das Projekt über Python (python3 app.py) gestartet, im /database/db_manager.py muss man dafür allerdings eine Zeile (Zeile 11) wie im Kommentar beschrieben anpassen und die nötigen Pythonmodule (requirements.txt) installiert haben.
 
 
 ## Dokumentation (Entwicklersicht)
+
+Grundlegend haben wir 4 größere Komponenten:
+
+### 1. Datenbank mit sqllite3
+Wir haben dabei eine DB_Manager Klasse in python geschrieben mit der wir die Datenbank (kundendatenbank.sql) zur Laufzeit bearbeiten und entsprechende Information gezielt auslesen können.
+
+### 2. Backend
+Wir verwenden verschiedene Klassen zur Abstraktion der Blokus Objekte.
+Dazu zählen:
+
+1. Blöcke 
+2. Spieler (Player)
+3. Spielbrett (Board)
+4. Spiel (Game/AI-Game)
+5. AI-Spieler (AIPlayer)
+
+Die Blöcke und das Spielbrett sind dabei intern als mehrdimensionale Arrays dargestellt. Die Blöcke können beispielsweise ihren internen Zustand (Attribut block_matrix) über die Rotationsfunktion und Reflectfunktion ändern. Jeder Spieler beginnt dann mit einem Dictionary mit den 21 verschiedenen Blockinstanzen
+
+Eine zentrale Funktion des Spielbretts ist die is_move_valid bzw. is_first_move_valid die bestimmt ob ein Zug auf dem aktullen Stand des Spielfelds gültig ist
+
+Der AI-Spieler basiert auf folgenden Funktionalitäten.
+1. Er speichert seiner vorhandenen "Corners" (potenzielle Einfügestellen)
+2. Er probiert auf einen kopierten Demoboard (welches den aktuellen Stand des Boards darstellt) verschiedene Züge aus und bewertet diese abhängig von den neue generierten "Corners".
+3. Ziel des AI-Spielers ist es möglichst mittig zu spielen und möglichst viele neue "Corners" zu erzeugen.
+4. Dabei kann es theoretisch gegen Ende des Spiels passieren das der AI-Spieler eine Einfügemöglichkeit übersieht (begrenzte Schleifedurchläufe bei der Evaluierung der Züge) und so frühzeitig aufgibt.
+5. Die Stärke des AI-Spielers kann mit einer entsprechenden Anzahl an Schleifendurchläufen (AIPlayer.py Zeile 431 und 449 -> Verhältnis der beiden Schleifendurchläufe zueinander möglichst beibehalten) angepasst werden (je mehr Durchläufe desto bessere Züge).
+
+
+### 3. Server und Sockets
+Wir nutzen Flask als Webserver und SocketIO für die Socket Events.
+
+Wir haben dabei verschiedene Routen für Authentifizierungsfunktionalitäten (auth.py -> Login, SignUp, Reset_PW etc.) die Lobby/Spielfunktionalitäten (lobby.py -> start_game, join_lobby, socketevents) und generelle Routen (main.py -> home, profile).
+
+Bei unserem Aufbau gab es vor allem Probleme mit der Gruppierung von Users in Lobbys, dies sollte normalerweise über das SocketIO Modul von Python abgedeckt werden, konnten wird allerdings bei uns nicht umsetzen. Deshalb werden die Lobbyinformation aktuell in die Datenbank gespeichert und für die beiden Lobbys gibt es unterschiedliche Socket Events.
+
+Hier könnte die Lobbystruktur weiterentwicklet werden sodass die Lobbyzuteilung in der Session wirklich umgesetzt wird und nicht über die Datenbank läuft.
+
+### 4. Frontend
+Für das Frontend verwendeten wir Javascript, HTML und CSS
+
+
 (Was müssen externe Entwickler über die Struktur des Projektes wissen? Welche Erweiterungsmöglichkeiten gibt es? Welches sind die wichtigsten Klassen/Module?)
 
 
