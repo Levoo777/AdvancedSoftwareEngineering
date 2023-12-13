@@ -13,16 +13,14 @@
         crossorigin="anonymous"></script>
 
 </head>
-<h1 class="title">
-    Welcome in Lobby {{name}}
-</h1>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
 <script>
     var socket = io.connect('http://' + document.domain + ':' + location.port);
     socket.on('finish_ai_game', function (ranking) {
-        console.log("Ranking", ranking);
+        var rankingHeader = document.getElementById("rankingHeader");
+        rankingHeader.hidden = false;
         var table = document.getElementById('rankingTable');
         table.innerHTML = '';
         ranking.forEach(function (tuple) {
@@ -109,7 +107,6 @@
 
 
                 <div>
-                    <h2>Next Move</h2>
                     <form onsubmit="event.preventDefault(); makefirstMove();">
                         <label for="row"></label>
                         <input type="number" id="row" name="row" hidden>
@@ -117,7 +114,7 @@
                         <label for="col"></label>
                         <input type="number" id="col" name="col" hidden>
 
-                        <button type="submit" class="btn btn-success">GO!</button>
+                        <button type="submit" class="btn btn-success">AI Move</button>
                     </form>
                     <br>
                     <a href="{{ url_for('main.profile') }}" class="btn btn-danger">Leave Game</a>
@@ -125,8 +122,8 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <h2>
-                    Game Board
+                <h2 hidden id="rankingHeader">
+                    Ranking
                 </h2>
                 <table id="rankingTable">
 
