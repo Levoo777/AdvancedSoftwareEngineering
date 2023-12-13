@@ -14,15 +14,8 @@
 
 </head>
 <body style="background-color: #b3d9ff;">
-<h1 class="title">
+<h1 class="title" id="order_player" style="text-align: center;">
     Welcome in Lobby {{order}}
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div class="notification is-danger">
-        {{ messages[0] }}
-    </div>
-    {% endif %}
-    {% endwith %}
 </h1>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
@@ -35,6 +28,9 @@
         console.log('Blöcke', data.blocks)
         console.log('Farbe', data.color)
         console.log('User', data.user)
+        order_field = document.getElementById("order_player")
+        order_field.style.color = data.color;
+        order_field.innerHTML = `Active Player: ${data.user}`
         updateBoard(data.board);
         updateGameBlocks(data.blocks, data.color)
     });
@@ -121,7 +117,6 @@
         console.log(playerColor);
     </script>
         <div>
-            <h2>Next Move</h2>
             <form onsubmit="event.preventDefault(); makeMove();">
                 <label for="row"></label>
                 <input type="number" id="row" name="row" hidden>
@@ -129,11 +124,11 @@
                 <label for="col"></label>
                 <input type="number" id="col" name="col" hidden>
     
-                <button type="submit" class="btn btn-success">GO!</button>
+                <button type="submit" class="btn btn-success">AI Move</button>
             </form>
             <br><br>
             <form onsubmit="event.preventDefault(); giveUp();">
-                <button type="submit" class="btn btn-danger">Surrender</button>
+                <button type="submit" class="btn btn-warning">Surrender</button>
             </form>
             <br><br>
             <a href="{{ url_for('main.profile') }}" class="btn btn-danger">Leave Game</a>
