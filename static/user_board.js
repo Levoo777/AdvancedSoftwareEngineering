@@ -461,14 +461,15 @@ function dragndrop(blocks_object_update) {
      square.addEventListener("dragenter", e => {
         e.preventDefault()
         const draggable = document.querySelector(".dragging")
+
         const draggingBlockId = Number(draggable.id)
         let yx_array = square.id.split(",")
         let y = Number(yx_array[0])
         let x = Number(yx_array[1])
 
-        console.log(draggable)
-        let currentBlock = blocks_array[Number(draggingBlockId)]
-        console.log(currentBlock)
+        draggableToArray(draggable)
+        let currentBlock = draggableToArray(draggable)
+
 
         for (i in currentBlock) {
 
@@ -522,6 +523,32 @@ function dragndrop(blocks_object_update) {
 
 }
 
+
+function draggableToArray (dragObject) {
+  let dragList = [[], [], [], [], []]
+  let i = 0
+  let j = 0
+      
+
+      Array.from(dragObject.children).forEach((element) => {
+
+
+        if (element.getAttribute("class") != "blocksquare-false") {
+          dragList[i].push(true)
+        } else {
+          dragList[i].push(false)
+        }
+
+        
+        if (j % 5 == 4){
+          i++
+        } 
+        j++
+      })
+
+      return dragList
+}
+
 // function rotateBlock() {
 
 // }
@@ -549,7 +576,7 @@ function changeColorBlockBoard(y, x, color) {
   element.style.boxShadow = `0 0 2px ${color}, 0 0 10px ${color}`
 }
 
-dragndrop(blocks_object)
+// dragndrop(blocks_object)
 
 function updateGameBoardGrid(currentGrid) {
 
@@ -600,13 +627,12 @@ document.addEventListener("keyup", (key) => {
     let rotateNumber = Number(clickedBlock.dataset.rotate)
   
     if (key.code == "KeyR") {
-      console.log("tet")
-      rotateNumber = (rotateNumber + 1) % 4
-      console.log(rotateNumber)
-      clickedBlock.setAttribute("data-rotate", rotateNumber)
       socket.emit('user_rotate_block', document.querySelector(".block.click").getAttribute("id"));
 
       
+    } else if (key.code == "KeyM") {
+
+
     } else if (key.code == "Escape") {
       clickedBlock.classList.remove("click")
       let trueSquaresClicked = document.querySelectorAll(".blocksquare-true.click")
@@ -618,16 +644,3 @@ document.addEventListener("keyup", (key) => {
   }
 })
 
-// document.addEventListener("keyup", (key) => {
-//   const clickedBlock = document.querySelector(".block.click")
-//   let rotateNumber = Number(clickedBlock.dataset.rotate)
-  
-//   if (key.code == "KeyR") {
-//     console.log("tet")
-//     rotateNumber = (rotateNumber + 1) % 4
-//     console.log(rotateNumber)
-//     clickedBlock.setAttribute("data-rotate", rotateNumber)
-//   } else {
-//     // do nothing
-//   }
-// })
