@@ -105,18 +105,7 @@
 
     <div class="center">
         <div id="board"></div>
-    </div>
-
-    <div style="color: white;" draggable="true"></div>
-
-    <script src="/static/user_board.js"></script>
-    <script>
-        var playerColor = "{{ color }}";
-        renderAllBlocks(blocks_object, playerColor)
-        dragndrop(blocks_object)
-        console.log(playerColor);
-    </script>
-        <div>
+        <div class="d-flex justify-content-around" style="margin-top: 3%;">
             <form onsubmit="event.preventDefault(); makeMove();">
                 <label for="row"></label>
                 <input type="number" id="row" name="row" hidden>
@@ -133,6 +122,18 @@
             <br><br>
             <a href="{{ url_for('main.profile') }}" class="btn btn-danger">Leave Game</a>
         </div>
+    </div>
+
+    <div style="color: white;" draggable="true"></div>
+
+    <script src="/static/user_board.js"></script>
+    <script>
+        var playerColor = "{{ color }}";
+        renderAllBlocks(blocks_object, playerColor)
+        dragndrop(blocks_object)
+        console.log(playerColor);
+    </script>
+
 </div>
 
     <div class="col-md-4 text-center">
