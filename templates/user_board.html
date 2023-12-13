@@ -23,11 +23,6 @@
     var socket = io.connect('http://' + document.domain + ':' + location.port);
 
     socket.on('update_board', function (data) {
-        console.log("Hallo")
-        console.log('Aktualisiere Spielfeld:', data.board);
-        console.log('Blöcke', data.blocks)
-        console.log('Farbe', data.color)
-        console.log('User', data.user)
         order_field = document.getElementById("order_player")
         order_field.style.color = data.color;
         order_field.innerHTML = `Active Player: ${data.user}`
@@ -38,7 +33,6 @@
     socket.on('finish_game', function (ranking) {
         var rankingHeader = document.getElementById("rankingHeader");
         rankingHeader.hidden = false;
-        console.log("Ranking", ranking);
         var table = document.getElementById('rankingTable');
         table.innerHTML = '';
         ranking.forEach(function (tuple) {
@@ -71,7 +65,6 @@
         var row = document.getElementById("row")
         var col = document.getElementById("col")
         var zug = { 'row': row.value, 'col': col.value, 'first': true };
-        console.log(zug)
         socket.emit('zug_gemacht', zug);
     }
 
@@ -79,7 +72,6 @@
         var row = document.getElementById("row")
         var col = document.getElementById("col")
         var zug = { 'row': row.value, 'col': col.value, 'first': false };
-        console.log(zug)
         socket.emit('set_block_user_game', zug);
     }
 
@@ -133,7 +125,7 @@
         var playerColor = "{{ color }}";
         renderAllBlocks(blocks_object, playerColor)
         dragndrop(blocks_object)
-        console.log(playerColor);
+
     </script>
 
 </div>
