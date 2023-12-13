@@ -30,7 +30,7 @@ You can clean the database with /database/db_init.py (go back to the state with 
     <pre>cd AdvancedSoftwareEngineering/</pre>
 
 2. With python3
-    <pre>python3 /database/db_init.py</pre>
+    <pre>python3 database/db_init.py</pre>
 
 
 # Features
