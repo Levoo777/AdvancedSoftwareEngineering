@@ -6,6 +6,5 @@ from flask_login import login_user, logout_user, login_required, current_user, u
 from classes.User import User
 
 
-
 game = Blueprint('game', __name__)
 
