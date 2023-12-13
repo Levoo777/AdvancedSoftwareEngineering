@@ -6,9 +6,9 @@
     document.addEventListener("DOMContentLoaded", function() {
         var form = document.querySelector("form");
         form.addEventListener("submit", function(event) {
-            event.preventDefault(); // Verhindert das sofortige Absenden des Formulars
+            event.preventDefault(); 
             hashPassword().then(function() {
-                form.submit(); // Sendet das Formular, nachdem das Passwort gehasht wurde
+                form.submit(); 
             });
         });
     });
@@ -16,14 +16,12 @@
     async function hashPassword() {
         var passwordInput = document.getElementById('password');
         var hashedPasswordInput = document.getElementById('hashedPassword');
-        console.log(passwordInput)
 
         var password = passwordInput.value;
         var hashedPassword = await sha256(password);
-        console.log(hashedPassword);
 
         hashedPasswordInput.value = hashedPassword;
-        passwordInput.value = ''; // Löscht das originale Passwortfeld
+        passwordInput.value = ''; 
 
     }
 

@@ -16,11 +16,9 @@
     async function hashPassword() {
         var passwordInput = document.getElementById('password');
         var hashedPasswordInput = document.getElementById('hashedPassword');
-        console.log(passwordInput)
 
         var password = passwordInput.value;
         var hashedPassword = await sha256(password);
-        console.log(hashedPassword);
 
         hashedPasswordInput.value = hashedPassword;
         passwordInput.value = '';

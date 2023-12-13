@@ -33,10 +33,6 @@
     });
 
     socket.on('update_ai_board', function (data) {
-        console.log("Hallo")
-        console.log('Aktualisiere Spielfeld:', data.board);
-        console.log('Blöcke', data.blocks)
-        console.log('Farbe', data.color)
         updateBoard(data.board);
         updateGameBlocks(data.blocks, data.color);
     });
@@ -58,7 +54,6 @@
         var row = document.getElementById("row")
         var col = document.getElementById("col")
         var zug = { 'row': row.value, 'col': col.value, 'first': true };
-        console.log(zug)
         socket.emit('zug_gemacht', zug);
     }
 
@@ -66,7 +61,6 @@
         var row = document.getElementById("row")
         var col = document.getElementById("col")
         var zug = { 'row': row.value, 'col': col.value, 'first': false };
-        console.log(zug)
         socket.emit('zug_gemacht', zug);
     }
 </script>
@@ -100,7 +94,6 @@
                     var playerColor = "{{ color }}";
                     renderAllBlocks(blocks_object, playerColor)
                     dragndrop(blocks_object)
-                    console.log(playerColor);
                 </script>
 
 
