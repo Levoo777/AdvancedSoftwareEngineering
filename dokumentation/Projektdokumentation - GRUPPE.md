@@ -108,9 +108,6 @@ Wichtige Module sind die update-Funktionen zum updaten des Boards, bzw. der Blö
 Die update-Funktionen bekommen ein Block-Dict bzw das aktualisiert Gameboard aus dem Backend und rendern diese dann im Frontend.
 Die Eventhandler decken das Drag and Drop, die Rotationen und das Spiegeln der Blöcke ab.
 
-(Was müssen externe Entwickler über die Struktur des Projektes wissen? Welche Erweiterungsmöglichkeiten gibt es? Welches sind die wichtigsten Klassen/Module?)
-
-
 ## Fazit
 Das Projekt hat Spaß gemacht und besonders spannend war die Implementierung der KI, die sehr interessant und lehrreich war. Im Laufe der Entwicklung konnten wir alle unsere Programmierfähigkeiten erweitern und neues Wissen erlangen. Wir stießen allerdings auf Herausforderungen, insbesondere im Bereich des Frontends und bei der Implementierung der Sockets - ein Gebiet, das für uns alle im Team neu war. Aufgrund der zeitlichen Beschränkungen und der parallelen Arbeit an anderen Projekten in diesem Semester konnten wir uns allerdings nicht vollständig darauf konzentrieren.
 
