@@ -102,8 +102,11 @@ Bei unserem Aufbau gab es vor allem Probleme mit der Gruppierung von Users in de
 Hier könnte die Lobbystruktur weiterentwicklet werden, so dass die Lobbyzuteilung in der Session wirklich umgesetzt wird und nicht über die Datenbank läuft.
 
 ### 4. Frontend
-Für das Frontend verwendeten wir Javascript, HTML und CSS.
+Für das Frontend verwendeten wir Javascript, HTML und CSS. Hier gibt es keine Klassen. Wichtige Strukturen in der Darstellung sind das Block- und Gameboard-Gridsystem, welches auf dem Gridsystem von CSS basiert. Blöcke werden in einer 5x5 Matrix dargestellt, wobei in diesen true für die darzustellenden Elemente steht. Das Gameboard ist eine 20x20 Grid.
 
+Wichtige Module sind die update-Funktionen zum updaten des Boards, bzw. der Blöcke, sowie die Eventhandler.  
+Die update-Funktionen bekommen ein Block-Dict bzw das aktualisiert Gameboard aus dem Backend und rendern diese dann im Frontend.
+Die Eventhandler decken das Drag and Drop, die Rotationen und das Spiegeln der Blöcke ab.
 
 (Was müssen externe Entwickler über die Struktur des Projektes wissen? Welche Erweiterungsmöglichkeiten gibt es? Welches sind die wichtigsten Klassen/Module?)
 
