@@ -101,6 +101,7 @@ class AI_Game():
         self.board = Board()
         for player in self.players:
             player.board = self.board
+        self.finished_players = []
         return self.board
 
     def get_next_active_player(self):

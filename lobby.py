@@ -547,9 +547,11 @@ def handle_zug(zug):
             ranking = ranking[::-1]
             socketio.emit('finish_ai_game', ranking)
             #ACTIVE_GAME[lobby] = False
+            game.finished_players=[]
             ORDER[lobby] = None
             USERS[lobby] = {}
             SEND_MATRIX_OLD[lobby] = None
+            GAME[lobby] = None
             return
     else: 
         COUNTER = 0
