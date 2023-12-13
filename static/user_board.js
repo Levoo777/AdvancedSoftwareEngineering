@@ -1,3 +1,4 @@
+// Levin Bolbas
 const blocks_object = {
   "1": 0,
   "2": [
@@ -294,7 +295,7 @@ function createBoard() {
 
 createBoard();
 
-
+// creates a block in default 5x5 layout
 function createBlock(block) {
   let blockGrid = structuredClone(DEFAULT_BLOCK_GRID)
   let newBlock = blockGrid
@@ -325,7 +326,7 @@ function createBlock(block) {
   return newBlock
 }
 
-
+// creates a list of all blocks in 5x5 default layout
 function createListOfBlocksGrid(blocks_object) {
   let BlocksGrid = []
   let block;
@@ -341,6 +342,7 @@ function createListOfBlocksGrid(blocks_object) {
 }
 
 
+// renders the blocks for frontend
 function renderAllBlocks(blocks_object_update, color) {
   let current_BOARD_BLOCKS = 0;
   const block_grid_layout = createListOfBlocksGrid(blocks_object_update);
@@ -401,7 +403,7 @@ function renderAllBlocks(blocks_object_update, color) {
 
 renderAllBlocks(blocks_object)
 
-
+// drag and drop event handling
 function dragndrop(blocks_object_update) {
   const draggables = document.querySelectorAll(".block")
   const squares = document.querySelectorAll(".square")
@@ -529,7 +531,7 @@ function dragndrop(blocks_object_update) {
 
 }
 
-
+// gets a html collection an returns a dict in default 5x5 layout
 function draggableToArray(dragObject) {
   let dragList = [
      [],
@@ -579,6 +581,7 @@ function changeColorBlockBoard(y, x, color) {
 }
 
 
+//updates the game baord
 function updateGameBoardGrid(currentGrid) {
 
   for (i in currentGrid) {
@@ -592,6 +595,8 @@ function updateGameBoardGrid(currentGrid) {
   }
 }
 
+
+// removes the old blocks
 function removeChildsForBlockUpdate() {
   let element = document.getElementById("blocks1")
   while (element.firstChild) {
@@ -609,13 +614,15 @@ function removeChildsForBlockUpdate() {
   }
 }
 
+
+// updates the game blocks
 function updateGameBlocks(updatet_version, color) {
   removeChildsForBlockUpdate()
   renderAllBlocks(updatet_version, color)
   dragndrop(updatet_version)
 }
 
-
+// key event handling
 document.addEventListener("keyup", (key) => {
 
   const clickedBlock = document.querySelector(".block.click")
