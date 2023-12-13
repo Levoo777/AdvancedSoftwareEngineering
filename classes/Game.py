@@ -28,7 +28,6 @@ class Game():
                 turn_active = True
                 while turn_active:
                     turn_active = False
-                    #print(f"\nPlayer {player.color}'s turn\n\nRemaining blocks:")
                     player.show_remaining_blocks()
                     self.board.show_board()
                     action = input("\nChoose Action   (insert, rotate, reflect, exit)\n")
@@ -43,7 +42,6 @@ class Game():
                             if valid:
                                 player.player_insert(block_idx, row, col)
                             else: 
-                                #print("Move not valid!")
                                 turn_active = True
 
                     elif action == "rotate":
@@ -64,11 +62,6 @@ class Game():
                     break
             round_one = False
             
-#PlayerA = Player("red", None)
-#Players = [PlayerA] 
-#game = Game(Players)
-#game.start_new_game()
-
 class AI_Game():
 
     finished_players = []
@@ -87,14 +80,11 @@ class AI_Game():
 
         while True:
             for player in self.players:
-                #print(len(player.blocks))
                 time.sleep(1)
                 if round_one:
                     player.set_first_block()
                 else:
                     player.set_block()
-                #print("test")
-                #time.sleep(1)
                 self.board.show_board()
             round_one = False
 
@@ -141,9 +131,9 @@ class AI_Game():
     
 
 
-aia = AIPlayer("red", None)
-aib = AIPlayer("blue", None)
-aic = AIPlayer("green", None)
-new_board = Board()
-game = AI_Game([aia, aib, aic], new_board)
+#aia = AIPlayer("red", None)
+#aib = AIPlayer("blue", None)
+#aic = AIPlayer("green", None)
+#new_board = Board()
+#game = AI_Game([aia, aib, aic], new_board)
 #game.play_game()
