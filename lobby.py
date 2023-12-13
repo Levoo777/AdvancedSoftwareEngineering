@@ -35,9 +35,7 @@ def lobby_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if current_user._lobby == 0:
-            print("Nicht in Lobby")
             return redirect(url_for('lobby.join'))
-        print("in_lobby")
         return func(*args, **kwargs)
     return decorated_function
 
@@ -86,7 +84,6 @@ def room():
 @login_required
 @lobby_required
 def room_leave_lobby():
-    print("testotest")
     db = DB_Manager("database/kundendatenbank.sql", "users")
     db.connect()
     user_id = current_user._id
@@ -99,7 +96,6 @@ def room_leave_lobby():
 @lobby_required
 def game_start():
     lobby = current_user._lobby - 1
-    print(f"active game: {ACTIVE_GAME[lobby]}, old_matrix: {SEND_MATRIX_OLD[lobby]}, users: {USERS[lobby-1]}, order: {ORDER[lobby]}")
     #if ACTIVE_GAME[lobby]:
         #flash("Spiel in dieser Lobby läuft gerade")
         #return redirect(url_for('lobby.join'))
@@ -114,7 +110,6 @@ def game_start():
         return render_template("board.html", board = game.board.matrix, name=current_user._name, color = game.active_player.color)
 
     if lobby == 0:
-        print(f"FINISHED GAME: {FINISHED_GAME[lobby]}")
         FINISHED_GAME[lobby] = False
         BOARDS[lobby] = Board()
         users = get_lobby_user()
@@ -174,7 +169,6 @@ def game_start():
 # user inserts a block
 @socketio.on('user_set_block')
 def set_block(data):
-    print(data)
     lobby = current_user._lobby - 1
     #ACTIVE_GAME[lobby] = True
     game = GAME[current_user._lobby - 1]
@@ -192,11 +186,9 @@ def set_block(data):
 
 
     block = Block(block_matrix, color)
-    print(color)
     COUNT[lobby] = COUNT[lobby] + 1
     if COUNT[lobby] <=4:
         if game.board.is_first_move_valid(data["y"], data["x"], block):
-            print("IS_VALID")
             game.active_player.player_insert(data["block"], data["y"], data["x"])
         
             game.get_next_active_player()
@@ -336,7 +328,6 @@ def handle_zug(zug):
             ORDER[lobby] = None
             USERS[lobby] = {}
             SEND_MATRIX_OLD[lobby] = None
-        print(f"Removed Player {surrendering_player.color} with {points} P")
         return 
 
     SEND_MATRIX_OLD[lobby] = send_matrix
@@ -354,7 +345,6 @@ def handle_zug(zug):
         ORDER[lobby] = None
         USERS[lobby] = {}
         SEND_MATRIX_OLD[lobby] = None
-        print("JETZT IST FERTGI")
         FINISHED_GAME[lobby] = True  
 
         return 
@@ -409,14 +399,10 @@ def surrender():
         USERS[lobby] = {}
         SEND_MATRIX_OLD[lobby-1] = None
         socketio.emit('finish_game', ranking)
-
-    print(f"Removed Player {surrendering_player.color} with {points} P")
     return
 
 @socketio.on('send_message')
 def handle_message(message):
-    print("testott")
-    print(message)
     email = current_user._email
     msg = f"{email}: {message}"
     socketio.emit('chat_message', msg)
@@ -511,7 +497,7 @@ def handle_zug(zug):
 
     if FINISHED_GAME[lobby]:
         return
-    #ACTIVE_GAME[lobby] = True
+
     game = GAME[current_user._lobby - 1]
     COUNT[lobby] = COUNT[lobby] + 1
     if COUNT[lobby] <=4:
@@ -519,7 +505,6 @@ def handle_zug(zug):
     else:
         game.play_game(False)
     
-    #print(game.board.matrix)
     send_matrix = [["X" for _ in range(20)] for _ in range(20)]
     for idx1, row in enumerate(game.board.matrix):
         for idx2, y in enumerate(row):
@@ -556,19 +541,9 @@ def handle_zug(zug):
     else: 
         COUNTER = 0
 
-    print(COUNTER)
-
     
     SEND_MATRIX_OLD[lobby] = send_matrix
-    #
-    # socketio.emit('update_ai_board', {'board': send_matrix})
-    if len(game.active_player.blocks) == 0:
-        print("Player wins!")
-
-    if COUNTER == 4:
-        winner = game.calculate_points()
-        print(f"{winner} wins the game!")
-        
+   
 
     game.get_next_active_player()
 
@@ -600,15 +575,12 @@ def handle_zug(zug):
 @socketio.on('join_room')
 def join_room(lobby_id):
     user_id = session.get('user_id')
-    print(user_id, lobby_id)
     socketio.emit('join_lobby', {'user_id': user_id}, room=lobby_id)
     return 'Joined lobby'
 
 @socketio.on('disconnect')
 def user_disconnect():
-    print(current_user._email)
     lobby = current_user._lobby - 1
-    print("USER DISCONNECT")
     try:
         surrender()
     except:
@@ -618,7 +590,6 @@ def user_disconnect():
     db.update_user((current_user._id, "lobby", 0))
     db.disconnect()
     if not get_lobby_user(lobby + 1):
-        print("RESET")
         FINISHED_GAME[lobby] = True
         ORDER[lobby] = None
         USERS[lobby] = {}
@@ -649,7 +620,6 @@ def get_lobby_user(lobby = None):
     return users
 
 def finish_game(lobby):
-    print("GAME_OVER")
     #ACTIVE_GAME[lobby-1] = False
     ORDER[lobby-1] = None
     USERS[lobby-1] = {}
