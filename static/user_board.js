@@ -408,7 +408,7 @@ function renderAllBlocks(blocks_object_update, color) {
 }
 
 
-renderAllBlocks(blocks_object)
+//renderAllBlocks(blocks_object)
 
 
 function dragndrop(blocks_object_update) {
