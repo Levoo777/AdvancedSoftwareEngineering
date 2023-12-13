@@ -58,30 +58,21 @@ class AIPlayer(Player):
         self.corners = []
         self.rnd_gen = SystemRandom()
 
-    # inserts random big block in the middle of the field
+    # inserts random big block in a corner
     def set_first_block(self):
-        #best_move = Move(0, 0, 0, [])
         random_block_idx = len(self.blocks) - self.rnd_gen.randint(0,7)
         random_big_block = self.blocks[random_block_idx]
 
-        #pos_row = 10
-        #pos_col = 10
-        #i = 10
         valid_move = False
 
         while valid_move == False:
-            #print("Hallo")
             random_block_idx = len(self.blocks) - self.rnd_gen.randint(0,7)
             random_big_block = self.blocks[random_block_idx]
-            #print("Block")
-            #print(random_big_block.block_matrix)
 
             if not self.board.matrix[0][0]:
                 pos_row = 0
                 pos_col = 0
-                #print("a")
                 move = self.try_block_first(pos_row, pos_col, random_big_block)
-                #print("b")
                 if random_big_block.block_matrix[0][0]:
                     valid_move = True
 
@@ -109,7 +100,7 @@ class AIPlayer(Player):
         self.player_insert(random_block_idx, move.row, move.col)
         self.corners += move.new_corners
         self.pop_corners()
-        #print(self.corners)
+      
     
    
 
@@ -147,7 +138,6 @@ class AIPlayer(Player):
                         move = self.try_block(row_to_fullfile,  col_to_fullfile, block)
                         if move >= best_move:
                             best_move = move
-                        #strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
                         
                 else:
                     for j in range(1, len(block.block_matrix[0])):
@@ -156,9 +146,7 @@ class AIPlayer(Player):
                                 move = self.try_block(row_to_fullfile - j, col_to_fullfile, block)
                                 if move >= best_move:
                                     best_move = move
-                                #strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
-                                
-                                    
+                             
 
                     for j in range(1, len(block.block_matrix)):
                         if block.block_matrix[j][0]:
@@ -166,8 +154,7 @@ class AIPlayer(Player):
                                 move = self.try_block(row_to_fullfile, col_to_fullfile - j, block)
                                 if move >= best_move:
                                     best_move = move
-                                #strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
-                                
+                              
                                     
 
 
@@ -180,8 +167,7 @@ class AIPlayer(Player):
                         move = self.try_block(row_to_fullfile - len(block.block_matrix) + 1, col_to_fullfile, block)
                         if move >= best_move:
                             best_move = move
-                        #strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
-                        
+                       
                 else:
                     for j in range(1, len(block.block_matrix[0])):
                         if block.block_matrix[-1][j]:
@@ -189,8 +175,7 @@ class AIPlayer(Player):
                                 move = self.try_block(row_to_fullfile - len(block.block_matrix) + 1, col_to_fullfile - j, block)
                                 if move >= best_move:
                                     best_move = move
-                                #strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
-                                
+                               
                                     
                 
                     for j in range(1, len(block.block_matrix)):
@@ -199,9 +184,7 @@ class AIPlayer(Player):
                                 move = self.try_block(row_to_fullfile - len(block.block_matrix) + 1 + j, col_to_fullfile, block)
                                 if move >= best_move:
                                     best_move = move
-                                #strength_of_move = -(row_to_fullfile - 10,5)**2 + (col_to_fullfile - 10,5)**2 +(row_to_fullfile + len(block.block_matrix) - 10,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 10,5)**2
-                                
-
+                
                             
                 element = block.block_matrix[0][-1]
 
@@ -211,9 +194,7 @@ class AIPlayer(Player):
                         move = self.try_block(row_to_fullfile , col_to_fullfile - len(block.block_matrix[0]) + 1, block)
                         if move >= best_move:
                             best_move = move
-                        #strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
                        
-                        
                 else:
                     for j in range(1, len(block.block_matrix[0])):
                         if block.block_matrix[0][-j-1]:
@@ -221,8 +202,7 @@ class AIPlayer(Player):
                                 move = self.try_block(row_to_fullfile, col_to_fullfile - len(block.block_matrix[0]) + 1 + j, block)
                                 if move >= best_move:
                                     best_move = move
-                                #strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
-                                
+                              
                                    
                 
                     for j in range(1, len(block.block_matrix)):
@@ -231,9 +211,6 @@ class AIPlayer(Player):
                                 move = self.try_block(row_to_fullfile -j, col_to_fullfile - len(block.block_matrix[0]) + 1, block)
                                 if move >= best_move:
                                     best_move = move
-                                #strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
-                                
-                                
                             
                 
                 element = block.block_matrix[-1][-1]
@@ -245,8 +222,7 @@ class AIPlayer(Player):
                         if move >= best_move:
                             best_move = move
         
-                        #strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
-                        
+                       
                      
                 else:
                     for j in range(1, len(block.block_matrix[0])):
@@ -255,8 +231,7 @@ class AIPlayer(Player):
                                 move = self.try_block(row_to_fullfile - len(block.block_matrix) + 1, col_to_fullfile - len(block.block_matrix[0]) + 1 + j, block)
                                 if move >= best_move:
                                     best_move = move
-                                #strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
-                                  
+                             
                                     
                 
                     for j in range(1, len(block.block_matrix)):
@@ -265,8 +240,7 @@ class AIPlayer(Player):
                                 move = self.try_block(row_to_fullfile - len(block.block_matrix) + 1 + j, col_to_fullfile - len(block.block_matrix[0]) + 1, block)
                                 if move >= best_move:
                                     best_move = move
-                                #strength_of_move = -(row_to_fullfile - 9,5)**2 + (col_to_fullfile - 9,5)**2 +(row_to_fullfile + len(block.block_matrix) - 9,5)**2 + (col_to_fullfile + len(block.block_matrix[0])- 9,5)**2
-                                
+                             
                                 
                 block.rotate()
             block.reflect()
@@ -283,7 +257,6 @@ class AIPlayer(Player):
     #@Lukas Buser, Sercan Berkpinar
     def get_best_corner(self):
         self.pop_corners()
-        #print(f"corner: {self.corners}")
         best_corner = (100, 100)
         for row, col in self.corners:
             if best_corner == (100, 100):
@@ -306,13 +279,10 @@ class AIPlayer(Player):
         demo_board.board_insert(block, row, col)
         new_corners = []
         for row_i in range(row -1, len(block.block_matrix) + row + 1):
-            #print(row_i)
             for col_i in range(col -1, len(block.block_matrix[0]) + col + 1):
-                #print(col_i)
                 if self.is_corner(demo_board, row_i, col_i):
                     if (row_i, col_i) not in self.corners:
                         new_corners.append((row_i, col_i))
-        #print(len(new_corners))
         return Move(len(new_corners)-1, row, col, new_corners, block)
     
     #@Leon Ams
@@ -401,7 +371,6 @@ class AIPlayer(Player):
     #@Lukas Buser, @Leon Ams    
     def set_block(self):
         best_move = Move(0, 0, 0, [])
-        #new_board.show_board()
         best_row, best_col = self.get_best_corner()
 
         best_idx= 0
@@ -411,7 +380,6 @@ class AIPlayer(Player):
         while counter < 8:
 
             idx, block = self.get_random_block("big")
-            #idx, block = 18, self.blocks[18]
             new_best_move = self.find_block_position(best_row, best_col, block)
             if best_move == Move(0, 0, 0, []):
                 best_move = new_best_move
@@ -422,14 +390,9 @@ class AIPlayer(Player):
                     best_idx = idx
             counter += 1
 
-        #print ("end1")
-        #print(str(best_move))
-        #print(counter)
-        #print(best_move == Move(0, 0, 0, []))
         best_move_start = best_move
 
         while best_move_start == Move(0, 0, 0, []) and counter < 50:
-            #print("start2")
             best_row, best_col = self.get_random_corner()
             idx, block = self.get_random_block("big")
             new_best_move = self.find_block_position(best_row, best_col, block)
@@ -443,11 +406,9 @@ class AIPlayer(Player):
                     best_move = new_best_move 
                     best_idx = idx
             counter += 1
-            #print(f"insert: {best_idx, best_move.row, best_move.col, best_move.block}")
 
         
         while not best_move.block and counter < 100:
-            #print("start2")
             best_row, best_col = self.get_random_corner()
             idx, block = self.get_random_block("small")
             new_best_move = self.find_block_position(best_row, best_col, block)
@@ -461,7 +422,6 @@ class AIPlayer(Player):
                     best_move = new_best_move 
                     best_idx = idx
             counter += 1
-            #print(f"insert: {best_idx, best_move.row, best_move.col, best_move.block}")
 
 
         if best_move.block:
@@ -469,8 +429,7 @@ class AIPlayer(Player):
             self.corners += best_move.new_corners
         else:
             print("UAAAAAAAAAAAAAH")
-        #self.pop_corners()
-        #print(self.corners)
+
 
         
     # @Sercan Berkpinar
@@ -479,15 +438,7 @@ class AIPlayer(Player):
         random.shuffle(copied_corners)
         return copied_corners[0]
 
-#new_board = Board()
-#ai = AIPlayer("red", new_board)
-#new_board.show_board()
-#ai.set_first_block()
-#print("\n")
-#new_board.show_board()
-#print("\n")
-#ai.set_block()
-#cleanew_board.show_board()
+
 
 
 

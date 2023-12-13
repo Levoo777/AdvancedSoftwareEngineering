@@ -29,7 +29,6 @@ class Player():
     #@Leon Ams
     def show_remaining_blocks(self):
         for idx, block in self.blocks.items():
-            #print(f"\n\n Block index {idx}:\n")
             block.show_block()
             
     #@Lukas Buser

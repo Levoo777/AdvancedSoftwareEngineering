@@ -132,9 +132,3 @@ class AI_Game():
     
 
 
-#aia = AIPlayer("red", None)
-#aib = AIPlayer("blue", None)
-#aic = AIPlayer("green", None)
-#new_board = Board()
-#game = AI_Game([aia, aib, aic], new_board)
-#game.play_game()
