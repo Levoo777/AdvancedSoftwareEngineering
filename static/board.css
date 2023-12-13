@@ -2,8 +2,8 @@
     box-sizing: border-box;
 }
 
-body {
-    background-color: #000;
+body, h1, h2, h3, h4, h5, h6, p, table, td, th, li, a {
+    color: black !important;
 }
 
 .square {
