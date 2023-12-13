@@ -13,7 +13,7 @@ Lukas Buser - Scrum Master, Development
 2. Build the docker container (try sudo if permission denied)
     <pre>docker build -t blokus-app .</pre>
 
-3. Add our database as Volume and run the container (please add your absolute path instead of pwd)
+3. Add our database as Volume and run the container. Please add your absolute path to the Repo Directory instead of "pwd".
     <pre>docker run -v /"pwd"/AdvancedSoftwareEngineering/database:/app/database -p 5000:5000 blokus-app</pre>
 
 4. Visite the Website on
