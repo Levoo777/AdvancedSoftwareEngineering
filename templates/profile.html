@@ -3,17 +3,24 @@
 {% block content %}
 <style>
   .title {
-    font-size: 4em; 
+    font-size: 4em;
   }
 
   .btn {
-    font-size: 1.5em; 
-    padding: 15px 30px; 
+    font-size: 1.5em;
+    padding: 15px 30px;
   }
 </style>
 <h1 class="title">
   Welcome {{ name }}!
 </h1>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="notification is-success">
+  {{ messages[0] }}
+</div>
+{% endif %}
+{% endwith %}
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-4">
