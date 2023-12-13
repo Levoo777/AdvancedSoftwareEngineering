@@ -41,9 +41,6 @@ class Block():
                 if len(cell_value) < 5:
                     cell_value = cell_value.ljust(5)
                 row_str += f"  {cell_value} |"
-            #print("_" * len(row_str) + "\n")
-            #print(row_str)
-        #print("_" * len(row_str) + "\n")
 
     #@Leon Ams  - generates full dict of blocks
     @staticmethod

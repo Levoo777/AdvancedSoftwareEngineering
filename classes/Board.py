@@ -20,12 +20,11 @@ class Board():
                     if not block.block_matrix[i][j]: 
                         continue  
 
-                    if row+i < 20 and row+i >= 0 and column+j <20 and column+j>= 0:                # new
+                    if row+i < 20 and row+i >= 0 and column+j <20 and column+j>= 0:              
                         pass
                     else:
                         return False
-
-                    
+                 
                     if self.matrix[row + i][column + j] != None:
                             if block.block_matrix[i][j]:
                                 return False
@@ -61,9 +60,6 @@ class Board():
             
             return corner
 
-            # for i in range(len(block)):
-            #     for j in range(len(block[i])):
-            #                 self.matrix[row + i][column + j] = block[i][j]
     def is_first_move_valid(self, row: int, column: int, block: Block):
 
             corner = False
@@ -81,7 +77,7 @@ class Board():
 
                     
 
-                    if row+i < 20 and row+i >= 0 and column+j <20 and column+j>= 0:                # new
+                    if row+i < 20 and row+i >= 0 and column+j <20 and column+j>= 0:                
                         pass
                     else:
                         if block.block_matrix[i][j]:
@@ -111,17 +107,12 @@ class Board():
                     if self.matrix[0][0] == block.color or self.matrix[0][19] == block.color or self.matrix[19][0] == block.color or self.matrix[19][19] == block.color:    
                         corner = True
             return corner
-
-
-
-
-    
+  
     #@Leon Ams
     def board_insert(self, block: Block, row: int, col: int):
         for idx_row, x_row in enumerate(block.block_matrix):
             for idx_col, val in enumerate(x_row):
                 if not self.matrix[row + idx_row][col + idx_col]:
-                    #print(f"INSERT {row + idx_row}, {col + idx_col}, {block.block_matrix}")
                     self.matrix[row + idx_row][col + idx_col] = val  
 
     #@Leon Ams, Sercan Berkpinar
@@ -133,14 +124,6 @@ class Board():
                 if len(cell_value) < 5:
                     cell_value = cell_value.ljust(5)
                 row += f"  {cell_value} |"
-            #print(row)
-            #print("_________" * 20 + "\n")
 
    
-
-
-
-
-
-
-field = Board()
+#field = Board()

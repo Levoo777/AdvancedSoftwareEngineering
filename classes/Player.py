@@ -44,9 +44,3 @@ class Player():
                     if self.blocks[block].block_matrix[idx1][idx2]:
                         points -= 1
         return points        
-
-#board = Board()
-#player = Player("red", board)
-#player.player_insert(3, 1, 2)
-#player.board.show_board()
-#player.show_remaining_blocks()
