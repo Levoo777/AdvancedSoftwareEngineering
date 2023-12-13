@@ -242,10 +242,10 @@ def set_block(data):
 
             SEND_MATRIX_OLD[lobby] = send_matrix
 
-            socketio.emit('update_board', {'board': send_matrix})
+            #socketio.emit('update_board', {'board': send_matrix})
 
             if len(game.active_player.blocks) == 0:
-                socketio.emit('update_board', {'board': send_matrix})
+                #socketio.emit('update_board', {'board': send_matrix})
                 ranking = []
                 all_players = game.finished_players + game.players
                 for player in all_players:
@@ -459,6 +459,44 @@ def rotate_block(block_id):
     socketio.emit('update_board', {'board': send_matrix, 'blocks': remaining_blocks, 'color': game.active_player.color, 'user': user_frontend})   
     return "Hi"
 
+@socketio.on('user_reflect_block')
+def reflect_block(block_id):
+    block_id = int(block_id) + 1
+    lobby = current_user._lobby - 1
+    game = GAME[current_user._lobby - 1]
+    color = game.active_player.color
+
+    if not USERS[lobby][current_user._email] == color:
+        return 
+
+    game.active_player.blocks[block_id].reflect()
+
+    remaining_blocks = deepcopy(game.active_player.blocks)
+    remaining_list = remaining_blocks.keys()
+    for i in range(1,22):
+        if i not in remaining_list:
+            remaining_blocks[i] = 0
+        else:
+            remaining_blocks[i] = remaining_blocks[i].block_matrix
+
+    if isinstance(game.active_player, AIPlayer):
+        user_frontend = "AI"
+    else:
+        for user in USERS[lobby]:
+            if USERS[lobby][user] == game.active_player.color:
+                user_frontend = user
+
+    send_matrix = [["X" for _ in range(20)] for _ in range(20)]
+    for idx1, row in enumerate(game.board.matrix):
+        for idx2, y in enumerate(row):
+            if y:
+                send_matrix[idx1][idx2] = y  
+
+    socketio.emit('update_board', {'board': send_matrix, 'blocks': remaining_blocks, 'color': game.active_player.color, 'user': user_frontend})   
+    return "Hi"
+
+
+
 ### AI GAME EVENTS
 
 # AI sets block
@@ -571,22 +609,23 @@ def user_disconnect():
     print("USER DISCONNECT")
     try:
         surrender()
-        db = DB_Manager("database/kundendatenbank.sql", "users")
-        db.connect()
-        db.update_user((current_user._id, "lobby", 0))
-        db.disconnect()
-        if not get_lobby_user(lobby + 1):
-            print("RESET")
-            FINISHED_GAME[lobby] = True
-            ORDER[lobby] = None
-            USERS[lobby] = {}
-            SEND_MATRIX_OLD[lobby] = None
-            GAME[lobby] = None
-            
-
-        logout_user()
     except:
         pass
+    db = DB_Manager("database/kundendatenbank.sql", "users")
+    db.connect()
+    db.update_user((current_user._id, "lobby", 0))
+    db.disconnect()
+    if not get_lobby_user(lobby + 1):
+        print("RESET")
+        FINISHED_GAME[lobby] = True
+        ORDER[lobby] = None
+        USERS[lobby] = {}
+        SEND_MATRIX_OLD[lobby] = None
+        GAME[lobby] = None
+        
+
+    logout_user()
+
     return 'Joined lobby'
 
 # @socketio.on('disconnect_info')
