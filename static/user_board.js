@@ -1,6 +1,10 @@
 // Levin Bolbas
 const blocks_object = {
-  "1": 0,
+  "1": [
+   [
+      "green"
+   ]
+   ],
   "2": [
      [
         "green",
@@ -401,7 +405,7 @@ function renderAllBlocks(blocks_object_update, color) {
 }
 
 
-renderAllBlocks(blocks_object)
+//renderAllBlocks(blocks_object)
 
 // drag and drop event handling
 function dragndrop(blocks_object_update) {

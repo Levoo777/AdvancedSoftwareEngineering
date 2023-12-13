@@ -15,7 +15,7 @@
 </head>
 <body style="background-color: #b3d9ff;">
 <h1 class="title" id="order_player" style="text-align: center;">
-    Welcome in Lobby {{order}}
+    Welcome in the User Game! Player {{order[0][0]}} ({{order[0][1]}}) starts!
 </h1>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
@@ -36,6 +36,8 @@
     });
 
     socket.on('finish_game', function (ranking) {
+        var rankingHeader = document.getElementById("rankingHeader");
+        rankingHeader.hidden = false;
         console.log("Ranking", ranking);
         var table = document.getElementById('rankingTable');
         table.innerHTML = '';
@@ -136,9 +138,9 @@
 
 </div>
 
-    <div class="col-md-4 text-center">
-        <h2>
-            USER-Game Board
+    <div class="col-md-4">
+        <h2 hidden id="rankingHeader">
+            Ranking
         </h2>
         
         <table id="rankingTable">

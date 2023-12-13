@@ -7,16 +7,16 @@ body, h1, h2, h3, h4, h5, h6, p, table, td, th, li, a {
 }
 
 .square {
-    width: 16px;
-    height: 16px;
+    width: 19px;
+    height: 19px;
     background-color: #1d1d1d;
     box-shadow: 0 0 2px #000;
     transition: 1s ease;
 }
 
 .square.dragenter {
-    width: 16px;
-    height: 16px;
+    width: 19px;
+    height: 19px;
     background-color: #1d1d1d;
     box-shadow: 0 0 2px #000;
     transition: 1s ease;
@@ -37,8 +37,8 @@ body, h1, h2, h3, h4, h5, h6, p, table, td, th, li, a {
 }
 
 .square.dragenter-false {
-    width: 16px;
-    height: 16px;
+    width: 19px;
+    height: 19px;
     background-color: #1d1d1d;
     box-shadow: 0 0 2px #000;
     transition: 1s ease;
@@ -58,31 +58,31 @@ body, h1, h2, h3, h4, h5, h6, p, table, td, th, li, a {
 }
 
 .blocksquare-true.red{
-    width: 16px;
-    height: 16px;
+    width: 19px;
+    height: 19px;
     background-color: red;
     box-shadow: 0 0 2px red, 0 0 10px red;
     transition: 1s ease;
 }
 
 .blocksquare-true.blue{
-    width: 16px;
-    height: 16px;
+    width: 19px;
+    height: 19px;
     background-color: blue;
     box-shadow: 0 0 2px blue, 0 0 10px blue;
     transition: 1s ease;
 }
 .blocksquare-true.yellow{
-    width: 16px;
-    height: 16px;
+    width: 19px;
+    height: 19px;
     background-color: yellow;
     box-shadow: 0 0 2px yellow, 0 0 10px yellow;
     transition: 1s ease;
 }
 
 .blocksquare-true.green{
-    width: 16px;
-    height: 16px;
+    width: 19px;
+    height: 19px;
     background-color: green;
     box-shadow: 0 0 2px green, 0 0 10px green;
     transition: 1s ease;
@@ -93,8 +93,8 @@ body, h1, h2, h3, h4, h5, h6, p, table, td, th, li, a {
 }
 
 .blocksquare-false {
-    width: 16px;
-    height: 16px;
+    width: 19px;
+    height: 19px;
     visibility: hidden;
 }
 
@@ -113,14 +113,14 @@ body, h1, h2, h3, h4, h5, h6, p, table, td, th, li, a {
 
 #board {
     display: grid;
-    grid-template-columns: repeat(20, 20px);
-    grid-template-rows: repeat(20, 20px);
+    grid-template-columns: repeat(20, 22px);
+    grid-template-rows: repeat(20, 22px);
 }
 
 .wrapper-left-side {
     position: absolute;
     width: 400px;
-    top: 50%;
+    top: 55%;
     left: 20%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
@@ -133,16 +133,16 @@ body, h1, h2, h3, h4, h5, h6, p, table, td, th, li, a {
 
 .block {
     display: grid;
-    grid-template-columns: repeat(5, 20px);
-    grid-template-rows: repeat(5, 20px);
+    grid-template-columns: repeat(5, 22px);
+    grid-template-rows: repeat(5, 22px);
     align-items: center;
     /* margin: 1% 1%; */
 }
 
 .no-block {
     display: grid;
-    grid-template-columns: repeat(5, 20px);
-    grid-template-rows: repeat(5, 20px);
+    grid-template-columns: repeat(5, 22px);
+    grid-template-rows: repeat(5, 22px);
     align-items: center;
     visibility: hidden;
 }

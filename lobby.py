@@ -186,6 +186,7 @@ def set_block(data):
                         send_matrix[idx1][idx2] = y
             
             SEND_MATRIX_OLD[lobby] = send_matrix
+            color = game.active_player.color
             if isinstance(game.active_player, AIPlayer):
                 user_frontend = "AI"
             else:
@@ -458,6 +459,20 @@ def reflect_block(block_id):
     socketio.emit('update_board', {'board': send_matrix, 'blocks': remaining_blocks, 'color': game.active_player.color, 'user': user_frontend})   
     return "Hi"
 
+@socketio.on('user_is_move_valid')
+def is_move_valid(data):
+    lobby = current_user._lobby - 1
+    game = GAME[lobby]
+
+    y = data["y"]
+    x = data["x"]
+    block_idx = data["block"]
+
+    block = game.active_player.blocks[block_idx]
+
+    res = game.board.is_move_valid(y, x, block)
+    socketio.emit('move_valid_response', res)
+    return "-"
 
 ########################################################################################################################################
 ### AI GAME EVENTS
