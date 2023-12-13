@@ -16,13 +16,10 @@ from extensions import socketio
 lobby = Blueprint('lobby', __name__)
 
 BOARDS = [Board()] * 10
-#PLAYER = []
 GAME = [AI_Game(["red"], Board()), AI_Game([AIPlayer("red"),AIPlayer("blue"), AIPlayer("green"), AIPlayer("yellow")], BOARDS[2])]
 USERS = [{}, None]
 ACTIVE_GAME = [False, False]
-#GAMES = [None] * 10
-COUNT = [0, 0]
-COUNTER = [0, 0]
+COUNT = [0, 0]                      # First round counter
 SEND_MATRIX_OLD = [None, None]
 GIVE_UP_COUNTER = [0, 0]
 ORDER = [None, None]
@@ -39,8 +36,8 @@ def lobby_required(func):
         return func(*args, **kwargs)
     return decorated_function
 
-
-### LOBBY ACTIONS
+########################################################################################################################################
+# LOBBY ACTIONS
 
 @lobby.route('/lobby')
 @login_required
@@ -96,9 +93,6 @@ def room_leave_lobby():
 @lobby_required
 def game_start():
     lobby = current_user._lobby - 1
-    #if ACTIVE_GAME[lobby]:
-        #flash("Spiel in dieser Lobby läuft gerade")
-        #return redirect(url_for('lobby.join'))
 
     if lobby == 1:
         FINISHED_GAME[lobby] = False
@@ -144,27 +138,10 @@ def game_start():
         return render_template("user_board.html", board = Board().matrix, order=ORDER[lobby], color=game.active_player.color)
         
     return "Lobby not found (please use lobby 1 for usergame or 2 for ai game)"
-# #neue version noch nicht lauffähig
-# def game_start()
-#     game = GAME[current_user._lobby - 1]
-#     game.init_game()
-#     number_human_players = get_users_in_lobby(current_user._lobby)
-    
-#     colors = ["green", "yellow", "red", "blue"]
-    
-#     if number_human_players <= 4:
-#         players = [Player(colors[i]) for i in range(number_human_players)]
-#         ai_players = [AIPlayer(color) for color in colors[number_human_players:]]
-        
-#         all_players = players + ai_players
-        
-#         GAME[current_user._lobby] = Game(all_players, BOARDS[current_user._lobby])
-#     else:
-#         print("Zu viele Spieler")
-    
-#     return render_template("board.html", board=game.board.matrix)
 
-### USER GAME EVENTS
+
+########################################################################################################################################
+# USER GAME EVENTS
 
 # user inserts a block
 @socketio.on('user_set_block')
@@ -482,17 +459,14 @@ def reflect_block(block_id):
     return "Hi"
 
 
-
+########################################################################################################################################
 ### AI GAME EVENTS
 
 # AI sets block
 @socketio.on('zug_gemacht')
 def handle_zug(zug):
-    global COUNTER
     global SEND_MATRIX_OLD
-
-    
-
+  
     lobby = current_user._lobby - 1
 
     if FINISHED_GAME[lobby]:
@@ -538,9 +512,6 @@ def handle_zug(zug):
             SEND_MATRIX_OLD[lobby] = None
             GAME[lobby] = None
             return
-    else: 
-        COUNTER = 0
-
     
     SEND_MATRIX_OLD[lobby] = send_matrix
    
@@ -569,7 +540,7 @@ def handle_zug(zug):
 
 
 
-
+########################################################################################################################################
 ## Further Functions
 
 @socketio.on('join_room')
@@ -596,15 +567,9 @@ def user_disconnect():
         SEND_MATRIX_OLD[lobby] = None
         GAME[lobby] = None
         
-
     logout_user()
 
     return 'Joined lobby'
-
-# @socketio.on('disconnect_info')
-# def handle_disconnect_info(data):
-#     print(f"Disconnect triggered from page: {data['page']}")
-#     # Additional handling based on the page information
 
 def get_lobby_user(lobby = None):
     db = DB_Manager("database/kundendatenbank.sql", "users")
@@ -620,7 +585,6 @@ def get_lobby_user(lobby = None):
     return users
 
 def finish_game(lobby):
-    #ACTIVE_GAME[lobby-1] = False
     ORDER[lobby-1] = None
     USERS[lobby-1] = {}
     SEND_MATRIX_OLD[lobby-1] = None
