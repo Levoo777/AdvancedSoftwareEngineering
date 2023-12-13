@@ -445,9 +445,21 @@ function dragndrop(blocks_object_update) {
         e.preventDefault()
 
         let trueSquaresClicked = document.querySelectorAll(".click")
-
+ 
         trueSquaresClicked.forEach(element => {
            element.classList.remove("click")
+        })
+ 
+        let trueSquaresDragenterFalse = document.querySelectorAll(".dragenter-false")
+ 
+        trueSquaresDragenterFalse.forEach(element => {
+           element.classList.remove("dragenter-false")
+        })
+ 
+        let trueSquaresDragenter = document.querySelectorAll(".dragenter")
+ 
+        trueSquaresDragenter.forEach(element => {
+           element.classList.remove("dragenter")
         })
 
         const draggable = document.querySelector(".dragging")
@@ -482,9 +494,21 @@ function dragndrop(blocks_object_update) {
         e.preventDefault()
 
         let trueSquaresClicked = document.querySelectorAll(".click")
-
+ 
         trueSquaresClicked.forEach(element => {
            element.classList.remove("click")
+        })
+ 
+        let trueSquaresDragenterFalse = document.querySelectorAll(".dragenter-false")
+ 
+        trueSquaresDragenterFalse.forEach(element => {
+           element.classList.remove("dragenter-false")
+        })
+ 
+        let trueSquaresDragenter = document.querySelectorAll(".dragenter")
+ 
+        trueSquaresDragenter.forEach(element => {
+           element.classList.remove("dragenter")
         })
 
         const dragEnters = document.querySelectorAll(".dragenter")
@@ -505,9 +529,21 @@ function dragndrop(blocks_object_update) {
      square.addEventListener("drop", e => {
         e.preventDefault()
         let trueSquaresClicked = document.querySelectorAll(".click")
-
+ 
         trueSquaresClicked.forEach(element => {
            element.classList.remove("click")
+        })
+ 
+        let trueSquaresDragenterFalse = document.querySelectorAll(".dragenter-false")
+ 
+        trueSquaresDragenterFalse.forEach(element => {
+           element.classList.remove("dragenter-false")
+        })
+ 
+        let trueSquaresDragenter = document.querySelectorAll(".dragenter")
+ 
+        trueSquaresDragenter.forEach(element => {
+           element.classList.remove("dragenter")
         })
         const draggable = document.querySelector(".dragging")
         const draggingBlockId = Number(draggable.id)
