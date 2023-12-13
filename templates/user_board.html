@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title> 
+    <title>Login</title>
     <link rel="stylesheet" href="/static/board.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -13,39 +13,39 @@
         crossorigin="anonymous"></script>
 
 </head>
-
+<body style="background-color: #b3d9ff;">
 <h1 class="title">
     Welcome in Lobby {{order}}
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-        <div class="notification is-danger">
-            {{ messages[0] }}
-        </div>
+    <div class="notification is-danger">
+        {{ messages[0] }}
+    </div>
     {% endif %}
     {% endwith %}
-  </h1>
+</h1>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
-    <script>
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
+<script>
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-        socket.on('update_board', function(data) {
-            console.log("Hallo")
-            console.log('Aktualisiere Spielfeld:', data.board);
-            console.log('Blöcke', data.blocks)
-            console.log('Farbe', data.color)
-            console.log('User', data.user)
-            updateBoard(data.board);
-            updateGameBlocks(data.blocks, data.color)
-        });
+    socket.on('update_board', function (data) {
+        console.log("Hallo")
+        console.log('Aktualisiere Spielfeld:', data.board);
+        console.log('Blöcke', data.blocks)
+        console.log('Farbe', data.color)
+        console.log('User', data.user)
+        updateBoard(data.board);
+        updateGameBlocks(data.blocks, data.color)
+    });
 
-        socket.on('finish_game', function(ranking) {
+    socket.on('finish_game', function (ranking) {
         console.log("Ranking", ranking);
         var table = document.getElementById('rankingTable');
         table.innerHTML = '';
-        ranking.forEach(function(tuple) {
+        ranking.forEach(function (tuple) {
             var row = table.insertRow();
-            tuple.forEach(function(element) {
+            tuple.forEach(function (element) {
                 var cell = row.insertCell();
                 cell.appendChild(document.createTextNode(element));
             });
@@ -53,84 +53,64 @@
     });
 
 
-        function updateBoard(updatedBoard) {
+    function updateBoard(updatedBoard) {
         updateGameBoardGrid(updatedBoard);
     }
 
-        function updateBlocks(updatedBlocks){
-            return
-        }
+    function updateBlocks(updatedBlocks) {
+        return
+    }
 
 
-function changeColorGameBoard(y, x, color) {
-    let element = document.getElementById(`y${y}, x${x}`)
-    element.style.backgroundColor = color;
+    function changeColorGameBoard(y, x, color) {
+        let element = document.getElementById(`y${y}, x${x}`)
+        element.style.backgroundColor = color;
 
-    element.style.boxShadow = `0 0 2px ${color}, 0 0 10px ${color}`
-}
+        element.style.boxShadow = `0 0 2px ${color}, 0 0 10px ${color}`
+    }
 
-            function makefirstMove(row, col, player) {
-                var row = document.getElementById("row")
-                var col = document.getElementById("col")
-                var zug = { 'row': row.value, 'col': col.value, 'first':true};
-                console.log(zug)
-                socket.emit('zug_gemacht', zug);
-            }
+    function makefirstMove(row, col, player) {
+        var row = document.getElementById("row")
+        var col = document.getElementById("col")
+        var zug = { 'row': row.value, 'col': col.value, 'first': true };
+        console.log(zug)
+        socket.emit('zug_gemacht', zug);
+    }
 
-            function makeMove(row, col, player) {
-                var row = document.getElementById("row")
-                var col = document.getElementById("col")
-                var zug = { 'row': row.value, 'col': col.value, 'first': false };
-                console.log(zug)
-                socket.emit('set_block_user_game', zug);
-            }
+    function makeMove(row, col, player) {
+        var row = document.getElementById("row")
+        var col = document.getElementById("col")
+        var zug = { 'row': row.value, 'col': col.value, 'first': false };
+        console.log(zug)
+        socket.emit('set_block_user_game', zug);
+    }
 
-            function giveUp() {
-                socket.emit('give_up');
-            }
+    function giveUp() {
+        socket.emit('give_up');
+    }
 
-            socket.on('connect', () => {
-            console.log('Connect');
-            });
+    socket.on('connect', () => {
+        console.log('Connect');
+    });
 
-            socket.on('disconnect', () => {
-            console.log('Disconnect');
-            socket.emit('disconnect');
-            });
-    </script>
-</html>
-<h1 class="text-center text-light">
-  USER-Game Board
+    socket.on('disconnect', () => {
+        console.log('Disconnect');
+        socket.emit('disconnect');
+    });
+</script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+<h1 class>
+    USER-Game Board
 </h1>
 
 <table id="rankingTable">
-   
+
 </table>
 
-<!-- <div class="board-content">
-<div class="chat-container">
-    <h2>Chat</h2>
-    <ul id="chat-list"></ul>
-    <form onsubmit="event.preventDefault(); sendMessage();">
-        <input type="text" id="message" placeholder="Type your message">
-        <button type="submit">Send</button>
-    </form>
-</div>
-
-<div class="game-container">
-  <h1>Game Page - Lobby {{ lobby_id }}</h1>
-  <h2>Users in the Lobby:</h2>
-  <ul class="lobby-users" id="board-list">
-      {% for row in board %}
-          <li>{{ row }}</li>
-      {% endfor %}
-  </ul>
-</div>
-</div> -->
 
 
-<body class="bg-black">
-    
 
     <div class="wrapper-left-side">
         <div class="blocks" id="blocks1"></div>
@@ -141,7 +121,7 @@ function changeColorGameBoard(y, x, color) {
     <div class="center">
         <div id="board"></div>
     </div>
-    
+
     <div style="color: white;" draggable="true"></div>
 
     <script src="/static/user_board.js"></script>
@@ -151,66 +131,71 @@ function changeColorGameBoard(y, x, color) {
         dragndrop(blocks_object)
         console.log(playerColor);
     </script>
-    
+</div>
 
-    <div class="wrapper-right-side">
-    <div class="chat-container">
-        <h2 class="text-light">Chat</h2>
-        <ul id="chat-list" style="list-style-type:none;"></ul>
-        <form onsubmit="event.preventDefault(); sendMessage();">
-            <input type="text" id="message" placeholder="Type your message">
-            <button type="submit" class="btn btn-primary">Send</button>
-        </form>
+    <div class="col-md-4 text-center">
+        <div class="chat-container">
+            <h2>Chat</h2>
+            <ul id="chat-list" style="list-style-type:none;"></ul>
+            <form onsubmit="event.preventDefault(); sendMessage();">
+                <input type="text" id="message" placeholder="Type your message" class="mb-2">
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+        </div>
     </div>
-</div>
+    </div>
+    </div>
 
-<div style="margin-left: 3%;">
-<h2 class="text-light">Next Move</h2>
-<form onsubmit="event.preventDefault(); makeMove();">
-    <label for="row"></label>
-    <input type="number" id="row" name="row" hidden>
+    <div>
+        <h2>Next Move</h2>
+        <form onsubmit="event.preventDefault(); makeMove();">
+            <label for="row"></label>
+            <input type="number" id="row" name="row" hidden>
 
-    <label for="col"></label>
-    <input type="number" id="col" name="col" hidden>
+            <label for="col"></label>
+            <input type="number" id="col" name="col" hidden>
 
-    <button type="submit" class="btn btn-success">GO!</button>
-</form>
+            <button type="submit" class="btn btn-success">GO!</button>
+        </form>
 
-<form onsubmit="event.preventDefault(); giveUp();">
-    <button type="submit" class="btn btn-danger">Surrender</button>
-</form>
+        <form onsubmit="event.preventDefault(); giveUp();">
+            <button type="submit" class="btn btn-danger">Surrender</button>
+        </form>
 
-<a href="{{ url_for('main.profile') }}" class="text-white">Leave Game</a>
-</div>
-<!-- 
-<form onsubmit="event.preventDefault(); makeMove(first=0);">
-    <label for="row"></label>
-    <input type="number" id="row" name="row" hidden>
+        <a href="{{ url_for('main.profile') }}" class="btn btn-danger">Leave Game</a>
+    </div>
+    <style>
+        .chat-container {
+            text-align: left;
+        }
 
-    <label for="col"></label>
-    <input type="number" id="col" name="col" hidden>
+        #chat-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-    <button type="submit" class="btn-primary">Zug machen</button>
-</form>  -->
+        socket.on('chat_message', function (message) {
+            var chatList = document.getElementById('chat-list');
+            var li = document.createElement('li');
+            var timestamp = new Date().toLocaleTimeString();
+            li.textContent = '[' + timestamp + '] ' + message;
+            chatList.appendChild(li);
+        });
+
+        function sendMessage() {
+            var messageInput = document.getElementById('message');
+            var message = messageInput.value.trim();
+            if (message !== '') {
+                var timestamp = new Date().toLocaleTimeString();
+                socket.emit('send_message', message);
+                messageInput.value = '';
+            }
+        }
+    </script>
 </body>
 
-<script>
-
-    socket.on('chat_message', function(message) {
-        var chatList = document.getElementById('chat-list');
-        var li = document.createElement('li');
-        li.textContent = message;
-        chatList.appendChild(li);
-    });
-
-    function sendMessage() {
-        var messageInput = document.getElementById('message');
-        var message = messageInput.value.trim();
-        if (message !== '') {
-            socket.emit('send_message', message);
-            messageInput.value = '';
-        }
-    }
-
-</script> 
 </html>
