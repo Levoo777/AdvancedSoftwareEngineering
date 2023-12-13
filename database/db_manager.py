@@ -8,7 +8,7 @@ class DB_Manager:
     cursor = None
 
     def __init__(self, db_name, table_name):
-        self.db_name = db_name
+        self.db_name = "/app/database/kundendatenbank.sql" # For python use db_name instead of the "/app/database/kundendatenbank.sql"
         self.table_name = table_name
     
     def change_table(self, table_name):
