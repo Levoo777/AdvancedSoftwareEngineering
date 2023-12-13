@@ -316,15 +316,6 @@ function createBlock(block) {
               newBlock[i][j] = true;
 
            }
-           /* else if (block[i][j] == "red") {
-                        newBlock[i][j] = "red";
-
-                    } else if (block[i][j] == "blue") {
-                        newBlock[i][j] = "blue";
-
-                    } else if (block[i][j] == "blue") {
-                        newBlock[i][j] = "blue";
-                    } */
         }
      }
 
@@ -408,7 +399,7 @@ function renderAllBlocks(blocks_object_update, color) {
 }
 
 
-//renderAllBlocks(blocks_object)
+renderAllBlocks(blocks_object)
 
 
 function dragndrop(blocks_object_update) {
@@ -427,39 +418,36 @@ function dragndrop(blocks_object_update) {
   })
 
 
-  
   draggables.forEach(draggable => {
      draggable.addEventListener("click", () => {
-        
+
+        let trueSquaresClicked = document.querySelectorAll(".click")
+
+        trueSquaresClicked.forEach(element => {
+           element.classList.remove("click")
+        })
 
         let true_squares = draggable.querySelectorAll(".blocksquare-true")
         true_squares.forEach(true_square => {
-          
+
            true_square.classList.add("click")
            draggable.classList.add("click")
         })
      })
   })
 
-  // document.addEventListener("keyup", (key) => {
-  //   const clickedBlock = document.querySelector(".block.click")
-  //   let rotateNumber = Number(clickedBlock.dataset.rotate)
-    
-  //   if (key.code == "KeyR") {
-  //     console.log("tet")
-  //     rotateNumber = (rotateNumber + 1) % 4
-  //     console.log(rotateNumber)
-  //     clickedBlock.setAttribute("data-rotate", rotateNumber)
-  //     // clickedBlock.classList.add(`rotate${i}`)
-  //   } else {
-  //     // do nothing
-  //   }
-  // })
 
   squares.forEach(square => {
 
      square.addEventListener("dragenter", e => {
         e.preventDefault()
+
+        let trueSquaresClicked = document.querySelectorAll(".click")
+
+        trueSquaresClicked.forEach(element => {
+           element.classList.remove("click")
+        })
+
         const draggable = document.querySelector(".dragging")
 
         const draggingBlockId = Number(draggable.id)
@@ -490,6 +478,13 @@ function dragndrop(blocks_object_update) {
 
      square.addEventListener("dragleave", e => {
         e.preventDefault()
+
+        let trueSquaresClicked = document.querySelectorAll(".click")
+
+        trueSquaresClicked.forEach(element => {
+           element.classList.remove("click")
+        })
+
         const dragEnters = document.querySelectorAll(".dragenter")
         dragEnters.forEach((element) => element.classList.remove("dragenter"))
      })
@@ -497,10 +492,21 @@ function dragndrop(blocks_object_update) {
 
      square.addEventListener("dragover", e => {
         e.preventDefault()
+        let trueSquaresClicked = document.querySelectorAll(".click")
+
+        trueSquaresClicked.forEach(element => {
+           element.classList.remove("click")
+        })
      })
+
 
      square.addEventListener("drop", e => {
         e.preventDefault()
+        let trueSquaresClicked = document.querySelectorAll(".click")
+
+        trueSquaresClicked.forEach(element => {
+           element.classList.remove("click")
+        })
         const draggable = document.querySelector(".dragging")
         const draggingBlockId = Number(draggable.id)
 
@@ -524,41 +530,37 @@ function dragndrop(blocks_object_update) {
 }
 
 
-function draggableToArray (dragObject) {
-  let dragList = [[], [], [], [], []]
+function draggableToArray(dragObject) {
+  let dragList = [
+     [],
+     [],
+     [],
+     [],
+     []
+  ]
   let i = 0
   let j = 0
-      
-
-      Array.from(dragObject.children).forEach((element) => {
 
 
-        if (element.getAttribute("class") != "blocksquare-false") {
-          dragList[i].push(true)
-        } else {
-          dragList[i].push(false)
-        }
+  Array.from(dragObject.children).forEach((element) => {
 
-        
-        if (j % 5 == 4){
-          i++
-        } 
-        j++
-      })
 
-      return dragList
+     if (element.getAttribute("class") != "blocksquare-false") {
+        dragList[i].push(true)
+     } else {
+        dragList[i].push(false)
+     }
+
+
+     if (j % 5 == 4) {
+        i++
+     }
+     j++
+  })
+
+  return dragList
 }
 
-// function rotateBlock() {
-
-// }
-
-// rotateBlock()
-// document.addEventListener('keyup', event => {
-//   if (event.code === 'Space') {
-//     console.log('Space pressed')
-//   }
-// })
 
 // changes the color of one coordinate on the game board
 function changeColorGameBoard(y, x, color) {
@@ -576,7 +578,6 @@ function changeColorBlockBoard(y, x, color) {
   element.style.boxShadow = `0 0 2px ${color}, 0 0 10px ${color}`
 }
 
-// dragndrop(blocks_object)
 
 function updateGameBoardGrid(currentGrid) {
 
@@ -621,27 +622,26 @@ document.addEventListener("keyup", (key) => {
 
   // no block choosed error handling
   if (clickedBlock == null) {
-    console.log("Kein Block gewählt")
+     console.log("Kein Block gewählt")
   } else {
 
-    let rotateNumber = Number(clickedBlock.dataset.rotate)
-  
-    if (key.code == "KeyR") {
-      socket.emit('user_rotate_block', document.querySelector(".block.click").getAttribute("id"));
+     let rotateNumber = Number(clickedBlock.dataset.rotate)
 
-      
-    } else if (key.code == "KeyM") {
-      socket.emit('user_reflect_block', document.querySelector(".block.click").getAttribute("id"));
+     if (key.code == "KeyR") {
+        socket.emit('user_rotate_block', document.querySelector(".block.click").getAttribute("id"));
 
 
-    } else if (key.code == "Escape") {
-      clickedBlock.classList.remove("click")
-      let trueSquaresClicked = document.querySelectorAll(".blocksquare-true.click")
-      
-      trueSquaresClicked.forEach(element => {
-        element.classList.remove("click")
-      })
-    }
+     } else if (key.code == "KeyM") {
+        socket.emit('user_reflect_block', document.querySelector(".block.click").getAttribute("id"));
+
+
+     } else if (key.code == "Escape") {
+        clickedBlock.classList.remove("click")
+        let trueSquaresClicked = document.querySelectorAll(".blocksquare-true.click")
+
+        trueSquaresClicked.forEach(element => {
+           element.classList.remove("click")
+        })
+     }
   }
 })
-
