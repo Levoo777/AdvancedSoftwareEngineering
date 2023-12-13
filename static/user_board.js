@@ -631,6 +631,7 @@ document.addEventListener("keyup", (key) => {
 
       
     } else if (key.code == "KeyM") {
+      socket.emit('user_reflect_block', document.querySelector(".block.click").getAttribute("id"));
 
 
     } else if (key.code == "Escape") {
